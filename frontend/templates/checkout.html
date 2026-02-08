@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Parcero Go</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="/static/alerts.js"></script>
+    <style>
+        body {
+            background: var(--dark-bg);
+            color: var(--text-dark);
+        }
+    </style>
+    <style>
+        .checkout-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        .checkout-grid {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        @media (max-width: 968px) {
+            .checkout-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .checkout-card {
+            background: var(--dark-card);
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.1);
+            margin-bottom: 1.5rem;
+        }
+        .checkout-card h3 {
+            margin: 0 0 1.5rem 0;
+            color: #D4AF37;
+            font-size: 1.5rem;
+            border-bottom: 2px solid #D4AF37;
+            padding-bottom: 1rem;
+            font-weight: 700;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #D4AF37;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.9rem;
+            background: var(--darker-card);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            font-family: inherit;
+            color: var(--text-dark);
+        }
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #D4AF37;
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
+        }
+        .form-group input::placeholder {
+            color: #888888;
+        }
+        .checkout-payment-single .payment-single-block {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            padding: 1.25rem 1.5rem;
+            background: var(--darker-card);
+            border: 2px solid var(--border-color);
+            border-radius: 14px;
+            border-left: 4px solid var(--primary-color);
+        }
+        .payment-single-icon {
+            font-size: 2.5rem;
+            width: 56px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(34, 197, 94, 0.15);
+            border-radius: 12px;
+            flex-shrink: 0;
+        }
+        .payment-single-name {
+            font-weight: 700;
+            font-size: 1.15rem;
+            color: var(--text-dark);
+            margin-bottom: 0.25rem;
+        }
+        .payment-single-desc {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+        .card-input-group {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1rem;
+        }
+        .order-summary {
+            position: sticky;
+            top: 100px;
+        }
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid var(--border-color);
+            color: #b8b8b8;
+        }
+        .summary-item:last-child {
+            border-bottom: none;
+        }
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            padding: 1.5rem 0;
+            margin-top: 1rem;
+            border-top: 2px solid var(--border-color);
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #ffffff;
+        }
+        .summary-total .amount {
+            color: #D4AF37;
+        }
+        .checkout-btn {
+            width: 100%;
+            padding: 1.2rem;
+            background: var(--gold-gradient);
+            color: var(--dark-bg);
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 1.5rem;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+        }
+        .checkout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.5);
+        }
+        .checkout-btn:active {
+            transform: translateY(0);
+        }
+        .checkout-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .order-items {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 1rem;
+        }
+        .order-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .order-item:last-child {
+            border-bottom: none;
+        }
+        .order-item-image {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+        }
+        .order-item-info {
+            flex: 1;
+        }
+        .order-item-name {
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+            font-size: 0.95rem;
+            color: #ffffff;
+        }
+        .order-item-details {
+            color: #b8b8b8;
+            font-size: 0.85rem;
+        }
+        .order-item-price {
+            color: #D4AF37;
+            font-weight: 700;
+            font-size: 1rem;
+        }
+        .empty-cart {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: #b8b8b8;
+        }
+        .empty-cart .icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+        .success-message {
+            display: none;
+            text-align: center;
+            padding: 3rem;
+            background: var(--dark-card);
+            border: 2px solid #D4AF37;
+            color: var(--text-dark);
+            border-radius: 16px;
+            margin-top: 2rem;
+        }
+        .success-message.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .success-icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+        }
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+            color: #b8b8b8;
+        }
+        .loading.show {
+            display: block;
+        }
+        .loading-detail {
+            font-size: 0.95rem;
+            margin-top: 0.5rem;
+            color: var(--primary-color);
+        }
+        .spinner {
+            border: 4px solid rgba(212, 175, 55, 0.3);
+            border-top: 4px solid #D4AF37;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+    <meta name="theme-color" content="#FFD23F">
+    <link rel="manifest" href="/static/manifest.json">
+</head>
+<body>
+    <a href="#main" class="skip-link">Saltar al contenido</a>
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="brand-wrap">
+                <img src="/static/logo.png" alt="Parcero Go" class="app-logo" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-block';">
+                <span class="brand-text-fallback" style="display:none;">Parcero Go</span>
+            </a>
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <div class="nav-links">
+                    <a href="/">Inicio</a>
+                    <a href="/delivery">Delivery</a>
+                    <a href="/tracking">Seguimiento</a>
+                    <a href="/" class="nav-link-login">Iniciar sesión</a>
+                    <a href="/perfil" class="nav-link-perfil" style="display:none;" aria-hidden="true">Perfil</a>
+                    <a href="/repartidor">Repartidor</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main id="main" class="checkout-container">
+        <div class="hero">
+            <h2>Finalizar Compra</h2>
+            <p>Completa tu información y método de pago</p>
+        </div>
+
+        <div id="checkout-content">
+            <div class="checkout-grid">
+                <!-- Formulario de Checkout -->
+                <div>
+                    <div class="checkout-card">
+                        <h3>📋 Información de Entrega</h3>
+                        <div class="form-group">
+                            <label>Nombre Completo *</label>
+                            <input type="text" id="customer-name" placeholder="Ej: Juan Pérez" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Teléfono *</label>
+                            <input type="tel" id="customer-phone" placeholder="Ej: +57 300 1234567" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Dirección de Entrega *</label>
+                            <input type="text" id="customer-address" placeholder="Ej: Calle 50 #30-20, Medellín" required>
+                        </div>
+                    </div>
+
+                    <div class="checkout-card checkout-payment-single">
+                        <h3>💳 Método de Pago</h3>
+                        <div class="payment-single-block">
+                            <div class="payment-single-icon">💵</div>
+                            <div class="payment-single-content">
+                                <div class="payment-single-name">Paga al recibir</div>
+                                <div class="payment-single-desc">Efectivo cuando te entreguen el pedido. Seguro y sin datos de tarjeta.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Resumen del Pedido -->
+                <div class="order-summary">
+                    <div class="checkout-card">
+                        <h3>🛒 Resumen del Pedido</h3>
+                        <div class="order-items" id="order-items">
+                            <div class="empty-cart">
+                                <div class="icon">🛒</div>
+                                <p>No hay productos en el carrito</p>
+                            </div>
+                        </div>
+                        <div class="summary-item">
+                            <span>Subtotal</span>
+                            <span>$<span id="subtotal">0</span></span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Envío</span>
+                            <span>$<span id="shipping">0</span></span>
+                        </div>
+                        <div class="summary-total">
+                            <span>Total</span>
+                            <span class="amount">$<span id="total">0</span></span>
+                        </div>
+                        <button class="checkout-btn" id="checkout-btn" onclick="processCheckout()">
+                            Completar Pedido
+                        </button>
+                        <div class="loading" id="loading">
+                            <div class="spinner"></div>
+                            <p id="loading-text">Procesando pedido...</p>
+                            <p id="loading-detail" class="loading-detail"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mensaje de Éxito -->
+        <div class="success-message" id="success-message">
+            <div class="success-icon">✅</div>
+            <h2>¡Pedido Completado!</h2>
+            <p id="success-order-id" style="font-size: 1.2rem; color: #D4AF37; font-weight: 700; margin: 1rem 0;"></p>
+            <p id="success-text"></p>
+            <p style="color: #b8b8b8; margin-top: 1rem;">Puedes ver en qué estado está tu pedido en cualquier momento.</p>
+            <div style="margin-top: 2rem; display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;">
+                <a href="/tracking" id="tracking-link" style="display: inline-block; padding: 1rem 2rem; background: var(--gold-gradient); color: var(--dark-bg); border-radius: 12px; font-weight: 700; text-decoration: none; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4); transition: all 0.3s;">📦 Ver estado del pedido</a>
+                <a href="/jumbo" style="display: inline-block; padding: 1rem 2rem; border: 2px solid #D4AF37; color: #D4AF37; border-radius: 12px; font-weight: 600; text-decoration: none;">Seguir Comprando</a>
+            </div>
+        </div>
+    </main>
+
+    <script src="/static/address.js"></script>
+    <script>if (typeof initNavSession === 'function') initNavSession();</script>
+    <script>
+        let cartItems = [];
+        let orderId = null;
+
+        // Cargar carrito del localStorage o sessionStorage
+        function loadCart() {
+            // Intentar cargar desde sessionStorage (del checkout de Jumbo)
+            const checkoutProducts = sessionStorage.getItem('checkout_products');
+            const jumboCart = localStorage.getItem('jumbo_cart');
+            
+            if (checkoutProducts) {
+                // Si hay productos del checkout de Jumbo, cargarlos
+                const productIds = JSON.parse(checkoutProducts);
+                loadProductsFromIds(productIds);
+            } else if (jumboCart) {
+                // Si no, usar el carrito de Jumbo
+                cartItems = JSON.parse(jumboCart);
+                updateOrderSummary();
+            } else {
+                // Si no hay carrito, redirigir a Jumbo
+                showAlert(
+                    'Tu carrito está vacío. Redirigiendo a productos...',
+                    'warning',
+                    'Carrito Vacío',
+                    () => {
+                        window.location.href = '/jumbo';
+                    }
+                );
+            }
+        }
+
+        // Cargar productos desde IDs
+        async function loadProductsFromIds(productIds) {
+            try {
+                const response = await fetch('/api/delivery/products/jumbo');
+                const data = await response.json();
+                const allProducts = data.products || [];
+                
+                cartItems = productIds.map(item => {
+                    const product = allProducts.find(p => p.id === item.product_id);
+                    if (product) {
+                        return {
+                            id: product.id,
+                            name: product.name,
+                            price: product.price,
+                            image: product.image || '',
+                            quantity: item.quantity
+                        };
+                    }
+                    return null;
+                }).filter(item => item !== null);
+                
+                updateOrderSummary();
+            } catch (error) {
+                console.error('Error cargando productos:', error);
+            }
+        }
+
+        // Actualizar resumen del pedido
+        function updateOrderSummary() {
+            const orderItems = document.getElementById('order-items');
+            const subtotalEl = document.getElementById('subtotal');
+            const shippingEl = document.getElementById('shipping');
+            const totalEl = document.getElementById('total');
+            
+            if (cartItems.length === 0) {
+                orderItems.innerHTML = `
+                    <div class="empty-cart">
+                        <div class="icon">🛒</div>
+                        <p>No hay productos en el carrito</p>
+                    </div>
+                `;
+                subtotalEl.textContent = '0';
+                shippingEl.textContent = '0';
+                totalEl.textContent = '0';
+                return;
+            }
+            
+            // Calcular subtotal
+            const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const shipping = subtotal > 50000 ? 0 : 5000; // Envío gratis sobre $50,000
+            const total = subtotal + shipping;
+            
+            // Renderizar items
+            orderItems.innerHTML = cartItems.map(item => `
+                <div class="order-item">
+                    <img src="${item.image || 'https://via.placeholder.com/60x60?text=Producto'}" 
+                         alt="${item.name}" 
+                         class="order-item-image"
+                         onerror="this.src='https://via.placeholder.com/60x60?text=Producto'">
+                    <div class="order-item-info">
+                        <div class="order-item-name">${item.name}</div>
+                        <div class="order-item-details">Cantidad: ${item.quantity} x $${item.price.toLocaleString()}</div>
+                    </div>
+                    <div class="order-item-price">$${(item.price * item.quantity).toLocaleString()}</div>
+                </div>
+            `).join('');
+            
+            subtotalEl.textContent = subtotal.toLocaleString();
+            shippingEl.textContent = shipping.toLocaleString();
+            totalEl.textContent = total.toLocaleString();
+        }
+
+        // Procesar checkout
+        async function processCheckout() {
+            // Validar formulario
+            const name = document.getElementById('customer-name').value.trim();
+            const phone = document.getElementById('customer-phone').value.trim();
+            const address = document.getElementById('customer-address').value.trim();
+            
+            if (!name || !phone || !address) {
+                showAlert(
+                    'Por favor completa todos los campos requeridos',
+                    'warning',
+                    'Campos Incompletos'
+                );
+                return;
+            }
+            
+            if (cartItems.length === 0) {
+                showAlert(
+                    'Tu carrito está vacío',
+                    'warning',
+                    'Carrito Vacío'
+                );
+                return;
+            }
+            
+            // Usar coordenadas por defecto de Medellín
+            const lat = 6.2088;
+            const lng = -75.5704;
+            
+            // Mostrar loading con mensaje según método de pago
+            const loadingEl = document.getElementById('loading');
+            const loadingText = document.getElementById('loading-text');
+            const loadingDetail = document.getElementById('loading-detail');
+            loadingEl.classList.add('show');
+            document.getElementById('checkout-btn').disabled = true;
+            
+            loadingText.textContent = 'Procesando pedido...';
+            if (loadingDetail) loadingDetail.textContent = '';
+            
+            try {
+                // Crear pedido (usando business_id = 1 como default para productos de Jumbo)
+                const orderData = {
+                    customer_name: name,
+                    customer_phone: phone,
+                    customer_address: address,
+                    customer_lat: lat,
+                    customer_lng: lng,
+                    business_id: 1, // Negocio por defecto para productos de Jumbo
+                    products: cartItems.map(item => ({
+                        product_id: item.id,
+                        quantity: item.quantity
+                    })),
+                    payment_method: 'efectivo'
+                };
+                
+                const orderResponse = await fetch('/api/delivery/orders', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(orderData)
+                });
+                
+                if (!orderResponse.ok) {
+                    const errData = await orderResponse.json().catch(function() { return {}; });
+                    const msg = errData.detail || ('Error ' + orderResponse.status);
+                    throw new Error(msg);
+                }
+                
+                const orderResult = await orderResponse.json();
+                orderId = orderResult.order.id;
+                
+                // Limpiar carrito
+                localStorage.removeItem('jumbo_cart');
+                sessionStorage.removeItem('checkout_products');
+                
+                // Mostrar mensaje de éxito con alerta bonita
+                showAlert(
+                    `Tu pedido #${orderId} ha sido creado. El pago se realizará al momento de la entrega.\n\nPuedes hacer seguimiento de tu pedido en la página de seguimiento.`,
+                    'success',
+                    '¡Pedido Completado!',
+                    () => {
+                        // Enviar notificación SMS simulada
+                        if (typeof sendSMSNotification === 'undefined') {
+                            // Definir función si no existe
+                            window.sendSMSNotification = function(orderId, phone, order) {
+                                const smsMessage = `🎉 Parcero Go\n\nTu pedido #${orderId} ha sido confirmado!\n\nNegocio: ${order.business_name}\nTotal: $${order.total.toLocaleString()}\nTiempo estimado: ${order.estimated_time} min\n\nRastrea tu pedido: ${window.location.origin}/tracking?phone=${encodeURIComponent(phone)}\n\nGracias por tu compra! 🚀`;
+                                console.log('📱 SMS simulado enviado a', phone);
+                                setTimeout(() => {
+                                    if (typeof showNotification !== 'undefined') {
+                                        showNotification('📱 Notificación SMS enviada a tu teléfono');
+                                    }
+                                }, 2000);
+                            };
+                        }
+                        sendSMSNotification(orderId, phone, orderResult.order);
+                        
+                        // Mostrar mensaje de éxito en la página
+                        document.getElementById('checkout-content').style.display = 'none';
+                        document.getElementById('success-message').classList.add('show');
+                        document.getElementById('success-order-id').textContent = `Número de pedido: #${orderId}`;
+                        document.getElementById('success-text').innerHTML = 'El pago se realizará al momento de la entrega.';
+                        const trackingLink = document.getElementById('tracking-link');
+                        trackingLink.href = '/tracking?phone=' + encodeURIComponent(phone);
+                    }
+                );
+                
+            } catch (error) {
+                console.error('Error:', error);
+                var msg = (error && error.message) ? error.message : 'Error al procesar el pedido. Por favor intenta nuevamente.';
+                showAlert(msg, 'error', 'Error al Procesar');
+            } finally {
+                document.getElementById('loading').classList.remove('show');
+                document.getElementById('loading-text').textContent = 'Procesando pedido...';
+                var detail = document.getElementById('loading-detail');
+                if (detail) detail.textContent = '';
+                document.getElementById('checkout-btn').disabled = false;
+            }
+        }
+
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', () => {
+            loadCart();
+            // Prellenar dirección de entrega si está guardada
+            var addrEl = document.getElementById('customer-address');
+            if (addrEl && typeof window.getCurrentAddress === 'function') {
+                addrEl.value = window.getCurrentAddress();
+            }
+        });
+    </script>
+    <script src="/static/theme.js"></script>
+</body>
+</html>

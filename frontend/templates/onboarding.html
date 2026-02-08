@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0f172a">
+    <title>Bienvenido - ParceroGo</title>
+    <link rel="manifest" href="/static/manifest.json">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+        body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background: #f8fafc; color: #1e293b; min-height: 100vh; -webkit-font-smoothing: antialiased; }
+        .onboarding { max-width: 440px; margin: 0 auto; min-height: 100vh; display: flex; flex-direction: column; }
+        /* Splash / Header */
+        .splash { background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%); padding: 2.5rem 1.5rem 2rem; text-align: center; border-radius: 0 0 28px 28px; box-shadow: 0 10px 40px rgba(15,23,42,0.3); }
+        .splash-logo { width: 140px; height: auto; margin: 0 auto 1rem; display: block; animation: logoEnter 0.8s ease-out; }
+        @keyframes logoEnter {
+            from { opacity: 0; transform: scale(0.85); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .splash-tagline { color: rgba(255,255,255,0.92); font-size: 1.05rem; font-weight: 500; margin: 0; letter-spacing: 0.02em; animation: fadeIn 0.6s ease-out 0.3s both; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        /* Contenido */
+        .content { flex: 1; padding: 1.75rem 1.5rem 2rem; }
+        .welcome-title { font-size: 1.6rem; font-weight: 800; color: #0f172a; margin: 0 0 0.5rem; line-height: 1.25; }
+        .welcome-sub { font-size: 1rem; color: #64748b; margin: 0 0 1.75rem; line-height: 1.45; }
+        /* Formulario */
+        .form-group { margin-bottom: 1.25rem; }
+        .form-group label { display: block; font-size: 0.9rem; font-weight: 600; color: #334155; margin-bottom: 0.5rem; }
+        .phone-wrap { display: flex; align-items: stretch; background: #fff; border: 2px solid #e2e8f0; border-radius: 14px; overflow: hidden; transition: border-color 0.2s, box-shadow 0.2s; }
+        .phone-wrap:focus-within { border-color: #f59e0b; box-shadow: 0 0 0 4px rgba(245,158,11,0.2); }
+        .phone-wrap.error { border-color: #dc2626; }
+        .phone-prefix { display: flex; align-items: center; padding: 0 1rem; background: #f1f5f9; color: #475569; font-weight: 600; font-size: 1rem; }
+        .phone-input { flex: 1; border: none; padding: 1rem 1rem; font-size: 1.05rem; color: #0f172a; outline: none; min-width: 0; }
+        .phone-input::placeholder { color: #94a3b8; }
+        /* Botones */
+        .btn-wrap { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1.5rem; }
+        .btn { display: block; width: 100%; padding: 1rem 1.5rem; border: none; border-radius: 14px; font-size: 1.05rem; font-weight: 700; cursor: pointer; text-align: center; transition: transform 0.15s, box-shadow 0.2s; -webkit-tap-highlight-color: transparent; }
+        .btn:active { transform: scale(0.98); }
+        .btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+        .btn-primary { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: #fff; box-shadow: 0 4px 14px rgba(245,158,11,0.4); }
+        .btn-primary:hover:not(:disabled) { box-shadow: 0 6px 20px rgba(245,158,11,0.45); }
+        .btn-secondary { background: transparent; color: #0f172a; border: 2px solid #e2e8f0; }
+        .btn-secondary:hover:not(:disabled) { border-color: #cbd5e1; background: #f8fafc; }
+        .note { font-size: 0.8rem; color: #94a3b8; text-align: center; margin-top: 1.5rem; line-height: 1.5; padding: 0 0.5rem; }
+        /* Loading */
+        .loading { display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.7); z-index: 100; align-items: center; justify-content: center; flex-direction: column; gap: 1rem; }
+        .loading.show { display: flex; }
+        .loading-spinner { width: 48px; height: 48px; border: 4px solid rgba(255,255,255,0.2); border-top-color: #f59e0b; border-radius: 50%; animation: spin 0.8s linear infinite; }
+        .loading-text { color: #fff; font-weight: 600; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <div class="onboarding">
+        <header class="splash">
+            <img src="/static/parcerogo-logo.png" alt="ParceroGo" class="splash-logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+            <span class="splash-logo" style="display:none; font-size: 2rem; font-weight: 800; color: #fbbf24;">ParceroGo</span>
+            <p class="splash-tagline">Tu parcero para pedir lo que quieras</p>
+        </header>
+
+        <main class="content">
+            <h1 class="welcome-title">¡Bienvenido a ParceroGo! 👋</h1>
+            <p class="welcome-sub">Pide comida y productos de tu barrio en minutos</p>
+
+            <form id="onboarding-form" novalidate>
+                <div class="form-group">
+                    <label for="phone">Número de celular</label>
+                    <div class="phone-wrap" id="phone-wrap">
+                        <span class="phone-prefix">🇨🇴 +57</span>
+                        <input type="tel" id="phone" class="phone-input" placeholder="300 123 4567" inputmode="numeric" maxlength="14" autocomplete="tel">
+                    </div>
+                </div>
+
+                <div class="btn-wrap">
+                    <button type="submit" class="btn btn-primary" id="btn-login">Iniciar sesión</button>
+                    <button type="button" class="btn btn-secondary" id="btn-register">Registrarse</button>
+                </div>
+            </form>
+
+            <p class="note">Este acceso es solo una simulación. No se envían mensajes reales.</p>
+        </main>
+    </div>
+
+    <div class="loading" id="loading">
+        <div class="loading-spinner"></div>
+        <span class="loading-text">Entrando...</span>
+    </div>
+
+    <script src="/static/address.js"></script>
+    <script>
+        (function() {
+            var phone = document.getElementById('phone');
+            var phoneWrap = document.getElementById('phone-wrap');
+            var form = document.getElementById('onboarding-form');
+            var btnLogin = document.getElementById('btn-login');
+            var btnRegister = document.getElementById('btn-register');
+            var loading = document.getElementById('loading');
+
+            function digitsOnly(s) { return (s || '').replace(/\D/g, ''); }
+            function formatPhone(v) {
+                var d = digitsOnly(v).slice(0, 10);
+                if (d.length <= 3) return d;
+                if (d.length <= 6) return d.slice(0,3) + ' ' + d.slice(3);
+                return d.slice(0,3) + ' ' + d.slice(3,6) + ' ' + d.slice(6);
+            }
+            function isValidLength(v) { return digitsOnly(v).length >= 10; }
+
+            phone.addEventListener('input', function() {
+                this.value = formatPhone(this.value);
+                phoneWrap.classList.toggle('error', this.value.length > 0 && !isValidLength(this.value));
+            });
+            phone.addEventListener('blur', function() {
+                phoneWrap.classList.toggle('error', this.value.length > 0 && !isValidLength(this.value));
+            });
+
+            function goHome() {
+                if (typeof setSession === 'function') setSession(true);
+                if (typeof setSessionUser === 'function') setSessionUser('', phone.value ? phone.value.trim() : '');
+                loading.classList.add('show');
+                setTimeout(function() {
+                    window.location.replace('/');
+                }, 1500);
+            }
+
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                if (!isValidLength(phone.value)) {
+                    phoneWrap.classList.add('error');
+                    return;
+                }
+                goHome();
+            });
+
+            btnRegister.addEventListener('click', function() {
+                if (!isValidLength(phone.value)) {
+                    phoneWrap.classList.add('error');
+                    return;
+                }
+                goHome();
+            });
+        })();
+    </script>
+</body>
+</html>

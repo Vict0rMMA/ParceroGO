@@ -1,0 +1,45 @@
+"""
+Servicio de SMS para confirmación de pago (Twilio).
+Envía un SMS al cliente cuando el pago simulado es exitoso. No lanza excepciones.
+"""
+
+import os
+
+# -----------------------------------------------------------------------------
+# Configuración
+# -----------------------------------------------------------------------------
+
+TO_PHONE = "+573022641006"
+MENSAJE_PAGO_OK = (
+    "Pedido confirmado. Tu pago fue exitoso y el pedido esta en preparacion."
+)
+
+# -----------------------------------------------------------------------------
+# API pública
+# -----------------------------------------------------------------------------
+
+
+def send_order_sms() -> bool:
+    """
+    Envía un SMS de confirmación de pago al número configurado usando Twilio.
+    Requiere: TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_PHONE en el entorno.
+    Returns: True si se envió correctamente, False en caso contrario.
+    """
+    sid = os.environ.get("TWILIO_ACCOUNT_SID", "").strip()
+    token = os.environ.get("TWILIO_AUTH_TOKEN", "").strip()
+    from_phone = os.environ.get("TWILIO_PHONE", "").strip()
+
+    if not sid or not token or not from_phone:
+        return False
+
+    try:
+        from twilio.rest import Client
+        client = Client(sid, token)
+        client.messages.create(
+            body=MENSAJE_PAGO_OK,
+            from_=from_phone,
+            to=TO_PHONE,
+        )
+        return True
+    except Exception:
+        return False

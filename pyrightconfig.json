@@ -1,0 +1,20 @@
+{
+  "include": [
+    "app",
+    "data",
+    "templates",
+    "static"
+  ],
+  "exclude": [
+    "**/__pycache__",
+    "**/node_modules",
+    ".git"
+  ],
+  "reportMissingImports": "none",
+  "reportMissingTypeStubs": false,
+  "reportGeneralTypeIssues": "none",
+  "reportOptionalMemberAccess": "none",
+  "reportOptionalSubscript": "none",
+  "pythonVersion": "3.11",
+  "typeCheckingMode": "off"
+}

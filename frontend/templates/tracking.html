@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#FFD23F">
+    <title>Estado de la compra - Parcero Go</title>
+    <link rel="manifest" href="/static/manifest.json">
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        /* Fondo siempre claro y legible en tracking (no heredar tema oscuro) */
+        html body.tracking-page,
+        html[data-theme="dark"] body.tracking-page {
+            background: linear-gradient(180deg, #f0ede8 0%, #e8e4dd 35%, #f5f2ed 100%) !important;
+            color: #1a1a1a !important;
+            margin: 0;
+            min-height: 100vh;
+        }
+        .tracking-page .tracking-top-bar { background: linear-gradient(90deg, #FFD23F 0%, #FF8C00 50%, #38BDF8 100%); height: 12px; width: 100%; }
+        .tracking-page .tracking-wrap { max-width: 1200px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
+        .tracking-page .breadcrumb { margin-bottom: 1.5rem; font-size: 0.95rem; }
+        .tracking-page .breadcrumb a { color: #1a1a1a; text-decoration: none; }
+        .tracking-page .breadcrumb a:hover { text-decoration: underline; }
+        .tracking-page .breadcrumb span { color: #555; }
+        .tracking-page .search-bar { background: #fff; border-radius: 12px; padding: 1rem 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.06); display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
+        .tracking-page .search-bar input { flex: 1; min-width: 200px; padding: 0.75rem 1rem; border: 1px solid #ccc; border-radius: 10px; font-size: 1rem; color: #1a1a1a; }
+        .tracking-page .search-bar input:focus { outline: none; border-color: #0D6EFD; box-shadow: 0 0 0 2px rgba(13,110,253,0.2); }
+        .tracking-page .search-bar button { padding: 0.75rem 1.5rem; background: #FFD600; color: #1a1a1a; border: none; border-radius: 10px; font-weight: 700; font-size: 1rem; cursor: pointer; }
+        .tracking-page .search-bar button:hover { background: #E6C200; }
+        .tracking-page .search-hint { color: #555; font-size: 0.9rem; }
+        .tracking-page .two-cols { display: grid; grid-template-columns: 1fr 380px; gap: 1.5rem; align-items: start; }
+        @media (max-width: 900px) { .tracking-page .two-cols { grid-template-columns: 1fr; } }
+        .tracking-page .card { background: #fff; border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+        .tracking-page .card-title { font-size: 1rem; font-weight: 700; margin: 0 0 0.75rem 0; color: #1a1a1a; }
+        .tracking-page .product-card { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+        .tracking-page .product-card .product-text { flex: 1; min-width: 0; }
+        .tracking-page .product-card .product-name { font-size: 1rem; color: #1a1a1a; margin: 0 0 0.35rem 0; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .tracking-page .product-card .product-meta { font-size: 0.9rem; color: #666; }
+        .tracking-page .product-card .product-meta a { color: #0D6EFD; text-decoration: none; }
+        .tracking-page .product-card .product-meta a:hover { text-decoration: underline; }
+        .tracking-page .product-card .product-thumb { width: 72px; height: 72px; border-radius: 50%; background: #eee; object-fit: cover; flex-shrink: 0; }
+        .tracking-page .envio-status { color: #00C853; font-weight: 700; font-size: 1rem; margin: 0 0 0.35rem 0; }
+        .tracking-page .envio-date { font-size: 1.35rem; font-weight: 700; color: #1a1a1a; margin: 0 0 1.25rem 0; }
+        .tracking-page .timeline-hint { font-size: 0.8rem; color: #666; margin: 0 0 0.75rem 0; }
+        /* Timeline de seguimiento: más bonito y legible */
+        .tracking-page .timeline { position: relative; padding-left: 2.5rem; padding-top: 0.25rem; }
+        .tracking-page .timeline-line { position: absolute; left: 15px; top: 28px; bottom: 28px; width: 3px; border-radius: 3px; background: linear-gradient(180deg, #e0e0e0 0%, #e8e8e8 100%); }
+        .tracking-page .timeline-line.progress-1 { background: linear-gradient(180deg, #22c55e 0%, #e0e0e0 33%, #e0e0e0 100%); }
+        .tracking-page .timeline-line.progress-2 { background: linear-gradient(180deg, #22c55e 0%, #22c55e 50%, #e0e0e0 100%); }
+        .tracking-page .timeline-line.progress-3 { background: linear-gradient(180deg, #22c55e 0%, #22c55e 100%); }
+        .tracking-page .timeline-step { position: relative; margin-bottom: 1.5rem; padding: 0.5rem 0; }
+        .tracking-page .timeline-step:last-child { margin-bottom: 0; }
+        .tracking-page .timeline-dot { position: absolute; left: -2.5rem; top: 0.1rem; width: 28px; height: 28px; border-radius: 50%; background: #e8e8e8; border: 3px solid #fff; box-shadow: 0 2px 6px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center; font-size: 0.85rem; }
+        .tracking-page .timeline-dot.filled { background: #22c55e; color: #fff; box-shadow: 0 2px 8px rgba(34,197,94,0.4); }
+        .tracking-page .timeline-dot svg { width: 22px; height: 22px; display: block; }
+        .tracking-page .timeline-step.active .timeline-dot svg { color: #1a1a1a; }
+        .tracking-page .timeline-step.past .timeline-dot svg { color: #fff; }
+        .tracking-page .timeline-step.inactive .timeline-dot svg { color: #888; }
+        .tracking-page .timeline-step.active .timeline-dot { background: linear-gradient(135deg, #D4AF37 0%, #FFD700 100%); color: #1a1a1a; box-shadow: 0 2px 10px rgba(212,175,55,0.45); border-color: #fff; }
+        .tracking-page .timeline-step.past .timeline-dot { background: #22c55e; color: #fff; }
+        .tracking-page .timeline-label { font-weight: 700; font-size: 1.05rem; color: #1a1a1a; margin: 0; }
+        .tracking-page .timeline-step.inactive .timeline-label { color: #777; font-weight: 500; }
+        .tracking-page .timeline-detail { font-size: 0.95rem; color: #444; margin: 0.35rem 0 0 0; line-height: 1.4; font-weight: 500; }
+        .tracking-page .timeline-step.inactive .timeline-detail { color: #888; }
+        .tracking-page .timeline-link { display: inline-block; margin-top: 1.25rem; color: #0D6EFD; font-size: 0.95rem; font-weight: 600; text-decoration: none; }
+        .tracking-page .timeline-link:hover { text-decoration: underline; }
+        .tracking-page .actions-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.25rem 1rem;
+            align-items: start;
+        }
+        .tracking-page .action-btn.cancel { grid-column: 1 / -1; justify-self: center; margin-top: 0.5rem; padding-top: 1.25rem; border-top: 1px solid #e8e8e8; }
+        @media (max-width: 520px) { .tracking-page .actions-row { grid-template-columns: repeat(2, 1fr); } }
+        .tracking-page .action-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.6rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            color: #1a1a1a;
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            min-width: 0;
+        }
+        .tracking-page .action-btn .action-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: #E8F4FD;
+            border: 2px solid #0D6EFD;
+            color: #0D6EFD;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.35rem;
+            flex-shrink: 0;
+        }
+        .tracking-page .action-btn.cancel .action-icon { background: #f8f8f8; border-color: #ccc; color: #666; }
+        .tracking-page .action-btn:hover .action-icon { opacity: 0.9; transform: scale(1.02); }
+        .tracking-page .action-btn:focus-visible { outline: 2px solid #0D6EFD; outline-offset: 2px; border-radius: 8px; }
+        .tracking-page .action-btn .action-label { text-align: center; line-height: 1.3; max-width: 100px; }
+        .tracking-page .address-card { display: flex; align-items: center; gap: 1rem; }
+        .tracking-page .address-card .addr-icon { width: 40px; height: 40px; border-radius: 50%; background: #E3F2FD; color: #0D6EFD; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
+        .tracking-page .address-card .addr-text { flex: 1; min-width: 0; }
+        .tracking-page .address-card .addr-line { font-size: 1rem; color: #1a1a1a; margin: 0; }
+        .tracking-page .address-card .addr-note { font-size: 0.85rem; color: #666; margin: 0.35rem 0 0 0; }
+        .tracking-page .address-card .addr-chevron { color: #999; font-size: 1.2rem; }
+        .tracking-page .purchase-detail-card .card-title { margin-bottom: 0.35rem; }
+        .tracking-page .purchase-detail-card .order-ref { font-size: 0.9rem; color: #666; margin-bottom: 1.25rem; }
+        .tracking-page .purchase-detail-card .row { display: flex; justify-content: space-between; margin-bottom: 0.6rem; font-size: 1rem; }
+        .tracking-page .purchase-detail-card .row.total { font-size: 1.15rem; font-weight: 700; margin-top: 0.75rem; margin-bottom: 0.5rem; }
+        .tracking-page .purchase-detail-card .envio-gratis { color: #00C853; font-weight: 600; }
+        .tracking-page .purchase-detail-card .payment-method { font-size: 0.85rem; color: #666; margin-top: 0.5rem; }
+        .tracking-page .purchase-detail-card .link-detail { display: inline-flex; align-items: center; gap: 0.35rem; margin-top: 0.75rem; color: #0D6EFD; font-size: 0.9rem; text-decoration: none; }
+        .tracking-page .purchase-detail-card .link-detail:hover { text-decoration: underline; }
+        .tracking-page .no-orders { text-align: center; padding: 3rem 2rem; background: #fff; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+        .tracking-page .no-orders-icon { font-size: 4rem; margin-bottom: 1rem; }
+        .tracking-page .no-orders h3 { color: #1a1a1a; margin: 0 0 0.5rem 0; font-size: 1.35rem; }
+        .tracking-page .no-orders p { color: #666; margin: 0; }
+        .tracking-page .order-selector { margin-bottom: 1rem; }
+        .tracking-page .order-selector label { font-size: 0.9rem; color: #666; margin-right: 0.5rem; }
+        .tracking-page .order-selector select { padding: 0.5rem 1rem; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; }
+    </style>
+</head>
+<body class="tracking-page">
+    <a href="#main" class="skip-link">Saltar al contenido</a>
+
+    <div class="tracking-top-bar" aria-hidden="true"></div>
+
+    <div class="tracking-wrap">
+        <a href="/" class="tracking-logo-wrap" style="display:inline-flex;align-items:center;margin-bottom:1rem;text-decoration:none;">
+            <img src="/static/logo.png" alt="Parcero Go" style="height:40px;width:auto;object-fit:contain;" onerror="this.style.display='none';this.nextElementSibling.style.display='inline';">
+            <span class="brand-text-fallback" style="display:none;font-size:1.25rem;font-weight:800;background:linear-gradient(135deg,#FFD23F,#FF8C00);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;">Parcero Go</span>
+        </a>
+        <nav class="breadcrumb" aria-label="Navegación">
+            <a href="/">Compras</a> <span> &gt; </span> <span>Estado de la compra</span>
+        </nav>
+
+        <div class="search-bar">
+            <input type="text" id="search-input" placeholder="Nº de pedido (ej: 1) o teléfono (ej: +57 300 1234567)" value="" autocomplete="off" aria-label="Buscar pedido">
+            <button type="button" id="btn-search">Ver estado del pedido</button>
+        </div>
+
+        <main id="main">
+            <div id="no-orders" class="no-orders">
+                <div class="no-orders-icon">📦</div>
+                <h3>Ingresa tu teléfono o número de pedido</h3>
+                <p>Verás el estado de tu compra y el detalle del envío</p>
+            </div>
+
+            <div id="orders-area" style="display: none;">
+                <div class="order-selector" id="order-selector" style="display: none;">
+                    <label for="select-order">Pedido:</label>
+                    <select id="select-order"></select>
+                </div>
+                <div class="two-cols" id="order-detail-cols"></div>
+            </div>
+        </main>
+    </div>
+
+    <script src="/static/address.js"></script>
+    <script src="/static/alerts.js"></script>
+    <script src="/static/product-images.js"></script>
+    <script>
+        if (typeof isSessionActive === 'function' && !isSessionActive()) {
+            window.location.replace('/');
+        }
+        var currentSearch = '';
+        var searchByOrderId = false;
+        var refreshInterval = null;
+        var displayRefreshInterval = null;
+        var lastOrderStatuses = {};
+        var notificationPermission = typeof Notification !== 'undefined' && Notification.permission === 'granted';
+        /** Tiempos de la simulación (en segundos): cuánto dura cada paso antes de pasar al siguiente. */
+        var TIMELINE_SECONDS_PREPARACION = 8;
+        var TIMELINE_SECONDS_EN_CAMINO = 8;
+        var TIMELINE_REFRESH_MS = 2000;
+
+        function requestNotificationPermission() {
+            if (!('Notification' in window)) return;
+            if (Notification.permission === 'granted') { notificationPermission = true; return; }
+            if (Notification.permission !== 'denied') {
+                Notification.requestPermission().then(function(p) { notificationPermission = p === 'granted'; });
+            }
+        }
+        function showOrderStatusNotification(orderId, newStatus) {
+            if (!notificationPermission || !('Notification' in window) || Notification.permission !== 'granted') return;
+            var statusText = { preparando: 'Preparando', en_camino: 'En camino', entregado: 'Entregado' }[newStatus] || newStatus;
+            try {
+                new Notification('Pedido #' + orderId + ' · ' + statusText, { body: 'Tu pedido ha cambiado de estado.', icon: '/static/icon-192.png' });
+            } catch (e) {}
+        }
+
+        document.getElementById('btn-search').addEventListener('click', function() {
+            var input = document.getElementById('search-input').value.trim();
+            if (!input) {
+                if (typeof showAlert !== 'undefined') showAlert('Ingresa el número de pedido o tu teléfono', 'warning', 'Buscar pedido');
+                return;
+            }
+            currentSearch = input;
+            requestNotificationPermission();
+            searchByOrderId = /^\d+$/.test(input.replace(/\s/g, '')) && input.length <= 8;
+            loadOrders();
+            if (refreshInterval) clearInterval(refreshInterval);
+            refreshInterval = setInterval(loadOrders, 5000);
+        });
+        document.getElementById('search-input').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') document.getElementById('btn-search').click();
+        });
+
+        function stopAutoRefresh() {
+            if (refreshInterval) { clearInterval(refreshInterval); refreshInterval = null; }
+            if (displayRefreshInterval) { clearInterval(displayRefreshInterval); displayRefreshInterval = null; }
+        }
+        function refreshTimelineDisplay() {
+            var cols = document.getElementById('order-detail-cols');
+            var selectEl = document.getElementById('select-order');
+            var orders = window.trackingOrders;
+            if (!orders || !orders.length || !cols) return;
+            var ord = orders.length > 1 ? orders.find(function(o) { return o.id === parseInt(selectEl.value, 10); }) : orders[0];
+            if (ord) cols.innerHTML = renderOrderDetail(ord);
+        }
+
+        function getArrivalDate(order) {
+            if (!order.created_at || order.estimated_time == null) return 'Próximamente';
+            var d = new Date(order.created_at);
+            d.setMinutes(d.getMinutes() + (order.estimated_time || 0));
+            var days = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+            var months = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+            return 'Llega el ' + days[d.getDay()] + ' ' + d.getDate() + ' de ' + months[d.getMonth()];
+        }
+
+        function getStatusStep(order) {
+            var s = order.status;
+            if (s === 'pendiente' || s === 'preparando') return 0;
+            if (s === 'en_camino') return 1;
+            if (s === 'entregado') return 2;
+            return 0;
+        }
+
+        /** Paso a mostrar en el timeline: avanza poco a poco con el tiempo (simulado), sin superar el estado real del pedido. */
+        function getDisplayStep(order) {
+            var realStep = getStatusStep(order);
+            var created = order.created_at ? new Date(order.created_at).getTime() : 0;
+            var elapsedSec = (Date.now() - created) / 1000;
+            var maxSec = 60;
+            if (elapsedSec > maxSec) return realStep;
+            var t1 = TIMELINE_SECONDS_PREPARACION;
+            var t2 = t1 + TIMELINE_SECONDS_EN_CAMINO;
+            var stepFromTime = elapsedSec < t1 ? 0 : (elapsedSec < t2 ? 1 : 2);
+            return Math.min(stepFromTime, realStep);
+        }
+
+        function getStatusTime(order, statusKey) {
+            var history = order.status_history || [];
+            var entry = history.find(function(h) { return h.status === statusKey; });
+            return entry && entry.timestamp ? formatDate(entry.timestamp) : null;
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return '';
+            var d = new Date(dateString);
+            return d.toLocaleDateString('es-CO', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
+        }
+
+        var timelineIcons = {
+            preparando: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>',
+            en_camino: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>',
+            entregado: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>'
+        };
+
+        function renderOrderDetail(order) {
+            var products = order.products || [];
+            var firstProduct = products[0];
+            var productName = firstProduct ? (firstProduct.product_name || 'Producto') : (order.business_name || 'Pedido');
+            var productImgUrl = (typeof getProductImageUrlByName === 'function' && firstProduct && firstProduct.product_name) ? getProductImageUrlByName(firstProduct.product_name) : '';
+            if (!productImgUrl) productImgUrl = 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=200&h=200&fit=crop';
+            var totalUnits = products.reduce(function(s, p) { return s + (p.quantity || 0); }, 0);
+            var step = getDisplayStep(order);
+            var steps = [
+                { key: 'preparando', label: 'En preparación', detail: 'El vendedor está preparando tu paquete.', icon: timelineIcons.preparando },
+                { key: 'en_camino', label: 'En camino', detail: order.delivery_person || order.courier_name ? ('Repartidor: ' + (order.delivery_person || order.courier_name)) : 'Tu pedido está en camino.', icon: timelineIcons.en_camino },
+                { key: 'entregado', label: 'Entrega', detail: 'Pedido entregado.', icon: timelineIcons.entregado }
+            ];
+            var timePreparando = getStatusTime(order, 'preparando') || getStatusTime(order, 'pendiente');
+            var lineClass = 'timeline-line' + (step >= 1 ? ' progress-' + (step + 1) : '');
+            var timelineHtml = '<div class="timeline"><div class="' + lineClass + '"></div>';
+            steps.forEach(function(s, i) {
+                var isActive = step === i;
+                var isPast = step > i;
+                var timeStr = getStatusTime(order, s.key);
+                if (i === 0) timeStr = timePreparando;
+                var detailStr = (timeStr ? timeStr + ' · ' : '') + s.detail;
+                var dotClass = isPast ? 'filled' : (isActive ? 'filled' : '');
+                var stepClass = isActive ? 'active' : (isPast ? 'past' : 'inactive');
+                timelineHtml += '<div class="timeline-step ' + stepClass + '"><div class="timeline-dot ' + dotClass + '" aria-hidden="true">' + s.icon + '</div><p class="timeline-label">' + s.label + '</p><p class="timeline-detail">' + (isActive ? detailStr : (isPast ? s.detail : '')) + '</p></div>';
+            });
+            timelineHtml += '</div><a href="#" class="timeline-link">Ver detalle del envío</a>';
+
+            var leftCol = '<div class="card product-card">' +
+                '<div class="product-text"><p class="product-name">' + escapeHtml(productName) + (products.length > 1 ? ' y más' : '') + '</p><p class="product-meta">' + totalUnits + ' u. | <a href="#">Ver detalle</a></p></div>' +
+                '<img src="' + escapeHtml(productImgUrl) + '" alt="" class="product-thumb" onerror="this.src=\'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=200&h=200&fit=crop\';" loading="lazy">' +
+                '</div>' +
+                '<div class="card">' +
+                '<p class="envio-status">Envío a tiempo</p>' +
+                '<p class="envio-date">' + getArrivalDate(order) + '</p>' +
+                '<p class="timeline-hint">El estado avanza cada ' + TIMELINE_SECONDS_PREPARACION + ' s (preparación → en camino) y cada ' + TIMELINE_SECONDS_EN_CAMINO + ' s (en camino → entrega). La vista se actualiza cada ' + (TIMELINE_REFRESH_MS / 1000) + ' s.</p>' +
+                timelineHtml +
+                '</div>' +
+                '<div class="card">' +
+                '<div class="actions-row">' +
+                '<button type="button" class="action-btn" title="Entregar a un vecino"><span class="action-icon">🏠</span><span class="action-label">Entregar a un vecino</span></button>' +
+                '<button type="button" class="action-btn" title="Entregar en portería"><span class="action-icon">🔔</span><span class="action-label">Entregar en portería</span></button>' +
+                '<button type="button" class="action-btn" title="Cambiar domicilio"><span class="action-icon">📍</span><span class="action-label">Cambiar domicilio</span></button>' +
+                '<button type="button" class="action-btn" title="Opinar del envío"><span class="action-icon">👍</span><span class="action-label">Opinar del envío</span></button>' +
+                (order.status !== 'entregado' && order.status !== 'cancelado' ? '<button type="button" class="action-btn cancel" title="Cancelar compra"><span class="action-icon">✕</span><span class="action-label">Cancelar compra</span></button>' : '') +
+                '</div></div>' +
+                '<div class="card address-card">' +
+                '<div class="addr-icon">🏠</div>' +
+                '<div class="addr-text"><p class="addr-line">' + escapeHtml(order.customer_address || '') + '</p><p class="addr-note">Pedido para ' + escapeHtml(order.customer_name || '') + '</p></div>' +
+                '<span class="addr-chevron">›</span></div>';
+
+            var paymentLabel = (order.payment_method === 'tarjeta' ? 'Tarjeta' : 'Efectivo') + (order.payment_status ? ' · ' + order.payment_status : '');
+            var createdStr = order.created_at ? formatDate(order.created_at) : '';
+            var rightCol = '<div class="card purchase-detail-card" style="position: sticky; top: 1.5rem;">' +
+                '<h2 class="card-title">Detalle de la compra</h2>' +
+                '<p class="order-ref">' + createdStr + ' | # ' + order.id + '</p>' +
+                '<div class="row"><span>Producto</span><span>$ ' + (order.total || 0).toLocaleString() + '</span></div>' +
+                '<div class="row"><span>Envío</span><span class="envio-gratis">Gratis</span></div>' +
+                '<div class="row total"><span>Total</span><span>$ ' + (order.total || 0).toLocaleString() + '</span></div>' +
+                '<p class="payment-method">' + escapeHtml(paymentLabel) + '</p>' +
+                '<a href="#" class="link-detail">Detalles de pago y envío ›</a></div>';
+
+            return '<div class="two-cols" data-order-id="' + order.id + '"><div>' + leftCol + '</div><div>' + rightCol + '</div></div>';
+        }
+
+        function escapeHtml(s) {
+            if (!s) return '';
+            var div = document.createElement('div');
+            div.textContent = s;
+            return div.innerHTML;
+        }
+
+        async function loadOrders() {
+            var ordersSection = document.getElementById('orders-area');
+            var noOrders = document.getElementById('no-orders');
+            var cols = document.getElementById('order-detail-cols');
+            var selectorWrap = document.getElementById('order-selector');
+            var selectEl = document.getElementById('select-order');
+
+            try {
+                var orders = [];
+                if (searchByOrderId) {
+                    var orderId = parseInt(currentSearch, 10);
+                    if (isNaN(orderId) || orderId < 1) {
+                        noOrders.innerHTML = '<div class="no-orders-icon">📭</div><h3>Número de pedido no válido</h3><p>Ingresa un número (ej: 1) o tu teléfono.</p>';
+                        noOrders.style.display = 'block';
+                        ordersSection.style.display = 'none';
+                        return;
+                    }
+                    var res = await fetch('/api/delivery/orders/' + orderId);
+                    if (!res.ok) {
+                        if (res.status === 404) {
+                            noOrders.innerHTML = '<div class="no-orders-icon">📭</div><h3>Pedido no encontrado</h3><p>No existe el pedido #' + orderId + '.</p>';
+                            noOrders.style.display = 'block';
+                            ordersSection.style.display = 'none';
+                            return;
+                        }
+                        throw new Error('Servidor no respondió correctamente.');
+                    }
+                    var data = await res.json().catch(function() { throw new Error('Respuesta inválida.'); });
+                    orders = data.order ? [data.order] : [];
+                } else {
+                    var url = '/api/delivery/orders/by-phone/' + encodeURIComponent(currentSearch);
+                    var r = await fetch(url);
+                    if (!r.ok) {
+                        noOrders.innerHTML = '<div class="no-orders-icon">📭</div><h3>No se encontraron pedidos</h3><p>No hay pedidos con ese teléfono.</p>';
+                        noOrders.style.display = 'block';
+                        ordersSection.style.display = 'none';
+                        stopAutoRefresh();
+                        return;
+                    }
+                    var data2 = await r.json().catch(function() { throw new Error('Respuesta inválida.'); });
+                    orders = data2.orders || [];
+                }
+
+                if (orders.length === 0) {
+                    noOrders.innerHTML = '<div class="no-orders-icon">📭</div><h3>No se encontraron pedidos</h3><p>Prueba con el número de pedido (ej: 1) o tu teléfono.</p>';
+                    noOrders.style.display = 'block';
+                    ordersSection.style.display = 'none';
+                    return;
+                }
+
+                orders.forEach(function(o) {
+                    var prev = lastOrderStatuses[o.id];
+                    if (prev !== undefined && prev !== o.status) showOrderStatusNotification(o.id, o.status);
+                    lastOrderStatuses[o.id] = o.status;
+                });
+
+                window.trackingOrders = orders;
+                noOrders.style.display = 'none';
+                ordersSection.style.display = 'block';
+
+                if (orders.length > 1) {
+                    selectorWrap.style.display = 'block';
+                    selectEl.innerHTML = orders.map(function(o) {
+                        return '<option value="' + o.id + '">Pedido #' + o.id + ' · ' + (o.business_name || '') + ' · $' + (o.total || 0).toLocaleString() + '</option>';
+                    }).join('');
+                    selectEl.onchange = function() {
+                        var id = parseInt(selectEl.value, 10);
+                        var ord = orders.find(function(o) { return o.id === id; });
+                        if (ord) cols.innerHTML = renderOrderDetail(ord);
+                    };
+                } else {
+                    selectorWrap.style.display = 'none';
+                }
+
+                var showOrder = orders.length > 1 ? orders[0] : orders[0];
+                if (orders.length > 1) selectEl.value = showOrder.id;
+                cols.innerHTML = renderOrderDetail(showOrder);
+                if (displayRefreshInterval) clearInterval(displayRefreshInterval);
+                displayRefreshInterval = setInterval(refreshTimelineDisplay, TIMELINE_REFRESH_MS);
+            } catch (err) {
+                console.error(err);
+                stopAutoRefresh();
+                noOrders.innerHTML = '<div class="no-orders-icon">⚠️</div><h3>No se pudo cargar</h3><p>' + (err.message || 'Error de conexión.') + ' Verifica que el servidor esté en marcha (puerto 8000).</p>';
+                noOrders.style.display = 'block';
+                ordersSection.style.display = 'none';
+            }
+        }
+
+        document.getElementById('orders-area').addEventListener('click', async function(e) {
+            var cancelBtn = e.target.closest('.action-btn.cancel');
+            if (!cancelBtn) return;
+            var wrapper = cancelBtn.closest('[data-order-id]');
+            var orderId = wrapper && wrapper.getAttribute('data-order-id');
+            if (!orderId) return;
+            if (!confirm('¿Cancelar el pedido #' + orderId + '? Esta acción no se puede deshacer.')) return;
+            try {
+                var res = await fetch('/api/delivery/orders/' + orderId + '/status', {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ status: 'cancelado' })
+                });
+                if (!res.ok) {
+                    var err = await res.json().catch(function() { return {}; });
+                    alert(err.detail || 'No se pudo cancelar el pedido.');
+                    return;
+                }
+                alert('Pedido #' + orderId + ' cancelado.');
+                loadOrders();
+            } catch (err) {
+                alert('Error de conexión. No se pudo cancelar.');
+            }
+        });
+
+        window.addEventListener('DOMContentLoaded', function() {
+            var params = new URLSearchParams(window.location.search);
+            var phone = params.get('phone');
+            var orderId = params.get('order');
+            var searchInput = document.getElementById('search-input');
+            if (orderId) {
+                searchInput.value = orderId;
+                currentSearch = orderId;
+                searchByOrderId = true;
+                loadOrders();
+                if (refreshInterval) clearInterval(refreshInterval);
+                refreshInterval = setInterval(loadOrders, 5000);
+            } else if (phone) {
+                searchInput.value = phone;
+                currentSearch = phone;
+                searchByOrderId = false;
+                loadOrders();
+                if (refreshInterval) clearInterval(refreshInterval);
+                refreshInterval = setInterval(loadOrders, 5000);
+            }
+        });
+    </script>
+    <script src="/static/theme.js"></script>
+</body>
+</html>

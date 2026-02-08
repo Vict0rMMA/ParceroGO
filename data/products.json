@@ -1,0 +1,452 @@
+[
+  {
+    "id": 1,
+    "business_id": 1,
+    "name": "Leche 1L",
+    "price": 4500,
+    "description": "Entera",
+    "category": "Supermercado",
+    "available": false,
+    "image": "https://picsum.photos/seed/s1/400"
+  },
+  {
+    "id": 2,
+    "business_id": 1,
+    "name": "Huevos x12",
+    "price": 8000,
+    "description": "AA",
+    "category": "Supermercado",
+    "available": false,
+    "image": "https://picsum.photos/seed/s2/400"
+  },
+  {
+    "id": 3,
+    "business_id": 1,
+    "name": "Queso 250g",
+    "price": 5500,
+    "description": "Campesino",
+    "category": "Supermercado",
+    "available": false,
+    "image": "https://picsum.photos/seed/s3/400"
+  },
+  {
+    "id": 4,
+    "business_id": 2,
+    "name": "Sancocho",
+    "price": 18000,
+    "description": "Sopa tradicional",
+    "category": "Restaurante",
+    "available": true,
+    "image": "https://picsum.photos/seed/r2/400"
+  },
+  {
+    "id": 5,
+    "business_id": 2,
+    "name": "Hamburguesa",
+    "price": 15000,
+    "description": "Artesanal",
+    "category": "Restaurante",
+    "available": true,
+    "image": "https://picsum.photos/seed/r3/400"
+  },
+  {
+    "id": 6,
+    "business_id": 2,
+    "name": "Bandeja Paisa",
+    "price": 25000,
+    "description": "Plato típico",
+    "category": "Restaurante",
+    "available": false,
+    "image": "https://picsum.photos/seed/r1/400"
+  },
+  {
+    "id": 7,
+    "business_id": 3,
+    "name": "Alcohol",
+    "price": 3500,
+    "description": "500ml",
+    "category": "Farmacia",
+    "available": true,
+    "image": "https://picsum.photos/seed/far3/400"
+  },
+  {
+    "id": 8,
+    "business_id": 3,
+    "name": "Acetaminofén",
+    "price": 5000,
+    "description": "500mg",
+    "category": "Farmacia",
+    "available": true,
+    "image": "https://picsum.photos/seed/far1/400"
+  },
+  {
+    "id": 9,
+    "business_id": 3,
+    "name": "Ibuprofeno",
+    "price": 6000,
+    "description": "Antiinflamatorio",
+    "category": "Farmacia",
+    "available": true,
+    "image": "https://picsum.photos/seed/far2/400"
+  },
+  {
+    "id": 10,
+    "business_id": 4,
+    "name": "Pan Integral",
+    "price": 3000,
+    "description": "500g",
+    "category": "Panadería",
+    "available": true,
+    "image": "https://picsum.photos/seed/pan3/400"
+  },
+  {
+    "id": 11,
+    "business_id": 4,
+    "name": "Pan de Bono",
+    "price": 500,
+    "description": "Tradicional",
+    "category": "Panadería",
+    "available": false,
+    "image": "https://picsum.photos/seed/pan1/400"
+  },
+  {
+    "id": 12,
+    "business_id": 4,
+    "name": "Almojábana",
+    "price": 600,
+    "description": "Fresca",
+    "category": "Panadería",
+    "available": true,
+    "image": "https://picsum.photos/seed/pan2/400"
+  },
+  {
+    "id": 13,
+    "business_id": 5,
+    "name": "Café Tinto",
+    "price": 2000,
+    "description": "Colombiano",
+    "category": "Cafetería",
+    "available": false,
+    "image": "https://picsum.photos/seed/c1/400"
+  },
+  {
+    "id": 14,
+    "business_id": 5,
+    "name": "Pastel",
+    "price": 4000,
+    "description": "Casero",
+    "category": "Cafetería",
+    "available": true,
+    "image": "https://picsum.photos/seed/c3/400"
+  },
+  {
+    "id": 15,
+    "business_id": 5,
+    "name": "Cappuccino",
+    "price": 4500,
+    "description": "Italiano",
+    "category": "Cafetería",
+    "available": true,
+    "image": "https://picsum.photos/seed/c2/400"
+  },
+  {
+    "id": 16,
+    "business_id": 6,
+    "name": "Aceite 1L",
+    "price": 8500,
+    "description": "Aceite de cocina",
+    "category": "Tienda de Abarrotes",
+    "available": true,
+    "image": "https://picsum.photos/seed/t2/400"
+  },
+  {
+    "id": 17,
+    "business_id": 6,
+    "name": "Azúcar 1kg",
+    "price": 2800,
+    "description": "Azúcar blanca",
+    "category": "Tienda de Abarrotes",
+    "available": true,
+    "image": "https://picsum.photos/seed/t3/400"
+  },
+  {
+    "id": 18,
+    "business_id": 6,
+    "name": "Arroz 1kg",
+    "price": 3500,
+    "description": "Arroz premium",
+    "category": "Tienda de Abarrotes",
+    "available": true,
+    "image": "https://picsum.photos/seed/t1/400"
+  },
+  {
+    "id": 19,
+    "business_id": 7,
+    "name": "Leche 1L",
+    "price": 4500,
+    "description": "Entera",
+    "category": "Supermercado",
+    "available": true,
+    "image": "https://picsum.photos/seed/s1/400"
+  },
+  {
+    "id": 20,
+    "business_id": 7,
+    "name": "Queso 250g",
+    "price": 5500,
+    "description": "Campesino",
+    "category": "Supermercado",
+    "available": true,
+    "image": "https://picsum.photos/seed/s3/400"
+  },
+  {
+    "id": 21,
+    "business_id": 7,
+    "name": "Huevos x12",
+    "price": 8000,
+    "description": "AA",
+    "category": "Supermercado",
+    "available": false,
+    "image": "https://picsum.photos/seed/s2/400"
+  },
+  {
+    "id": 22,
+    "business_id": 8,
+    "name": "Bandeja Paisa",
+    "price": 25000,
+    "description": "Plato típico",
+    "category": "Restaurante",
+    "available": false,
+    "image": "https://picsum.photos/seed/r1/400"
+  },
+  {
+    "id": 23,
+    "business_id": 8,
+    "name": "Hamburguesa",
+    "price": 15000,
+    "description": "Artesanal",
+    "category": "Restaurante",
+    "available": true,
+    "image": "https://picsum.photos/seed/r3/400"
+  },
+  {
+    "id": 24,
+    "business_id": 8,
+    "name": "Sancocho",
+    "price": 18000,
+    "description": "Sopa tradicional",
+    "category": "Restaurante",
+    "available": true,
+    "image": "https://picsum.photos/seed/r2/400"
+  },
+  {
+    "id": 25,
+    "business_id": 9,
+    "name": "Acetaminofén",
+    "price": 5000,
+    "description": "500mg",
+    "category": "Farmacia",
+    "available": true,
+    "image": "https://picsum.photos/seed/far1/400"
+  },
+  {
+    "id": 26,
+    "business_id": 9,
+    "name": "Alcohol",
+    "price": 3500,
+    "description": "500ml",
+    "category": "Farmacia",
+    "available": true,
+    "image": "https://picsum.photos/seed/far3/400"
+  },
+  {
+    "id": 27,
+    "business_id": 9,
+    "name": "Ibuprofeno",
+    "price": 6000,
+    "description": "Antiinflamatorio",
+    "category": "Farmacia",
+    "available": true,
+    "image": "https://picsum.photos/seed/far2/400"
+  },
+  {
+    "id": 28,
+    "business_id": 10,
+    "name": "Almojábana",
+    "price": 600,
+    "description": "Fresca",
+    "category": "Panadería",
+    "available": true,
+    "image": "https://picsum.photos/seed/pan2/400"
+  },
+  {
+    "id": 29,
+    "business_id": 10,
+    "name": "Pan de Bono",
+    "price": 500,
+    "description": "Tradicional",
+    "category": "Panadería",
+    "available": true,
+    "image": "https://picsum.photos/seed/pan1/400"
+  },
+  {
+    "id": 30,
+    "business_id": 10,
+    "name": "Pan Integral",
+    "price": 3000,
+    "description": "500g",
+    "category": "Panadería",
+    "available": true,
+    "image": "https://picsum.photos/seed/pan3/400"
+  },
+  {
+    "id": 31,
+    "business_id": 11,
+    "name": "Pizza Margherita",
+    "price": 18000,
+    "description": "Clásica",
+    "category": "Pizzería",
+    "available": true,
+    "image": "https://picsum.photos/seed/p1/400"
+  },
+  {
+    "id": 32,
+    "business_id": 11,
+    "name": "Pizza Familiar",
+    "price": 35000,
+    "description": "Para compartir",
+    "category": "Pizzería",
+    "available": true,
+    "image": "https://picsum.photos/seed/p3/400"
+  },
+  {
+    "id": 33,
+    "business_id": 11,
+    "name": "Pizza Pepperoni",
+    "price": 22000,
+    "description": "Con queso",
+    "category": "Pizzería",
+    "available": true,
+    "image": "https://picsum.photos/seed/p2/400"
+  },
+  {
+    "id": 34,
+    "business_id": 12,
+    "name": "Pizza Pepperoni",
+    "price": 22000,
+    "description": "Con queso",
+    "category": "Pizzería",
+    "available": false,
+    "image": "https://picsum.photos/seed/p2/400"
+  },
+  {
+    "id": 35,
+    "business_id": 12,
+    "name": "Pizza Margherita",
+    "price": 18000,
+    "description": "Clásica",
+    "category": "Pizzería",
+    "available": false,
+    "image": "https://picsum.photos/seed/p1/400"
+  },
+  {
+    "id": 36,
+    "business_id": 12,
+    "name": "Pizza Familiar",
+    "price": 35000,
+    "description": "Para compartir",
+    "category": "Pizzería",
+    "available": false,
+    "image": "https://picsum.photos/seed/p3/400"
+  },
+  {
+    "id": 37,
+    "business_id": 13,
+    "name": "Hamburguesa Clásica",
+    "price": 12000,
+    "description": "Con papas",
+    "category": "Comidas Rápidas",
+    "available": false,
+    "image": "https://picsum.photos/seed/f1/400"
+  },
+  {
+    "id": 38,
+    "business_id": 13,
+    "name": "Perro Caliente",
+    "price": 8000,
+    "description": "Especial",
+    "category": "Comidas Rápidas",
+    "available": true,
+    "image": "https://picsum.photos/seed/f2/400"
+  },
+  {
+    "id": 39,
+    "business_id": 13,
+    "name": "Empanadas",
+    "price": 3000,
+    "description": "De carne",
+    "category": "Comidas Rápidas",
+    "available": true,
+    "image": "https://picsum.photos/seed/f3/400"
+  },
+  {
+    "id": 40,
+    "business_id": 14,
+    "name": "Hamburguesa Clásica",
+    "price": 12000,
+    "description": "Con papas",
+    "category": "Comidas Rápidas",
+    "available": false,
+    "image": "https://picsum.photos/seed/f1/400"
+  },
+  {
+    "id": 41,
+    "business_id": 14,
+    "name": "Perro Caliente",
+    "price": 8000,
+    "description": "Especial",
+    "category": "Comidas Rápidas",
+    "available": true,
+    "image": "https://picsum.photos/seed/f2/400"
+  },
+  {
+    "id": 42,
+    "business_id": 14,
+    "name": "Empanadas",
+    "price": 3000,
+    "description": "De carne",
+    "category": "Comidas Rápidas",
+    "available": true,
+    "image": "https://picsum.photos/seed/f3/400"
+  },
+  {
+    "id": 43,
+    "business_id": 15,
+    "name": "Empanadas",
+    "price": 3000,
+    "description": "De carne",
+    "category": "Comidas Rápidas",
+    "available": false,
+    "image": "https://picsum.photos/seed/f3/400"
+  },
+  {
+    "id": 44,
+    "business_id": 15,
+    "name": "Perro Caliente",
+    "price": 8000,
+    "description": "Especial",
+    "category": "Comidas Rápidas",
+    "available": true,
+    "image": "https://picsum.photos/seed/f2/400"
+  },
+  {
+    "id": 45,
+    "business_id": 15,
+    "name": "Hamburguesa Clásica",
+    "price": 12000,
+    "description": "Con papas",
+    "category": "Comidas Rápidas",
+    "available": false,
+    "image": "https://picsum.photos/seed/f1/400"
+  }
+]
