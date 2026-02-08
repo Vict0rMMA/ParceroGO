@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ParceroGo — Delivery Medellín</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(165deg, #0f172a 0%, #0c1222 50%, #080d18 100%);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+    }
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(135deg, #FFD23F 0%, #FF8C00 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    p { color: #b8b8b8; margin-bottom: 2rem; max-width: 420px; }
+    a {
+      display: inline-block;
+      padding: 1rem 2rem;
+      background: linear-gradient(135deg, #FFD23F 0%, #FF8C00 100%);
+      color: #0a0a0a;
+      text-decoration: none;
+      font-weight: 700;
+      border-radius: 14px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    a:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(255, 210, 63, 0.4); }
+  </style>
+</head>
+<body>
+  <h1>ParceroGo</h1>
+  <p>Delivery para negocios de barrio en Medellín. MVP académico.</p>
+  <a href="https://parcerogo.onrender.com" id="app-link">Ir a la app →</a>
+  <script>
+    var url = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+      ? 'http://127.0.0.1:8000'
+      : 'https://parcerogo.onrender.com';
+    document.getElementById('app-link').href = url;
+  </script>
+</body>
+</html>

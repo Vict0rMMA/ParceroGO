@@ -1,0 +1,15 @@
+# Netlify - Landing estática (la app completa se despliega en Render)
+# Este sitio solo muestra una página que enlaza a la app.
+# https://docs.netlify.com/configure-builds/file-based-configuration/
+
+[build]
+  publish = "netlify-public"
+  command = "echo Build OK"
+
+[build.environment]
+  NODE_VERSION = "18"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
