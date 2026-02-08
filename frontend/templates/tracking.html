@@ -244,6 +244,13 @@
             return 0;
         }
 
+        function canCancelOrder(order) {
+            if (!order) return false;
+            var s = order.status;
+            if (s === 'entregado' || s === 'cancelado') return false;
+            return true;
+        }
+
         /** Paso a mostrar en el timeline: avanza poco a poco con el tiempo (simulado), sin superar el estado real del pedido. */
         function getDisplayStep(order) {
             var realStep = getStatusStep(order);
@@ -319,7 +326,7 @@
                 '<button type="button" class="action-btn" title="Entregar en portería"><span class="action-icon">🔔</span><span class="action-label">Entregar en portería</span></button>' +
                 '<button type="button" class="action-btn" title="Cambiar domicilio"><span class="action-icon">📍</span><span class="action-label">Cambiar domicilio</span></button>' +
                 '<button type="button" class="action-btn" title="Opinar del envío"><span class="action-icon">👍</span><span class="action-label">Opinar del envío</span></button>' +
-                (order.status !== 'entregado' && order.status !== 'cancelado' ? '<button type="button" class="action-btn cancel" title="Cancelar compra"><span class="action-icon">✕</span><span class="action-label">Cancelar compra</span></button>' : '') +
+                (canCancelOrder(order) ? '<button type="button" class="action-btn cancel" title="Cancelar pedido"><span class="action-icon">✕</span><span class="action-label">Cancelar pedido</span></button>' : '') +
                 '</div></div>' +
                 '<div class="card address-card">' +
                 '<div class="addr-icon">🏠</div>' +
@@ -441,51 +448,36 @@
             var wrapper = cancelBtn.closest('[data-order-id]');
             var orderId = wrapper && wrapper.getAttribute('data-order-id');
             if (!orderId) return;
+            var doCancel = function () {
+                (async function () {
+                    try {
+                        var res = await fetch('/api/delivery/orders/' + orderId + '/status', {
+                            method: 'PATCH',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ status: 'cancelado' })
+                        });
+                        if (!res.ok) {
+                            var err = await res.json().catch(function() { return {}; });
+                            if (typeof showAlert === 'function') showAlert(err.detail || 'No se pudo cancelar el pedido.', 'error', 'Error');
+                            else alert(err.detail || 'No se pudo cancelar el pedido.');
+                            return;
+                        }
+                        if (typeof showAlert === 'function') showAlert('Tu pedido #' + orderId + ' se ha cancelado correctamente.', 'success', 'Pedido cancelado', function() { loadOrders(); });
+                        else { alert('Pedido #' + orderId + ' cancelado.'); loadOrders(); }
+                    } catch (err) {
+                        if (typeof showAlert === 'function') showAlert('Error de conexión. No se pudo cancelar.', 'error', 'Error');
+                        else alert('Error de conexión. No se pudo cancelar.');
+                    }
+                })();
+            };
             if (typeof showConfirm === 'function') {
                 showConfirm(
                     '¿Cancelar el pedido #' + orderId + '? Esta acción no se puede deshacer.',
                     'Cancelar pedido',
-                    function () {
-                        (async function () {
-                            try {
-                                var res = await fetch('/api/delivery/orders/' + orderId + '/status', {
-                                    method: 'PATCH',
-                                    headers: { 'Content-Type': 'application/json' },
-                                    body: JSON.stringify({ status: 'cancelado' })
-                                });
-                                if (!res.ok) {
-                                    var err = await res.json().catch(function() { return {}; });
-                                    if (typeof showAlert === 'function') showAlert(err.detail || 'No se pudo cancelar el pedido.', 'error', 'Error');
-                                    else alert(err.detail || 'No se pudo cancelar el pedido.');
-                                    return;
-                                }
-                                if (typeof showAlert === 'function') showAlert('Pedido #' + orderId + ' cancelado.', 'success', 'Pedido cancelado');
-                                else alert('Pedido #' + orderId + ' cancelado.');
-                                loadOrders();
-                            } catch (err) {
-                                if (typeof showAlert === 'function') showAlert('Error de conexión. No se pudo cancelar.', 'error', 'Error');
-                                else alert('Error de conexión. No se pudo cancelar.');
-                            }
-                        })();
-                    }
+                    doCancel
                 );
             } else if (confirm('¿Cancelar el pedido #' + orderId + '? Esta acción no se puede deshacer.')) {
-                try {
-                    var res = await fetch('/api/delivery/orders/' + orderId + '/status', {
-                        method: 'PATCH',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ status: 'cancelado' })
-                    });
-                    if (!res.ok) {
-                        var err = await res.json().catch(function() { return {}; });
-                        alert(err.detail || 'No se pudo cancelar el pedido.');
-                        return;
-                    }
-                    alert('Pedido #' + orderId + ' cancelado.');
-                    loadOrders();
-                } catch (err) {
-                    alert('Error de conexión. No se pudo cancelar.');
-                }
+                doCancel();
             }
         });
 

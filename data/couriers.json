@@ -58,10 +58,10 @@
     "lat": 6.257,
     "lng": -75.557631,
     "zone": "Centro",
-    "available": true,
+    "available": false,
     "vehicle": "Moto",
     "rating": 4.7,
-    "current_order_id": null,
+    "current_order_id": 16,
     "total_deliveries": 100
   },
   {
