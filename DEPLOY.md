@@ -1,6 +1,6 @@
 # Desplegar ParceroGo
 
-Este proyecto tiene **backend en Python (FastAPI)**. Netlify solo sirve sitios estáticos, no ejecuta ese servidor. Por eso hay dos despliegues:
+Este proyecto tiene **backend en Python (FastAPI)**. Vercel sirve solo la landing estática; la app completa se despliega en Render.
 
 ---
 
@@ -25,20 +25,19 @@ La app entera (API + páginas) se despliega en **Render**.
 
 ---
 
-## 2. Netlify (landing que enlaza a la app)
+## 2. Vercel (landing que enlaza a la app)
 
-En Netlify se despliega solo una **página estática** que lleva a la app en Render.
+En Vercel se despliega solo la **página estática** que lleva a la app en Render.
 
-1. Entra a **https://app.netlify.com** y conecta el mismo repo de GitHub.
-2. Configuración del sitio:
-   - **Build command:** `echo Build OK` (o deja el que use `netlify.toml`).
-   - **Publish directory:** `netlify-public`
-3. **Deploy site**.
-4. Después del primer deploy en **Render**, copia la URL de tu servicio (ej: `https://parcerogo.onrender.com`).
-5. En el repo, edita **`netlify-public/index.html`**: cambia la URL del botón “Ir a la app” por tu URL de Render (busca `parcerogo.onrender.com` y sustitúyela).
-6. Vuelve a desplegar en Netlify (push al repo o “Trigger deploy” en Netlify).
+1. Entra a **https://vercel.com** y conecta el mismo repo de GitHub.
+2. Al crear el proyecto, en **Root Directory** elige **Edit** y pon: `landing`.
+3. **Framework Preset:** Other (o deja que lo detecte como estático).
+4. No hace falta Build Command; **Deploy**.
+5. Después del primer deploy en **Render**, copia la URL de tu servicio (ej: `https://parcerogo.onrender.com`).
+6. En el repo, edita **`landing/index.html`**: cambia la URL del botón “Ir a la app” por tu URL de Render (busca `parcerogo.onrender.com` y sustitúyela).
+7. Vuelve a desplegar en Vercel (push al repo o redeploy desde el dashboard).
 
-Tu dominio de Netlify (ej: `algo.netlify.app`) mostrará esa landing; el botón llevará a la app en Render.
+Tu dominio de Vercel (ej: `parcerogo.vercel.app`) mostrará la landing; el botón llevará a la app en Render.
 
 ---
 
@@ -47,6 +46,6 @@ Tu dominio de Netlify (ej: `algo.netlify.app`) mostrará esa landing; el botón 
 | Dónde    | Qué se despliega                          |
 |----------|-------------------------------------------|
 | **Render** | App completa (FastAPI + frontend + API). |
-| **Netlify** | Solo la landing con el botón “Ir a la app”. |
+| **Vercel** | Solo la landing con el botón “Ir a la app”. |
 
-Para que todo funcione: primero despliega en **Render** y luego (opcional) en **Netlify** usando la URL de Render en el botón.
+Para que todo funcione: primero despliega en **Render** y luego (opcional) en **Vercel** usando la URL de Render en el botón.
