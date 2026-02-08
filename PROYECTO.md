@@ -12,7 +12,6 @@ Este proyecto es un **MVP (Minimum Viable Product)** académico de una plataform
 - **Frontend**: HTML5, CSS3, JavaScript (Vanilla)
 - **Mapa**: Leaflet.js + OpenStreetMap
 - **Almacenamiento**: Archivos JSON (sin base de datos)
-- **Web Scraping**: BeautifulSoup4, Requests (para generación de datos)
 
 ### Estructura de Directorios
 
@@ -25,10 +24,7 @@ MASCOTAS/
 │   │   ├── delivery.py   # Rutas de delivery
 │   │   ├── payments.py   # Rutas de pagos
 │   │   └── couriers.py   # Rutas de repartidores
-│   └── scraping/         # Scripts de generación de datos
-│       ├── businesses_scraper.py
-│       ├── products_scraper.py
-│       └── couriers_scraper.py
+│   └── data_generator.py # Generación de datos (negocios, productos, repartidores)
 ├── data/                  # Archivos JSON de datos
 ├── templates/            # Templates HTML
 ├── static/               # Archivos estáticos (CSS, JS)
@@ -43,13 +39,6 @@ MASCOTAS/
 2. **Bajo costo**: No requiere servidor de base de datos
 3. **Propósito académico**: Demuestra conceptos sin complejidad innecesaria
 4. **Escalabilidad futura**: La arquitectura permite migrar a BD fácilmente
-
-### ¿Por qué web scraping?
-
-1. **Datos realistas**: Los datos generados reflejan estructuras reales
-2. **Propósito académico**: Demuestra conocimiento de técnicas de scraping
-3. **Datos públicos**: Solo se simulan datos de fuentes públicas
-4. **Prototipado**: Permite poblar el sistema rápidamente
 
 ## 📊 Módulos del Sistema
 
@@ -135,8 +124,7 @@ Este proyecto demuestra:
 1. **Arquitectura de software**: Separación de módulos y responsabilidades
 2. **APIs RESTful**: Diseño de endpoints bien estructurados
 3. **Integración de tecnologías**: Frontend, Backend, Mapas
-4. **Web Scraping**: Técnicas de obtención de datos
-5. **Sin dependencias complejas**: Solución viable sin base de datos
+4. **Sin dependencias complejas**: Solución viable sin base de datos
 6. **Cálculos geográficos**: Uso de fórmulas matemáticas (Haversine)
 
 ## 📝 Notas para el Profesor

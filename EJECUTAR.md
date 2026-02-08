@@ -41,7 +41,6 @@ python -m uvicorn backend.app.main:app --host 127.0.0.1 --port 8000
 Abre tu navegador y ve a:
 - **http://127.0.0.1:8000** - Página principal
 - **http://127.0.0.1:8000/delivery** - Módulo de delivery
-- **http://127.0.0.1:8000/jumbo** - Productos Jumbo
 - **http://127.0.0.1:8000/api/docs** - Documentación API
 
 ---

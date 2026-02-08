@@ -70,9 +70,9 @@ python -m app.main
 - Filtros avanzados
 - Búsqueda por múltiples criterios
 
-✅ **Web Scraping**:
-- Scripts para generar datos realistas
-- Basados en estructura de datos públicos
+✅ **Generación de datos**:
+- Datos iniciales generados por script (negocios, productos, repartidores)
+- Almacenamiento en JSON
 
 ## 🔧 Solución Rápida (Todo en Uno)
 

@@ -27,7 +27,7 @@ Todo el servidor y la lógica de la API.
 | App FastAPI | `backend/app/main.py` |
 | Rutas API | `backend/app/routes/` (delivery, payments, couriers, orders, notifications) |
 | Utilidades | `backend/app/utils.py` (JSON, distancia, etc.) |
-| Generación de datos | `backend/app/data_generator.py` (sin scraping) |
+| Generación de datos | `backend/app/data_generator.py` |
 | SMS / notificaciones | `backend/app/notify_sms.py`, `backend/app/sms_service.py` |
 | Inicializar datos | `backend/init_data.py` |
 | Dependencias | `backend/requirements.txt` |
@@ -53,7 +53,7 @@ Páginas, estilos y scripts del navegador.
 
 | Qué | Dónde |
 |-----|--------|
-| Plantillas HTML | `frontend/templates/` (index, delivery, jumbo, checkout, tracking, perfil, etc.) |
+| Plantillas HTML | `frontend/templates/` (index, delivery, checkout, tracking, perfil, etc.) |
 | CSS | `frontend/static/style.css` |
 | JavaScript | `frontend/static/` (delivery.js, address.js, theme.js, alerts.js) |
 | PWA | `frontend/static/manifest.json`, `frontend/static/sw.js` |
@@ -68,7 +68,6 @@ Archivos JSON en la raíz del proyecto (no dentro de backend).
 
 - `businesses.json` – Negocios  
 - `products.json` – Productos por negocio  
-- `jumbo_products.json` – Productos Jumbo  
 - `couriers.json` – Repartidores  
 - `orders.json` – Pedidos  
 - `payments.json` – Pagos  
