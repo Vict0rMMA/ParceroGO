@@ -30,9 +30,9 @@ La app entera (API + páginas) se despliega en **Render**.
 En Vercel se despliega solo la **página estática** que lleva a la app en Render.
 
 1. Entra a **https://vercel.com** y conecta el mismo repo de GitHub.
-2. Al crear el proyecto, en **Root Directory** elige **Edit** y pon: `landing`.
-3. **Framework Preset:** Other (o deja que lo detecte como estático).
-4. No hace falta Build Command; **Deploy**.
+2. **Importante:** En **Settings** → **General** → **Root Directory** pon `landing` y guarda. Si no, verás 404 (el `index.html` está en `landing/`).
+3. El repo tiene `vercel.json` con `outputDirectory: "landing"`; aun así, configurar Root Directory en Vercel evita el 404.
+4. **Framework Preset:** Other. No hace falta Build Command; **Deploy**.
 5. Después del primer deploy en **Render**, copia la URL de tu servicio (ej: `https://parcerogo.onrender.com`).
 6. En el repo, edita **`landing/index.html`**: cambia la URL del botón “Ir a la app” por tu URL de Render (busca `parcerogo.onrender.com` y sustitúyela).
 7. Vuelve a desplegar en Vercel (push al repo o redeploy desde el dashboard).
