@@ -1,6 +1,3 @@
-/**
- * Service Worker — caché estático y notificaciones push (simuladas).
- */
 var CACHE_NAME = 'delivery-v1';
 var STATIC_URLS = ['/static/style.css', '/static/theme.js', '/static/alerts.js', '/static/delivery.js', '/'];
 

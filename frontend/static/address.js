@@ -1,10 +1,4 @@
-/**
- * address.js — Dirección de entrega, sesión simulada y perfil de usuario.
- * Todo se persiste en localStorage (sin backend real).
- */
-
 (function () {
-    // --- Constantes de almacenamiento ---
     var STORAGE_KEY = 'delivery_current_address';
     var PROFILE_KEY = 'parcero_user_profile';
     var SESSION_KEY = 'parcero_session';
@@ -13,7 +7,6 @@
     var ADDRESSES_KEY = 'delivery_saved_addresses';
     var DEFAULT_ADDRESS = 'Calle 39B #109-46, Medellín';
 
-    // --- Sesión simulada ---
     window.isSessionActive = function () {
         try { return localStorage.getItem(SESSION_KEY) === 'true'; } catch (e) { return false; }
     };
@@ -36,7 +29,6 @@
         try { return localStorage.getItem(USER_PHONE_KEY) || ''; } catch (e) { return ''; }
     };
 
-    // --- Dirección actual ---
     window.getCurrentAddress = function () {
         try {
             var s = localStorage.getItem(STORAGE_KEY);
@@ -53,7 +45,6 @@
         return false;
     };
 
-    // --- Perfil de usuario (nombre, teléfono, dirección) ---
     window.getUserProfile = function () {
         try {
             var s = localStorage.getItem(PROFILE_KEY);
@@ -81,7 +72,6 @@
     };
     window.isUserRegistered = function () { return isSessionActive(); };
 
-    // --- Cerrar sesión (borra sesión, perfil, direcciones) ---
     window.clearSession = function () {
         try {
             localStorage.removeItem(SESSION_KEY);
@@ -93,7 +83,6 @@
         } catch (e) {}
     };
 
-    // --- Navbar: mostrar "Iniciar sesión" o "Perfil" según sesión ---
     window.initNavSession = function () {
         var loginLink = document.querySelector('.nav-link-login');
         var perfilLink = document.querySelector('.nav-link-perfil');
@@ -130,7 +119,6 @@
         return div.innerHTML;
     }
 
-    /** Modal bonito para editar dirección (reemplaza el prompt feo del navegador). */
     function showEditAddressDialog(value, title, onDone) {
         var overlay = document.createElement('div');
         overlay.className = 'address-edit-overlay';
@@ -180,7 +168,6 @@
         });
     }
 
-    /** Abre el modal de selección de dirección. onUpdateDisplay se llama al elegir una dirección. */
     window.openAddressModal = function (onUpdateDisplay) {
         onUpdateDisplay = onUpdateDisplay || function () {};
         var overlay = document.getElementById('address-modal-overlay');
@@ -279,7 +266,6 @@
         overlay.classList.add('show');
     };
 
-    /** Rellena el bloque .app-header-address y al clic abre el modal de dirección. */
     window.initHeaderAddress = function () {
         var block = document.querySelector('.app-header-address');
         if (!block) return;

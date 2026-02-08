@@ -1,7 +1,3 @@
-/**
- * Imágenes de productos por nombre (Unsplash): foto según nombre del producto.
- * Leche → leche, Pizza → pizza, etc.
- */
 (function () {
     var BASE_URL = 'https://images.unsplash.com/photo-';
     var QUERY = '?w=400&h=300&fit=crop';

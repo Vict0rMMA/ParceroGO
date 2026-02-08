@@ -1,9 +1,3 @@
-/**
- * Página Delivery: lista de negocios, mapa, productos y carrito.
- * Carga datos desde /api/delivery (simulado). Sesión y direcciones en address.js.
- */
-
-// --- Estado global ---
 var businesses = [];
 var selectedBusiness = null;
 var selectedProducts = [];
@@ -12,7 +6,6 @@ var businessMarkers = [];
 var courierMarkers = [];
 var deliveryFiltersBound = false;
 
-// --- Constantes: categorías (slug URL → nombres en datos y etiqueta) ---
 var CATEGORIA_SLUG_TO_NAMES = {
     super: ['Supermercado', 'Tienda de Abarrotes'],
     expres: ['Tienda de Abarrotes', 'Supermercado'],
@@ -34,7 +27,6 @@ var CATEGORY_ICONS = {
 var CATEGORY_ORDER = ['Comidas Rápidas', 'Pizzería', 'Restaurante', 'Cafetería', 'Farmacia', 'Panadería', 'Supermercado', 'Veterinaria', 'Tienda de Mascotas', 'Tienda de Abarrotes'];
 var FAVORITES_KEY = 'delivery_favorites';
 
-// --- Helpers: URL y filtros ---
 function getCategoryFilterFromUrl() {
     var params = new URLSearchParams(window.location.search);
     var slug = (params.get('categoria') || '').toLowerCase().trim();
@@ -48,7 +40,6 @@ function highlightActiveCategoryChip() {
     });
 }
 
-// --- Helpers: imágenes (delegan a business-images.js / product-images.js) ---
 function getBusinessImageUrl(businessId, category) {
     if (typeof window.getBusinessImageUrlByCategory === 'function' && category) {
         return window.getBusinessImageUrlByCategory(category, businessId);
@@ -63,7 +54,6 @@ function getProductImageUrl(productId, productName) {
     return 'https://picsum.photos/seed/prod' + productId + '/400/300';
 }
 
-// --- Favoritos (localStorage) ---
 function getFavorites() {
     try {
         var raw = localStorage.getItem(FAVORITES_KEY);
@@ -78,7 +68,6 @@ function toggleFavorite(businessId) {
     displayBusinesses();
 }
 
-// --- Filtros: búsqueda, abierto, orden; se enlazan una sola vez ---
 function setupDeliveryFilters() {
     if (deliveryFiltersBound) return;
     deliveryFiltersBound = true;
@@ -90,7 +79,6 @@ function setupDeliveryFilters() {
     if (sortEl) sortEl.addEventListener('change', displayBusinesses);
 }
 
-// --- Badge del carrito ---
 function updateCartBadge() {
     var badge = document.getElementById('delivery-cart-badge');
     if (badge && typeof selectedProducts !== 'undefined') {
@@ -101,7 +89,6 @@ function updateCartBadge() {
     if (typeof updateDeliveryCartUI === 'function') updateDeliveryCartUI();
 }
 
-// --- Mapa ---
 function initMap() {
     map = L.map('map', { zoomControl: true, scrollWheelZoom: true, zoomControl: false }).setView([6.2476, -75.5658], 13);
     L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
@@ -128,7 +115,6 @@ var courierIcon = L.divIcon({
     popupAnchor: [0, -21]
 });
 
-// --- API: cargar negocios ---
 function loadBusinesses() {
     var listEl = document.getElementById('businesses-list');
     if (!listEl) return;
@@ -160,7 +146,6 @@ function loadBusinesses() {
         });
 }
 
-// --- API: cargar repartidores y marcadores en el mapa ---
 function loadCouriers() {
     fetch('/api/couriers/available')
         .then(function (r) { return r.json(); })
@@ -185,7 +170,6 @@ function loadCouriers() {
         .catch(function (e) { console.error('Error cargando repartidores:', e); });
 }
 
-// --- Lista de negocios: filtrar, ordenar, agrupar y renderizar ---
 function displayBusinesses() {
     var list = document.getElementById('businesses-list');
     if (!list) return;
@@ -298,7 +282,6 @@ function displayBusinesses() {
     }
 }
 
-// --- Seleccionar negocio y cargar productos ---
 function selectBusiness(businessId) {
     selectedBusiness = businesses.filter(function (b) { return b.id === businessId; })[0];
     if (!selectedBusiness) return;
@@ -329,7 +312,6 @@ function selectBusiness(businessId) {
         .catch(function (e) { console.error('Error cargando productos:', e); });
 }
 
-// --- Productos del negocio seleccionado ---
 function displayProducts(products) {
     var list = document.getElementById('products-list');
     list.innerHTML = '<h4 style="margin-bottom: 1.5rem; color: #D4AF37; font-size: 1.5rem; border-bottom: 2px solid #D4AF37; padding-bottom: 0.5rem;">🍽️ Productos Disponibles</h4>';
@@ -360,7 +342,6 @@ function displayProducts(products) {
     updateOrderTotal();
 }
 
-// --- Carrito: agregar / quitar / total ---
 function addProduct(productId, name, price, notes) {
     var existing = selectedProducts.filter(function (p) { return p.product_id === productId && (p.notes || '') === (notes || ''); })[0];
     if (existing) existing.quantity += 1;
@@ -404,7 +385,6 @@ function updateOrderTotal() {
     if (cartTotal) cartTotal.textContent = typeof formatCOP === 'function' ? formatCOP(total) : '$ ' + total.toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
 }
 
-// --- Marcadores de negocios en el mapa ---
 function addBusinessesToMap() {
     if (typeof map === 'undefined' || !map || typeof L === 'undefined') return;
     businessMarkers.forEach(function (m) { try { map.removeLayer(m); } catch (e) {} });
@@ -432,7 +412,6 @@ function addBusinessesToMap() {
     });
 }
 
-// --- Inicialización ---
 try {
     if (document.getElementById('map')) initMap();
 } catch (e) { console.warn('Mapa no inicializado:', e); }

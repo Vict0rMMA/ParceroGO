@@ -1,7 +1,3 @@
-/**
- * Tema (claro/oscuro), idioma (es/en) y registro del Service Worker.
- * Persiste en localStorage: delivery_theme, delivery_lang.
- */
 (function () {
     var THEME_KEY = 'delivery_theme';
     var LANG_KEY = 'delivery_lang';

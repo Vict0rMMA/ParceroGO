@@ -1,17 +1,11 @@
-/**
- * API shim para despliegue estático (Vercel): simula /api/* y /orders/* usando
- * datos estáticos (/data/*.json) y localStorage. Misma forma de respuesta que el backend FastAPI.
- * Si la app se sirve desde el backend (localhost:8000, Render), NO intercepta: se usa la API real.
- */
 (function () {
     'use strict';
-    /** Formato de precios en pesos colombianos (COP). Uso: formatCOP(12345) → "$ 12.345" */
     window.formatCOP = function (n) {
         return '$ ' + (Number(n) || 0).toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
     };
     var origin = window.location.origin || '';
     var isBackend = origin.indexOf('localhost:8000') !== -1 || origin.indexOf('127.0.0.1:8000') !== -1 || origin.indexOf('onrender.com') !== -1;
-    if (isBackend) return; /* Backend real: no interceptar, que las tiendas y todo carguen por API */
+    if (isBackend) return;
     var REAL_FETCH = window.fetch;
     var DATA_PREFIX = '/data/';
     var ORDERS_KEY = 'parcerogo_orders';
@@ -73,13 +67,11 @@
         init = init || {};
         var method = (init.method || 'GET').toUpperCase();
 
-        // GET /api/delivery/businesses
         if (url === '/api/delivery/businesses' && method === 'GET') {
             return loadJson(DATA_PREFIX + 'businesses.json').then(function (arr) {
                 return jsonResponse({ businesses: Array.isArray(arr) ? arr : [] });
             }).catch(function () { return jsonResponse({ businesses: [] }); });
         }
-        // GET /api/delivery/businesses/:id/products
         var m1 = url.match(/^\/api\/delivery\/businesses\/(\d+)\/products$/);
         if (m1 && method === 'GET') {
             var bid = parseInt(m1[1], 10);
@@ -90,7 +82,6 @@
                 return jsonResponse({ products: list });
             }).catch(function () { return jsonResponse({ products: [] }); });
         }
-        // GET /api/couriers/available — inicializa parcerogo_couriers desde /data si no hay
         if (url === '/api/couriers/available' && method === 'GET') {
             return loadJson(DATA_PREFIX + 'couriers.json').then(function (arr) {
                 var list = Array.isArray(arr) ? arr : [];
@@ -103,7 +94,6 @@
                 return jsonResponse({ couriers: available, count: available.length });
             }).catch(function () { return jsonResponse({ couriers: [], count: 0 }); });
         }
-        // GET /api/couriers/
         if (url === '/api/couriers/' && method === 'GET') {
             return loadJson(DATA_PREFIX + 'couriers.json').then(function (arr) {
                 var list = Array.isArray(arr) ? arr : [];
@@ -115,7 +105,6 @@
                 return jsonResponse({ couriers: list });
             }).catch(function () { return jsonResponse({ couriers: [] }); });
         }
-        // GET /api/delivery/products/jumbo
         if (url.indexOf('/api/delivery/products/jumbo') === 0 && method === 'GET') {
             return loadJson(DATA_PREFIX + 'jumbo_products.json').then(function (arr) {
                 var list = Array.isArray(arr) ? arr : [];
@@ -133,7 +122,6 @@
                 });
             }).catch(function () { return jsonResponse({ products: [], count: 0, source: 'Jumbo Colombia', categories: [], category: null }); });
         }
-        // GET /api/delivery/orders
         if (url.indexOf('/api/delivery/orders') === 0 && method === 'GET') {
             var orders = getStoredOrders();
             var q = url.indexOf('?');
@@ -146,7 +134,6 @@
             }
             return Promise.resolve(jsonResponse({ orders: orders, count: orders.length }));
         }
-        // GET /api/delivery/orders/by-phone/:phone
         var m2 = url.match(/^\/api\/delivery\/orders\/by-phone\/(.+)$/);
         if (m2 && method === 'GET') {
             var phone = decodeURIComponent(m2[1]);
@@ -156,7 +143,6 @@
             orders.sort(function (a, b) { return (b.created_at || '').localeCompare(a.created_at || ''); });
             return Promise.resolve(jsonResponse({ orders: orders, count: orders.length }));
         }
-        // GET /api/delivery/orders/:id
         var m3 = url.match(/^\/api\/delivery\/orders\/(\d+)$/);
         if (m3 && method === 'GET') {
             var oid = parseInt(m3[1], 10);
@@ -165,7 +151,6 @@
             if (!order) return Promise.resolve(errorResponse('Pedido no encontrado', 404));
             return Promise.resolve(jsonResponse({ order: order }));
         }
-        // PATCH /api/delivery/orders/:id/status
         var m4 = url.match(/^\/api\/delivery\/orders\/(\d+)\/status$/);
         if (m4 && method === 'PATCH') {
             var oid2 = parseInt(m4[1], 10);
@@ -210,7 +195,6 @@
             }
             return Promise.resolve(applyStatusAndSave());
         }
-        // POST /api/delivery/orders
         if (url === '/api/delivery/orders' && method === 'POST') {
             var payload = (init.body && typeof init.body === 'string') ? JSON.parse(init.body) : {};
             return Promise.all([
@@ -280,7 +264,6 @@
                 return errorResponse(err.message || 'Error al crear pedido', 500);
             });
         }
-        // POST /api/couriers/:id/assign-order/:orderId
         var m5 = url.match(/^\/api\/couriers\/(\d+)\/assign-order\/(\d+)$/);
         if (m5 && method === 'POST') {
             var cid = parseInt(m5[1], 10), oid3 = parseInt(m5[2], 10);
@@ -306,7 +289,6 @@
                 return jsonResponse({ message: 'Pedido ' + oid3 + ' asignado a ' + courier.name, order: order, courier: courier });
             });
         }
-        // POST /api/couriers/:id/complete-order/:orderId
         var m6 = url.match(/^\/api\/couriers\/(\d+)\/complete-order\/(\d+)$/);
         if (m6 && method === 'POST') {
             var cid2 = parseInt(m6[1], 10), oid4 = parseInt(m6[2], 10);
@@ -334,7 +316,6 @@
             }
             return Promise.resolve(handleComplete());
         }
-        // POST /orders/pay
         if (url === '/orders/pay' && method === 'POST') {
             var payBody = (init.body && typeof init.body === 'string') ? JSON.parse(init.body) : {};
             var orders = getStoredOrders();

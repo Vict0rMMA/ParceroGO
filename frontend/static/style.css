@@ -6,7 +6,6 @@
 
 :root,
 [data-theme="dark"] {
-    /* Parcero Go: amarillo/naranja + azul cielo/royal + rojo */
     --pg-yellow: #FFD23F;
     --pg-orange: #FF8C00;
     --pg-blue-sky: #38BDF8;
@@ -68,7 +67,6 @@ html:not([data-theme="light"]) body {
     background-attachment: fixed;
 }
 
-/* Navbar Parcero Go */
 .navbar {
     background: var(--dark-card);
     border-bottom: 3px solid var(--pg-yellow);
@@ -147,7 +145,6 @@ html:not([data-theme="light"]) body {
     .navbar .navbar-center { justify-content: flex-start; gap: 1rem; }
     .navbar .container { gap: 1rem; }
 }
-/* En móvil: navbar con scroll horizontal para que se pueda deslizar y ver todos los enlaces */
 @media (max-width: 768px) {
     .navbar {
         overflow-x: auto;
@@ -249,7 +246,6 @@ html:not([data-theme="light"]) body {
     padding: 2rem;
 }
 
-/* Hero section mejorado negro/dorado */
 .hero {
     text-align: center;
     padding: 4rem 2rem;
@@ -285,7 +281,6 @@ html:not([data-theme="light"]) body {
     opacity: 0.95;
 }
 
-/* Features cards mejoradas */
 .features {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -341,7 +336,6 @@ html:not([data-theme="light"]) body {
     margin-bottom: 0;
 }
 
-/* Map section mejorada */
 .map-section {
     background: var(--card-bg);
     padding: 2rem;
@@ -371,7 +365,6 @@ html:not([data-theme="light"]) body {
     position: relative;
 }
 
-/* Mapa de inicio: sección mejorada */
 .map-section--home {
     border-radius: 20px;
     overflow: hidden;
@@ -475,7 +468,6 @@ html:not([data-theme="light"]) body {
     background: var(--darker-card);
     transform: scale(1.02);
 }
-/* Marcadores del mapa */
 .map-marker {
     width: 44px;
     height: 44px;
@@ -496,7 +488,6 @@ html:not([data-theme="light"]) body {
     font-size: 18px;
     background: linear-gradient(135deg, #FF6B9D 0%, #FF5A8A 100%);
 }
-/* Clusters de negocios */
 .map-cluster-wrap { background: none !important; border: none !important; }
 .map-cluster {
     width: 44px;
@@ -513,7 +504,6 @@ html:not([data-theme="light"]) body {
     color: white;
     text-shadow: 0 1px 2px rgba(0,0,0,0.3);
 }
-/* Popups del mapa */
 .map-popup {
     padding: 0.5rem 0;
     min-width: 180px;
@@ -538,7 +528,6 @@ html:not([data-theme="light"]) body {
     transition: opacity 0.2s;
 }
 .map-popup-link:hover { opacity: 0.95; }
-/* Control de capas Leaflet en mapa de inicio */
 .map-section--home .leaflet-control-layers {
     border-radius: 12px !important;
     overflow: hidden;
@@ -563,7 +552,6 @@ html:not([data-theme="light"]) body {
 .map-section--home .leaflet-popup-tip { background: var(--dark-card); }
 .map-section--home .leaflet-popup-content { margin: 0.75rem 1rem; }
 
-/* Estilos para popups del mapa */
 .leaflet-popup-content-wrapper {
     border-radius: 12px;
     box-shadow: 0 8px 30px rgba(0,0,0,0.2);
@@ -580,7 +568,6 @@ html:not([data-theme="light"]) body {
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
-/* Controles del mapa mejorados */
 .leaflet-control-zoom {
     border: none;
     box-shadow: 0 4px 15px rgba(0,0,0,0.15);
@@ -616,7 +603,6 @@ html:not([data-theme="light"]) body {
     color: #D4AF37;
 }
 
-/* Content grid */
 .content-grid {
     display: grid;
     grid-template-columns: 350px 1fr;
@@ -649,7 +635,6 @@ html:not([data-theme="light"]) body {
     box-shadow: 0 4px 20px rgba(0,0,0,0.08);
 }
 
-/* Business items mejorados */
 .business-item {
     padding: 1.2rem;
     margin-bottom: 0.8rem;
@@ -685,7 +670,6 @@ html:not([data-theme="light"]) body {
     font-weight: 600;
 }
 
-/* Product items mejorados */
 .product-item {
     display: flex;
     justify-content: space-between;
@@ -733,7 +717,6 @@ html:not([data-theme="light"]) body {
     box-shadow: 0 6px 20px rgba(0, 217, 165, 0.4);
 }
 
-/* Buttons mejorados */
 .btn {
     display: inline-block;
     padding: 0.9rem 2rem;
@@ -754,7 +737,6 @@ html:not([data-theme="light"]) body {
     box-shadow: 0 6px 20px rgba(0, 217, 165, 0.4);
 }
 
-/* Forms mejorados */
 form {
     display: flex;
     flex-direction: column;
@@ -778,7 +760,6 @@ form select:focus {
     box-shadow: 0 0 0 3px rgba(0, 217, 165, 0.1);
 }
 
-/* Badges y labels */
 .badge {
     display: inline-block;
     padding: 0.3rem 0.8rem;
@@ -802,14 +783,12 @@ form select:focus {
     color: var(--dark-bg);
 }
 
-/* Order total destacado */
 #order-total {
     font-size: 2rem;
     color: #D4AF37;
     font-weight: 800;
 }
 
-/* Sistema de alertas personalizado */
 .custom-alert-overlay {
     display: none;
     position: fixed;
@@ -961,7 +940,6 @@ form select:focus {
     }
 }
 
-/* Actualizar colores de elementos adicionales */
 .sidebar {
     background: var(--dark-card);
     border: 2px solid var(--border-color);
@@ -1020,7 +998,6 @@ form select:focus {
     color: var(--text-light);
 }
 
-/* Responsive */
 @media (max-width: 768px) {
     .content-grid {
         grid-template-columns: 1fr;
@@ -1035,7 +1012,6 @@ form select:focus {
     }
 }
 
-/* Scrollbar personalizado */
 .sidebar::-webkit-scrollbar {
     width: 8px;
 }
@@ -1054,7 +1030,6 @@ form select:focus {
     background: #00C896;
 }
 
-/* Accesibilidad: foco visible y skip link */
 :focus { outline: none; }
 :focus-visible {
     outline: 2px solid var(--primary-color);
@@ -1092,7 +1067,6 @@ a:focus-visible, button:focus-visible, [tabindex="0"]:focus-visible {
 .nav-utils button:hover { border-color: var(--primary-color); color: var(--primary-color); }
 .nav-utils button:focus-visible { outline: 2px solid var(--primary-color); outline-offset: 2px; }
 .font-size-btn { font-size: 0.85rem; }
-/* ========== Estilo App Delivery - Escritorio y móvil ========== */
 .app-shell {
     max-width: 1200px;
     margin: 0 auto;
@@ -1166,7 +1140,6 @@ a:focus-visible, button:focus-visible, [tabindex="0"]:focus-visible {
 .app-header-address[role="button"]:hover { opacity: 0.9; }
 .app-header-address[role="button"]:focus { outline: 2px solid var(--primary-color); outline-offset: 2px; }
 
-/* Modal de selección de dirección (estilo tipo app) */
 .address-modal-overlay {
     position: fixed;
     inset: 0;
@@ -1363,7 +1336,6 @@ a:focus-visible, button:focus-visible, [tabindex="0"]:focus-visible {
     text-align: center;
 }
 
-/* Modal de editar dirección (reemplaza el prompt feo del navegador) */
 .address-edit-overlay {
     position: fixed;
     inset: 0;
@@ -1544,7 +1516,6 @@ a:focus-visible, button:focus-visible, [tabindex="0"]:focus-visible {
     justify-content: center;
 }
 
-/* Categorías horizontales */
 .categories-strip {
     padding: 1.25rem 0;
     overflow-x: auto;
@@ -1597,7 +1568,6 @@ a:focus-visible, button:focus-visible, [tabindex="0"]:focus-visible {
 .category-chip.active .icon-wrap { border-color: var(--primary-color); background: rgba(212,175,55,0.2); }
 .category-chip span { font-size: 0.9rem; font-weight: 500; text-align: center; line-height: 1.2; }
 
-/* Tiendas cercanas - carrusel */
 .section-title {
     display: flex;
     align-items: center;
@@ -1666,7 +1636,6 @@ a:focus-visible, button:focus-visible, [tabindex="0"]:focus-visible {
 .store-circle .time { font-size: 0.9rem; color: var(--text-muted); font-weight: 600; }
 .store-circle .name { font-size: 0.85rem; color: var(--text-light); text-align: center; max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-/* Banner promocional grande */
 .promo-banner-large {
     margin: 1.25rem 0;
     border-radius: 20px;
@@ -1698,7 +1667,6 @@ a:focus-visible, button:focus-visible, [tabindex="0"]:focus-visible {
 }
 .promo-banner-large .btn-pide-ya:hover { transform: scale(1.02); box-shadow: 0 4px 20px rgba(255,140,0,0.4); }
 
-/* Carrusel de banners promocionales – diseño mejorado */
 .promo-carousel {
     margin: 1.5rem 0;
     position: relative;
@@ -1817,7 +1785,6 @@ a:focus-visible, button:focus-visible, [tabindex="0"]:focus-visible {
     box-shadow: 0 0 0 2px rgba(255, 140, 0, 0.3);
 }
 
-/* Product cards estilo app */
 .product-card-app {
     background: var(--dark-card);
     border-radius: 12px;
@@ -1884,7 +1851,6 @@ a:focus-visible, button:focus-visible, [tabindex="0"]:focus-visible {
 }
 .products-scroll::-webkit-scrollbar { display: none; }
 
-/* Store card para lista de negocios (estilo app) */
 .store-card-app {
     display: flex;
     align-items: center;
@@ -1918,7 +1884,6 @@ a:focus-visible, button:focus-visible, [tabindex="0"]:focus-visible {
 .store-card-app .store-meta { font-size: 0.8rem; color: var(--text-muted); }
 .store-card-app .store-meta .time { color: var(--primary-color); font-weight: 600; }
 
-/* Pantalla de bienvenida / Registro */
 .welcome-screen {
     position: fixed;
     inset: 0;
@@ -2033,7 +1998,6 @@ a:focus-visible, button:focus-visible, [tabindex="0"]:focus-visible {
     transform: translateY(0);
 }
 
-/* Bottom nav */
 .app-bottom-nav {
     display: flex;
     align-items: center;
@@ -2070,7 +2034,6 @@ a:focus-visible, button:focus-visible, [tabindex="0"]:focus-visible {
 .app-bottom-nav button:hover { border-color: var(--primary-color); color: var(--primary-color); }
 .app-bottom-nav a.active { background: var(--gold-gradient); color: var(--dark-bg); border-color: var(--primary-color); }
 
-/* Grid de productos (vista delivery) */
 .products-grid-app {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));

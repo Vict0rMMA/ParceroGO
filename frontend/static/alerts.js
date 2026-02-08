@@ -1,8 +1,3 @@
-/**
- * Sistema de alertas y confirmaciones personalizadas (reemplazo visual de alert/confirm).
- * SMS simulado para notificaciones de pedido (sin envío real).
- */
-
 var ALERT_OVERLAY_ID = 'custom-alert-overlay';
 var ALERT_ICONS = { success: '✅', error: '❌', warning: '⚠️', info: 'ℹ️' };
 var ALERT_TITLES = { success: '¡Éxito!', error: 'Error', warning: 'Advertencia', info: 'Información' };
@@ -40,13 +35,6 @@ function closeAlert(callback) {
     if (typeof callback === 'function') callback();
 }
 
-/**
- * Muestra una alerta personalizada.
- * @param {string} message - Mensaje
- * @param {string} type - 'success' | 'error' | 'warning' | 'info'
- * @param {string} title - Título opcional
- * @param {Function} callback - Se ejecuta al cerrar
- */
 function showAlert(message, type, title, callback) {
     type = type || 'info';
     ensureAlertDOM();
@@ -77,13 +65,6 @@ function showAlert(message, type, title, callback) {
     document.addEventListener('keydown', escHandler);
 }
 
-/**
- * Muestra una confirmación (Aceptar / Cancelar).
- * @param {string} message - Mensaje
- * @param {string} title - Título
- * @param {Function} onConfirm - Al confirmar
- * @param {Function} onCancel - Al cancelar
- */
 function showConfirm(message, title, onConfirm, onCancel) {
     title = title || 'Confirmar';
     ensureAlertDOM();
@@ -122,12 +103,6 @@ if (document.readyState === 'loading') {
     ensureAlertDOM();
 }
 
-/**
- * Envío de SMS simulado (en producción se usaría Twilio u otro).
- * @param {number} orderId - ID del pedido
- * @param {string} phone - Teléfono
- * @param {Object} order - Datos del pedido
- */
 function sendSMSNotification(orderId, phone, order) {
     var smsMessage =
         '🎉 Parcero Go\n\nTu pedido #' + orderId + ' ha sido confirmado!\n\n' +

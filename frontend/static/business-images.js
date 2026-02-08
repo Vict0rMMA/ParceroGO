@@ -1,7 +1,3 @@
-/**
- * Imágenes por categoría de negocio (Unsplash): fotos por tipo de tienda.
- * Supermercado → pasillo/tienda, Restaurante → comida, etc.
- */
 (function () {
     var SIZE = '80';
     var BASE_URL = 'https://images.unsplash.com/photo-';
