@@ -26,8 +26,11 @@
       background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-    p { color: #b8b8b8; margin-bottom: 2rem; max-width: 420px; }
-    a {
+    p { color: #b8b8b8; margin-bottom: 1rem; max-width: 420px; }
+    .note { font-size: 0.9rem; color: #888; margin-top: 1.5rem; max-width: 380px; line-height: 1.5; }
+    .note a { color: #38BDF8; text-decoration: none; }
+    .note a:hover { text-decoration: underline; }
+    .btn {
       display: inline-block;
       padding: 1rem 2rem;
       background: linear-gradient(135deg, #FFD23F 0%, #FF8C00 100%);
@@ -36,19 +39,39 @@
       font-weight: 700;
       border-radius: 14px;
       transition: transform 0.2s, box-shadow 0.2s;
+      margin: 0.25rem;
     }
-    a:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(255, 210, 63, 0.4); }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(255, 210, 63, 0.4); }
+    .btn.secondary {
+      background: transparent;
+      color: #FFD23F;
+      border: 2px solid #FFD23F;
+    }
+    .btn.secondary:hover { background: rgba(255, 210, 63, 0.15); }
+    .landing-logo {
+      width: 160px;
+      height: auto;
+      margin-bottom: 1rem;
+      display: block;
+      object-fit: contain;
+    }
+    .landing-logo[hidden] { display: none; }
   </style>
 </head>
 <body>
+  <img src="logo.png" alt="" class="landing-logo" id="landing-logo" onerror="this.hidden=true;">
   <h1>ParceroGo</h1>
   <p>Delivery para negocios de barrio en Medellín. MVP académico.</p>
-  <a href="https://parcerogo.onrender.com" id="app-link">Ir a la app →</a>
+  <a class="btn" href="https://parcerogo.onrender.com" id="app-link">Ir a la app →</a>
+  <a class="btn secondary" href="https://github.com/Vict0rMMA/ParceroGO#readme" target="_blank" rel="noopener">Ver en GitHub</a>
+  <p class="note" id="hint">Si el botón no abre la app, despliega el backend en <a href="https://render.com" target="_blank" rel="noopener">Render</a> (instrucciones en el repo, archivo DEPLOY.md).</p>
   <script>
-    var url = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-      ? 'http://127.0.0.1:8000'
-      : 'https://parcerogo.onrender.com';
-    document.getElementById('app-link').href = url;
+    var appUrl = 'https://parcerogo.onrender.com';
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+      appUrl = 'http://127.0.0.1:8000';
+      document.getElementById('hint').innerHTML = 'Modo local: ejecuta <code>EJECUTAR.bat</code> o el servidor en el puerto 8000.';
+    }
+    document.getElementById('app-link').href = appUrl;
   </script>
 </body>
 </html>
