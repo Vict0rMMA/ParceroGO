@@ -402,7 +402,7 @@
         </div>
         <div class="cart-footer" id="cart-footer" style="display: none;">
             <div class="cart-total">
-                <strong>Total: $<span id="cart-total">0</span></strong>
+                <strong>Total: <span id="cart-total">$ 0</span></strong>
             </div>
             <button class="checkout-btn" onclick="checkout()">Proceder al Pago</button>
             <button class="clear-cart-btn" onclick="clearCart()">Vaciar Carrito</button>
@@ -500,7 +500,7 @@
                     </p>
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; flex-wrap: wrap; gap: 0.5rem;">
                         <p style="color: #D4AF37; font-size: 1.8rem; font-weight: 700; margin: 0;">
-                            $${product.price.toLocaleString()}
+                            ${typeof formatCOP === 'function' ? formatCOP(product.price) : '$ ' + (product.price || 0).toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
                         </p>
                         <span style="background: var(--gold-gradient); color: #0a0a0a; padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.85rem; font-weight: 600;">${product.category}</span>
                     </div>
@@ -609,7 +609,7 @@
                 
                 // Calcular total
                 const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-                cartTotal.textContent = total.toLocaleString();
+                cartTotal.textContent = typeof formatCOP === 'function' ? formatCOP(total) : '$ ' + total.toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
                 
                 // Renderizar items
                 cartItems.innerHTML = '';
@@ -623,7 +623,7 @@
                              onerror="this.src='https://via.placeholder.com/80x80?text=Producto'">
                         <div class="cart-item-info">
                             <div class="cart-item-name">${item.name}</div>
-                            <div class="cart-item-price">$${(item.price * item.quantity).toLocaleString()}</div>
+                            <div class="cart-item-price">${typeof formatCOP === 'function' ? formatCOP(item.price * item.quantity) : '$ ' + (item.price * item.quantity).toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</div>
                             <div class="cart-item-quantity">
                                 <button class="quantity-btn" onclick="updateQuantity(${item.id}, -1)">-</button>
                                 <span class="quantity-value">${item.quantity}</span>

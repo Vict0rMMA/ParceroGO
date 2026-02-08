@@ -331,9 +331,9 @@
             var rightCol = '<div class="card purchase-detail-card" style="position: sticky; top: 1.5rem;">' +
                 '<h2 class="card-title">Detalle de la compra</h2>' +
                 '<p class="order-ref">' + createdStr + ' | # ' + order.id + '</p>' +
-                '<div class="row"><span>Producto</span><span>$ ' + (order.total || 0).toLocaleString() + '</span></div>' +
+                '<div class="row"><span>Producto</span><span>' + (typeof formatCOP === 'function' ? formatCOP(order.total || 0) : '$ ' + (order.total || 0).toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 })) + '</span></div>' +
                 '<div class="row"><span>Envío</span><span class="envio-gratis">Gratis</span></div>' +
-                '<div class="row total"><span>Total</span><span>$ ' + (order.total || 0).toLocaleString() + '</span></div>' +
+                '<div class="row total"><span>Total</span><span>' + (typeof formatCOP === 'function' ? formatCOP(order.total || 0) : '$ ' + (order.total || 0).toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 })) + '</span></div>' +
                 '<p class="payment-method">' + escapeHtml(paymentLabel) + '</p>' +
                 '<a href="#" class="link-detail">Detalles de pago y envío ›</a></div>';
 
@@ -410,7 +410,7 @@
                 if (orders.length > 1) {
                     selectorWrap.style.display = 'block';
                     selectEl.innerHTML = orders.map(function(o) {
-                        return '<option value="' + o.id + '">Pedido #' + o.id + ' · ' + (o.business_name || '') + ' · $' + (o.total || 0).toLocaleString() + '</option>';
+                        return '<option value="' + o.id + '">Pedido #' + o.id + ' · ' + (o.business_name || '') + ' · ' + (typeof formatCOP === 'function' ? formatCOP(o.total || 0) : '$ ' + (o.total || 0).toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 })) + '</option>';
                     }).join('');
                     selectEl.onchange = function() {
                         var id = parseInt(selectEl.value, 10);
@@ -441,22 +441,51 @@
             var wrapper = cancelBtn.closest('[data-order-id]');
             var orderId = wrapper && wrapper.getAttribute('data-order-id');
             if (!orderId) return;
-            if (!confirm('¿Cancelar el pedido #' + orderId + '? Esta acción no se puede deshacer.')) return;
-            try {
-                var res = await fetch('/api/delivery/orders/' + orderId + '/status', {
-                    method: 'PATCH',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ status: 'cancelado' })
-                });
-                if (!res.ok) {
-                    var err = await res.json().catch(function() { return {}; });
-                    alert(err.detail || 'No se pudo cancelar el pedido.');
-                    return;
+            if (typeof showConfirm === 'function') {
+                showConfirm(
+                    '¿Cancelar el pedido #' + orderId + '? Esta acción no se puede deshacer.',
+                    'Cancelar pedido',
+                    function () {
+                        (async function () {
+                            try {
+                                var res = await fetch('/api/delivery/orders/' + orderId + '/status', {
+                                    method: 'PATCH',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ status: 'cancelado' })
+                                });
+                                if (!res.ok) {
+                                    var err = await res.json().catch(function() { return {}; });
+                                    if (typeof showAlert === 'function') showAlert(err.detail || 'No se pudo cancelar el pedido.', 'error', 'Error');
+                                    else alert(err.detail || 'No se pudo cancelar el pedido.');
+                                    return;
+                                }
+                                if (typeof showAlert === 'function') showAlert('Pedido #' + orderId + ' cancelado.', 'success', 'Pedido cancelado');
+                                else alert('Pedido #' + orderId + ' cancelado.');
+                                loadOrders();
+                            } catch (err) {
+                                if (typeof showAlert === 'function') showAlert('Error de conexión. No se pudo cancelar.', 'error', 'Error');
+                                else alert('Error de conexión. No se pudo cancelar.');
+                            }
+                        })();
+                    }
+                );
+            } else if (confirm('¿Cancelar el pedido #' + orderId + '? Esta acción no se puede deshacer.')) {
+                try {
+                    var res = await fetch('/api/delivery/orders/' + orderId + '/status', {
+                        method: 'PATCH',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ status: 'cancelado' })
+                    });
+                    if (!res.ok) {
+                        var err = await res.json().catch(function() { return {}; });
+                        alert(err.detail || 'No se pudo cancelar el pedido.');
+                        return;
+                    }
+                    alert('Pedido #' + orderId + ' cancelado.');
+                    loadOrders();
+                } catch (err) {
+                    alert('Error de conexión. No se pudo cancelar.');
                 }
-                alert('Pedido #' + orderId + ' cancelado.');
-                loadOrders();
-            } catch (err) {
-                alert('Error de conexión. No se pudo cancelar.');
             }
         });
 

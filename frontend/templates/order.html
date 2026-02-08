@@ -138,7 +138,7 @@
                         <div id="products-summary"></div>
                         <div id="total-summary" class="total-box">
                             <div class="label">Total a pagar</div>
-                            <div class="amount">$<span id="order-total">0</span></div>
+                            <div class="amount"><span id="order-total">$ 0</span></div>
                         </div>
                     </div>
                 </div>
@@ -309,12 +309,12 @@
                     <div>
                         <span class="name">${p.name}</span>
                         ${p.notes ? `<div class="notes" style="font-size: 0.85rem; color: #888; margin-top: 0.2rem;">Nota: ${(p.notes || '').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</div>` : ''}
-                        <div class="qty">${p.quantity} x $${p.price.toLocaleString()}</div>
+                        <div class="qty">${p.quantity} x ${typeof formatCOP === 'function' ? formatCOP(p.price) : '$ ' + (p.price || 0).toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</div>
                     </div>
-                    <span class="subtotal">$${(p.price * p.quantity).toLocaleString()}</span>
+                    <span class="subtotal">${typeof formatCOP === 'function' ? formatCOP(p.price * p.quantity) : '$ ' + (p.price * p.quantity).toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</span>
                 </div>
             `).join('');
-            document.getElementById('order-total').textContent = totalWithTip.toLocaleString();
+            document.getElementById('order-total').textContent = typeof formatCOP === 'function' ? formatCOP(totalWithTip) : '$ ' + totalWithTip.toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
         }
 
         function clearCartAndRedirect() {
@@ -371,7 +371,7 @@
                 document.getElementById('order-content').style.display = 'none';
                 document.getElementById('empty-state').style.display = 'none';
                 document.getElementById('success-block').classList.add('show');
-                document.getElementById('success-msg').textContent = 'Pedido #' + order.id + ' · Total $' + order.total.toLocaleString();
+                document.getElementById('success-msg').textContent = 'Pedido #' + order.id + ' · Total ' + (typeof formatCOP === 'function' ? formatCOP(order.total) : '$ ' + (order.total || 0).toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 }));
                 document.getElementById('success-payment-badge').textContent = 'Método: ' + paymentLabel;
                 var link = document.getElementById('success-tracking-link');
                 link.href = '/tracking?phone=' + encodeURIComponent(phone);

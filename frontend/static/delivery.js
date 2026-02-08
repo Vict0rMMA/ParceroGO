@@ -352,7 +352,7 @@ function displayProducts(products) {
             '<p style="color: #b8b8b8; margin: 0.3rem 0; font-size: 0.85rem; min-height: 2rem;">' + (product.description || '') + '</p>' +
             '<input type="text" id="' + notesId + '" placeholder="Notas (ej. sin cebolla)" style="width: 100%; margin-top: 0.5rem; padding: 0.5rem; background: var(--darker-card); border: 1px solid #2a2a2a; border-radius: 8px; color: var(--text-dark); font-size: 0.85rem;">' +
             '<div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;">' +
-            '<p class="price" style="color: #D4AF37; font-size: 1.3rem; font-weight: 700; margin: 0;">$' + (product.price || 0).toLocaleString() + '</p>' +
+            '<p class="price" style="color: #D4AF37; font-size: 1.3rem; font-weight: 700; margin: 0;">' + (typeof formatCOP === 'function' ? formatCOP(product.price || 0) : '$ ' + (product.price || 0).toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 })) + '</p>' +
             '<button onclick="var n=document.getElementById(\'' + notesId + '\'); addProduct(' + product.id + ', \'' + nameSafe + '\', ' + (product.price || 0) + ', n ? n.value : \'\'); if(n) n.value=\'\';" style="background: linear-gradient(135deg, #D4AF37 0%, #FFD700 100%); color: #0a0a0a; border: none; padding: 0.6rem 1.2rem; border-radius: 25px; font-weight: 600; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);">+ Agregar</button>' +
             '</div>';
         list.appendChild(item);
@@ -387,7 +387,7 @@ function updateSelectedProducts() {
             var item = document.createElement('div');
             item.className = 'product-item';
             item.style.cssText = 'display: flex; justify-content: space-between; align-items: center; padding: 1rem; margin-bottom: 0.8rem; background: #151515; border: 1px solid #2a2a2a; border-radius: 12px;';
-            item.innerHTML = '<div><strong style="color: #ffffff; font-size: 1rem;">' + product.name + '</strong><p style="color: #b8b8b8; margin: 0.3rem 0; font-size: 0.9rem;">Cantidad: ' + product.quantity + ' x $' + product.price.toLocaleString() + '</p><p class="price" style="color: #D4AF37; font-weight: 700; font-size: 1.1rem; margin: 0.3rem 0;">Subtotal: $' + (product.price * product.quantity).toLocaleString() + '</p></div><button onclick="removeProduct(' + index + ')" style="background: #ff4444; color: white; border: none; padding: 0.6rem 1rem; border-radius: 8px; font-weight: 600; cursor: pointer;">Eliminar</button>';
+            item.innerHTML = '<div><strong style="color: #ffffff; font-size: 1rem;">' + product.name + '</strong><p style="color: #b8b8b8; margin: 0.3rem 0; font-size: 0.9rem;">Cantidad: ' + product.quantity + ' x ' + (typeof formatCOP === 'function' ? formatCOP(product.price) : '$ ' + (product.price || 0).toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 })) + '</p><p class="price" style="color: #D4AF37; font-weight: 700; font-size: 1.1rem; margin: 0.3rem 0;">Subtotal: ' + (typeof formatCOP === 'function' ? formatCOP(product.price * product.quantity) : '$ ' + (product.price * product.quantity).toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 })) + '</p></div><button onclick="removeProduct(' + index + ')" style="background: #ff4444; color: white; border: none; padding: 0.6rem 1rem; border-radius: 8px; font-weight: 600; cursor: pointer;">Eliminar</button>';
             container.appendChild(item);
         });
     }
@@ -397,11 +397,11 @@ function updateOrderTotal() {
     var total = selectedProducts.reduce(function (sum, p) { return sum + (p.price * p.quantity); }, 0);
     var totalElement = document.getElementById('order-total');
     if (totalElement) {
-        totalElement.textContent = total.toLocaleString();
+        totalElement.textContent = typeof formatCOP === 'function' ? formatCOP(total) : '$ ' + total.toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
         totalElement.style.color = '#D4AF37';
     }
     var cartTotal = document.getElementById('delivery-cart-total');
-    if (cartTotal) cartTotal.textContent = total.toLocaleString();
+    if (cartTotal) cartTotal.textContent = typeof formatCOP === 'function' ? formatCOP(total) : '$ ' + total.toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
 }
 
 // --- Marcadores de negocios en el mapa ---

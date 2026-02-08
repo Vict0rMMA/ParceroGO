@@ -1,10 +1,17 @@
 /**
  * API shim para despliegue estático (Vercel): simula /api/* y /orders/* usando
  * datos estáticos (/data/*.json) y localStorage. Misma forma de respuesta que el backend FastAPI.
- * Debe cargarse como primer script en cada página.
+ * Si la app se sirve desde el backend (localhost:8000, Render), NO intercepta: se usa la API real.
  */
 (function () {
     'use strict';
+    /** Formato de precios en pesos colombianos (COP). Uso: formatCOP(12345) → "$ 12.345" */
+    window.formatCOP = function (n) {
+        return '$ ' + (Number(n) || 0).toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+    };
+    var origin = window.location.origin || '';
+    var isBackend = origin.indexOf('localhost:8000') !== -1 || origin.indexOf('127.0.0.1:8000') !== -1 || origin.indexOf('onrender.com') !== -1;
+    if (isBackend) return; /* Backend real: no interceptar, que las tiendas y todo carguen por API */
     var REAL_FETCH = window.fetch;
     var DATA_PREFIX = '/data/';
     var ORDERS_KEY = 'parcerogo_orders';

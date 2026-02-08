@@ -6,7 +6,7 @@
     "price": 4500,
     "description": "Entera",
     "category": "Supermercado",
-    "available": false,
+    "available": true,
     "image": "https://picsum.photos/seed/s1/400"
   },
   {
@@ -16,7 +16,7 @@
     "price": 8000,
     "description": "AA",
     "category": "Supermercado",
-    "available": false,
+    "available": true,
     "image": "https://picsum.photos/seed/s2/400"
   },
   {
@@ -26,7 +26,7 @@
     "price": 5500,
     "description": "Campesino",
     "category": "Supermercado",
-    "available": false,
+    "available": true,
     "image": "https://picsum.photos/seed/s3/400"
   },
   {

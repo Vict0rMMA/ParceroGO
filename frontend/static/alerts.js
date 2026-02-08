@@ -131,7 +131,7 @@ if (document.readyState === 'loading') {
 function sendSMSNotification(orderId, phone, order) {
     var smsMessage =
         '🎉 Parcero Go\n\nTu pedido #' + orderId + ' ha sido confirmado!\n\n' +
-        'Negocio: ' + order.business_name + '\nTotal: $' + order.total.toLocaleString() + '\n' +
+        'Negocio: ' + order.business_name + '\nTotal: ' + (typeof formatCOP === 'function' ? formatCOP(order.total) : '$ ' + (order.total || 0).toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 })) + '\n' +
         'Tiempo estimado: ' + order.estimated_time + ' min\n\n' +
         'Rastrea tu pedido: ' + window.location.origin + '/tracking?phone=' + encodeURIComponent(phone) + '\n\n' +
         'Gracias por tu compra! 🚀';

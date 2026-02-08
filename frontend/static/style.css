@@ -147,6 +147,47 @@ html:not([data-theme="light"]) body {
     .navbar .navbar-center { justify-content: flex-start; gap: 1rem; }
     .navbar .container { gap: 1rem; }
 }
+/* En móvil: navbar con scroll horizontal para que se pueda deslizar y ver todos los enlaces */
+@media (max-width: 768px) {
+    .navbar {
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+    }
+    .navbar::-webkit-scrollbar {
+        height: 6px;
+    }
+    .navbar::-webkit-scrollbar-track {
+        background: var(--darker-card);
+        border-radius: 6px;
+    }
+    .navbar::-webkit-scrollbar-thumb {
+        background: var(--primary-color);
+        border-radius: 6px;
+    }
+    .navbar .container {
+        flex-direction: row;
+        flex-wrap: nowrap;
+        min-width: max-content;
+        width: max-content;
+        padding: 0.5rem 1rem;
+        gap: 0.75rem;
+        margin: 0;
+    }
+    .navbar .brand-wrap { flex-shrink: 0; }
+    .navbar .navbar-center { flex-shrink: 0; justify-content: flex-start; flex: 0 1 auto; }
+    .nav-links {
+        flex-wrap: nowrap;
+        gap: 0.5rem;
+    }
+    .nav-links a {
+        white-space: nowrap;
+        padding: 0.5rem 0.75rem;
+        font-size: 0.9rem;
+    }
+    .navbar .container > div:last-child { flex-shrink: 0; }
+}
 
 .navbar h1 {
     font-size: 1.8rem;
@@ -985,11 +1026,6 @@ form select:focus {
         grid-template-columns: 1fr;
     }
     
-    .navbar .container {
-        flex-direction: column;
-        gap: 1rem;
-    }
-    
     .hero h2 {
         font-size: 2rem;
     }
@@ -1056,10 +1092,6 @@ a:focus-visible, button:focus-visible, [tabindex="0"]:focus-visible {
 .nav-utils button:hover { border-color: var(--primary-color); color: var(--primary-color); }
 .nav-utils button:focus-visible { outline: 2px solid var(--primary-color); outline-offset: 2px; }
 .font-size-btn { font-size: 0.85rem; }
-@media (max-width: 768px) {
-    .nav-links a { padding: 0.5rem 0.8rem; font-size: 0.9rem; }
-}
-
 /* ========== Estilo App Delivery - Escritorio y móvil ========== */
 .app-shell {
     max-width: 1200px;
@@ -1133,6 +1165,291 @@ a:focus-visible, button:focus-visible, [tabindex="0"]:focus-visible {
 .app-header-address .chevron { color: var(--text-muted); font-size: 0.95rem; }
 .app-header-address[role="button"]:hover { opacity: 0.9; }
 .app-header-address[role="button"]:focus { outline: 2px solid var(--primary-color); outline-offset: 2px; }
+
+/* Modal de selección de dirección (estilo tipo app) */
+.address-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 9998;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+.address-modal-overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+.address-modal-panel {
+    width: 100%;
+    max-width: 480px;
+    max-height: 85vh;
+    background: var(--dark-bg, #0f172a);
+    border-radius: 20px 20px 0 0;
+    padding: 1.25rem 1.5rem 2rem;
+    overflow-y: auto;
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+    box-shadow: 0 -4px 24px rgba(0,0,0,0.3);
+}
+.address-modal-overlay.show .address-modal-panel {
+    transform: translateY(0);
+}
+.address-modal-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+}
+.address-modal-back {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--darker-card, #1e293b);
+    border: 1px solid var(--border-color, #334155);
+    color: var(--text-dark);
+    font-size: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+.address-modal-back:hover { background: #334155; }
+.address-modal-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin: 0;
+}
+.address-modal-search {
+    width: 100%;
+    padding: 0.85rem 1rem 0.85rem 2.75rem;
+    border-radius: 14px;
+    border: 1px solid var(--border-color, #334155);
+    background: var(--darker-card, #1e293b);
+    color: var(--text-dark);
+    font-size: 1rem;
+    margin-bottom: 1.25rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: 1rem center;
+}
+.address-modal-search::placeholder { color: var(--text-muted, #64748b); }
+.address-current-card {
+    background: var(--dark-card, #1e293b);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 16px;
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+}
+.address-current-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(255, 210, 63, 0.2);
+    color: var(--primary-color, #FFD23F);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    flex-shrink: 0;
+}
+.address-current-body { flex: 1; min-width: 0; }
+.address-current-label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin: 0 0 0.35rem 0;
+}
+.address-current-addr {
+    font-size: 0.95rem;
+    color: var(--text-dark);
+    line-height: 1.4;
+    margin: 0 0 0.75rem 0;
+}
+.address-current-btn {
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    border: 1px solid var(--primary-color);
+    background: transparent;
+    color: var(--primary-color);
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+.address-current-btn:hover { background: rgba(255, 210, 63, 0.15); }
+.address-section-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin: 0 0 0.75rem 0;
+}
+.address-list { list-style: none; padding: 0; margin: 0; }
+.address-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: var(--dark-card, #1e293b);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 14px;
+    margin-bottom: 0.6rem;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+}
+.address-list li:hover { border-color: var(--primary-color); background: rgba(255, 210, 63, 0.06); }
+.address-list li.selected { border-color: var(--primary-color); background: rgba(255, 210, 63, 0.1); }
+.address-list .addr-pin {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--darker-card, #0f172a);
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+.address-list .addr-content { flex: 1; min-width: 0; }
+.address-list .addr-tag {
+    display: inline-block;
+    padding: 0.2rem 0.6rem;
+    border-radius: 20px;
+    background: rgba(255, 210, 63, 0.2);
+    color: var(--primary-color);
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-bottom: 0.35rem;
+}
+.address-list .addr-line {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin: 0;
+    line-height: 1.35;
+}
+.address-list .addr-detail {
+    font-size: 0.85rem;
+    color: var(--text-muted, #94a3b8);
+    margin: 0.35rem 0 0 0;
+    line-height: 1.4;
+}
+.address-list .addr-edit {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.address-list .addr-edit:hover { color: var(--primary-color); background: rgba(255, 210, 63, 0.1); }
+.address-list-empty {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    padding: 1rem;
+    text-align: center;
+}
+
+/* Modal de editar dirección (reemplaza el prompt feo del navegador) */
+.address-edit-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+.address-edit-overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+.address-edit-card {
+    background: var(--dark-card, #1e293b);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 16px;
+    padding: 1.5rem;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    transform: scale(0.95);
+    transition: transform 0.2s ease;
+}
+.address-edit-overlay.show .address-edit-card {
+    transform: scale(1);
+}
+.address-edit-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin: 0 0 1rem 0;
+}
+.address-edit-input {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    border-radius: 12px;
+    border: 2px solid var(--border-color, #334155);
+    background: var(--darker-card, #0f172a);
+    color: var(--text-dark);
+    font-size: 1rem;
+    margin-bottom: 1.25rem;
+    box-sizing: border-box;
+}
+.address-edit-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(255, 210, 63, 0.2);
+}
+.address-edit-input::placeholder {
+    color: var(--text-muted);
+}
+.address-edit-actions {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: flex-end;
+}
+.address-edit-btn {
+    padding: 0.6rem 1.25rem;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    border: none;
+    transition: background 0.2s, color 0.2s;
+}
+.address-edit-cancel {
+    background: var(--darker-card);
+    color: var(--text-muted);
+    border: 1px solid var(--border-color);
+}
+.address-edit-cancel:hover {
+    background: #334155;
+    color: var(--text-dark);
+}
+.address-edit-ok {
+    background: linear-gradient(135deg, #FFD23F 0%, #FF8C00 100%);
+    color: #0a0a0a;
+}
+.address-edit-ok:hover {
+    filter: brightness(1.1);
+}
 
 .promo-banner-mini {
     display: inline-flex;

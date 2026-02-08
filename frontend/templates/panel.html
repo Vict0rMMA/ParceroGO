@@ -127,7 +127,7 @@
             statsEl.innerHTML = ''
                 + '<div class="stat-box"><div class="num">' + panelOrders.length + '</div><div class="label">Total pedidos</div></div>'
                 + '<div class="stat-box"><div class="num">' + pending.length + '</div><div class="label">Pendientes</div></div>'
-                + '<div class="stat-box"><div class="num">$' + totalRevenue.toLocaleString() + '</div><div class="label">Entregados (total)</div></div>';
+                + '<div class="stat-box"><div class="num">' + (typeof formatCOP === 'function' ? formatCOP(totalRevenue) : '$ ' + totalRevenue.toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 })) + '</div><div class="label">Entregados (total)</div></div>';
 
             if (panelOrders.length === 0) {
                 listEl.innerHTML = '<p style="color: #b8b8b8;">No hay pedidos para este negocio.</p>';
@@ -142,7 +142,7 @@
                 if (canPreparando) actions += '<button type="button" class="btn-status preparando" onclick="setStatus(' + o.id + ', \'preparando\')">👨‍🍳 Preparando</button>';
                 if (canEnCamino) actions += '<button type="button" class="btn-status en_camino" onclick="setStatus(' + o.id + ', \'en_camino\')">🚚 En camino</button>';
                 return '<div class="order-row ' + (status === 'entregado' ? 'entregado' : '') + '">'
-                    + '<div class="info"><strong>Pedido #' + o.id + '</strong><br><span>' + (o.customer_name || '') + ' · ' + (o.customer_address || '') + '</span><br><span>Total: $' + (o.total || 0).toLocaleString() + ' · ' + status + '</span></div>'
+                    + '<div class="info"><strong>Pedido #' + o.id + '</strong><br><span>' + (o.customer_name || '') + ' · ' + (o.customer_address || '') + '</span><br><span>Total: ' + (typeof formatCOP === 'function' ? formatCOP(o.total || 0) : '$ ' + (o.total || 0).toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 })) + ' · ' + status + '</span></div>'
                     + '<div class="actions">' + actions + '</div></div>';
             }).join('');
         }

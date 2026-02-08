@@ -70,10 +70,13 @@
                     <a href="/repartidor">Repartidor</a>
                 </div>
             </div>
-            <a href="/delivery" class="cart-icon-btn navbar-cart-btn" aria-label="Carrito" style="position:relative;display:flex;align-items:center;justify-content:center;width:50px;height:50px;border-radius:50%;background:var(--darker-card);border:1px solid var(--border-color);color:var(--text-dark);text-decoration:none;">
-                <svg class="cart-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:24px;height:24px;"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-                <span class="cart-badge-dot" id="index-cart-badge" style="display:none;position:absolute;top:4px;right:4px;min-width:20px;height:20px;padding:0 6px;background:var(--danger-color);color:#fff;font-size:0.8rem;font-weight:700;border-radius:10px;align-items:center;justify-content:center;flex;">0</span>
-            </a>
+            <div style="display:flex;align-items:center;gap:0.5rem;">
+                <a href="/tracking" class="cart-icon-btn navbar-cart-btn" aria-label="Mis pedidos" style="position:relative;display:flex;align-items:center;justify-content:center;width:50px;height:50px;border-radius:50%;background:var(--darker-card);border:1px solid var(--border-color);color:var(--text-dark);text-decoration:none;" title="Mis pedidos">📋</a>
+                <a href="/delivery" class="cart-icon-btn navbar-cart-btn" aria-label="Carrito" style="position:relative;display:flex;align-items:center;justify-content:center;width:50px;height:50px;border-radius:50%;background:var(--darker-card);border:1px solid var(--border-color);color:var(--text-dark);text-decoration:none;">
+                    <svg class="cart-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:24px;height:24px;"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                    <span class="cart-badge-dot" id="index-cart-badge" style="display:none;position:absolute;top:4px;right:4px;min-width:20px;height:20px;padding:0 6px;background:var(--danger-color);color:#fff;font-size:0.8rem;font-weight:700;border-radius:10px;">0</span>
+                </a>
+            </div>
         </div>
     </nav>
 
@@ -100,10 +103,7 @@
                     <svg class="search-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
                     <input type="search" placeholder="Buscar productos o tiendas" aria-label="Buscar">
                 </div>
-                <div class="app-header-actions">
-                    <a href="/tracking" aria-label="Mis pedidos">📋</a>
-                    <a href="/delivery" aria-label="Carrito" class="header-cart-link"><svg class="cart-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg></a>
-                </div>
+                <div class="app-header-actions"></div>
             </div>
         </header>
 

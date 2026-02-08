@@ -70,7 +70,7 @@
                     <h3>Ejemplo: Pedido #0 · Negocio demo</h3>
                     <p>📍 Dirección de ejemplo, Medellín</p>
                     <p>👤 Cliente · +57 300 0000000</p>
-                    <p class="total">Total: $0</p>
+                    <p class="total">Total: $ 0</p>
                     <p style="color: #888;">Estado: en_camino</p>
                     <p style="font-size: 0.8rem; color: #6b7280; margin-top: 0.5rem;">Solo demostración — no es un pedido real.</p>
                 </div>
@@ -138,7 +138,7 @@
             html += '<h3>Pedido #' + order.id + ' · ' + (order.business_name || '') + '</h3>';
             html += '<p>📍 ' + (order.customer_address || '') + '</p>';
             html += '<p>👤 ' + (order.customer_name || '') + ' · ' + (order.customer_phone || '') + '</p>';
-            html += '<p class="total">Total: $' + (order.total || 0).toLocaleString() + '</p>';
+            html += '<p class="total">Total: ' + (typeof formatCOP === 'function' ? formatCOP(order.total || 0) : '$ ' + (order.total || 0).toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 })) + '</p>';
             html += '<p style="color: #888;">Estado: ' + status + '</p>';
             if (canTake) {
                 html += '<button type="button" class="btn-take" onclick="takeOrder(' + order.id + ', ' + courierId + ')">Tomar pedido</button>';

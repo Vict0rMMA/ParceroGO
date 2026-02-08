@@ -339,7 +339,7 @@
                         </div>
                         <div class="summary-item">
                             <span>Subtotal</span>
-                            <span>$<span id="subtotal">0</span></span>
+                            <span><span id="subtotal">$ 0</span></span>
                         </div>
                         <div class="summary-item">
                             <span>Envío</span>
@@ -347,7 +347,7 @@
                         </div>
                         <div class="summary-total">
                             <span>Total</span>
-                            <span class="amount">$<span id="total">0</span></span>
+                            <span class="amount"><span id="total">$ 0</span></span>
                         </div>
                         <button class="checkout-btn" id="checkout-btn" onclick="processCheckout()">
                             Completar Pedido
@@ -450,15 +450,15 @@
                         <p>No hay productos en el carrito</p>
                     </div>
                 `;
-                subtotalEl.textContent = '0';
+                subtotalEl.textContent = '$ 0';
                 shippingEl.textContent = '0';
-                totalEl.textContent = '0';
+                totalEl.textContent = '$ 0';
                 return;
             }
             
             // Calcular subtotal
             const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            const shipping = subtotal > 50000 ? 0 : 5000; // Envío gratis sobre $50,000
+            const shipping = subtotal > 50000 ? 0 : 5000; // Envío gratis sobre $ 50.000 (COP)
             const total = subtotal + shipping;
             
             // Renderizar items
@@ -470,15 +470,15 @@
                          onerror="this.src='https://via.placeholder.com/60x60?text=Producto'">
                     <div class="order-item-info">
                         <div class="order-item-name">${item.name}</div>
-                        <div class="order-item-details">Cantidad: ${item.quantity} x $${item.price.toLocaleString()}</div>
+                        <div class="order-item-details">Cantidad: ${item.quantity} x ${typeof formatCOP === 'function' ? formatCOP(item.price) : '$ ' + (item.price || 0).toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</div>
                     </div>
-                    <div class="order-item-price">$${(item.price * item.quantity).toLocaleString()}</div>
+                    <div class="order-item-price">${typeof formatCOP === 'function' ? formatCOP(item.price * item.quantity) : '$ ' + (item.price * item.quantity).toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</div>
                 </div>
             `).join('');
             
-            subtotalEl.textContent = subtotal.toLocaleString();
-            shippingEl.textContent = shipping.toLocaleString();
-            totalEl.textContent = total.toLocaleString();
+            subtotalEl.textContent = typeof formatCOP === 'function' ? formatCOP(subtotal) : '$ ' + subtotal.toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+            shippingEl.textContent = typeof formatCOP === 'function' ? formatCOP(shipping) : '$ ' + shipping.toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+            totalEl.textContent = typeof formatCOP === 'function' ? formatCOP(total) : '$ ' + total.toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
         }
 
         // Procesar checkout
@@ -565,7 +565,7 @@
                         if (typeof sendSMSNotification === 'undefined') {
                             // Definir función si no existe
                             window.sendSMSNotification = function(orderId, phone, order) {
-                                const smsMessage = `🎉 Parcero Go\n\nTu pedido #${orderId} ha sido confirmado!\n\nNegocio: ${order.business_name}\nTotal: $${order.total.toLocaleString()}\nTiempo estimado: ${order.estimated_time} min\n\nRastrea tu pedido: ${window.location.origin}/tracking?phone=${encodeURIComponent(phone)}\n\nGracias por tu compra! 🚀`;
+                                const smsMessage = `🎉 Parcero Go\n\nTu pedido #${orderId} ha sido confirmado!\n\nNegocio: ${order.business_name}\nTotal: ${typeof formatCOP === 'function' ? formatCOP(order.total) : '$ ' + (order.total || 0).toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}\nTiempo estimado: ${order.estimated_time} min\n\nRastrea tu pedido: ${window.location.origin}/tracking?phone=${encodeURIComponent(phone)}\n\nGracias por tu compra! 🚀`;
                                 console.log('📱 SMS simulado enviado a', phone);
                                 setTimeout(() => {
                                     if (typeof showNotification !== 'undefined') {
