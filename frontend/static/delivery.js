@@ -286,6 +286,17 @@ function displayBusinesses() {
     }
 }
 
+/**
+ * Hace scroll suave hasta la sección de productos (id="productos").
+ * Se llama al seleccionar una tienda para que el usuario vea los productos sin bajar manualmente.
+ */
+function scrollToProductosSection() {
+    var section = document.getElementById('productos');
+    if (section) {
+        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+}
+
 function selectBusiness(businessId) {
     selectedBusiness = businesses.filter(function (b) { return b.id === businessId; })[0];
     if (!selectedBusiness) return;
@@ -313,9 +324,13 @@ function selectBusiness(businessId) {
     var listEl = document.getElementById('products-list');
     listEl.innerHTML = '<div class="products-loading" style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:3rem 1rem;color:var(--text-muted);"><div style="width:40px;height:40px;border:3px solid var(--border-color);border-top-color:var(--primary-color);border-radius:50%;animation:spin 0.8s linear infinite;"></div><p style="margin:1rem 0 0 0;font-size:1rem;">Cargando productos…</p></div>';
 
+    scrollToProductosSection();
+
     fetch('/api/delivery/businesses/' + businessId + '/products')
         .then(function (r) { return r.json(); })
-        .then(function (data) { displayProducts(data.products || []); })
+        .then(function (data) {
+            displayProducts(data.products || []);
+        })
         .catch(function (e) {
             console.error('Error cargando productos:', e);
             listEl.innerHTML = '<h4 style="margin-bottom:1rem;color:var(--primary-color);">🍽️ Productos</h4><p style="color:#ff6b6b;text-align:center;padding:2rem;">No se pudieron cargar los productos. Intenta de nuevo.</p>';
