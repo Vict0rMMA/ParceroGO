@@ -132,6 +132,10 @@ function loadBusinesses() {
                 listEl.innerHTML = '<p style="color: #b8b8b8; padding: 1rem; text-align: center;">No hay negocios cargados. Ejecuta <code>python init_data.py</code> si es la primera vez.</p>';
                 return;
             }
+            var params = new URLSearchParams(window.location.search);
+            var q = params.get('q');
+            var searchEl = document.getElementById('search-business');
+            if (q && searchEl) { searchEl.value = q; }
             displayBusinesses();
             addBusinessesToMap();
             loadCouriers();
@@ -306,10 +310,16 @@ function selectBusiness(businessId) {
     var emptyEl = document.getElementById('business-details-empty');
     if (emptyEl) emptyEl.style.display = 'none';
 
+    var listEl = document.getElementById('products-list');
+    listEl.innerHTML = '<div class="products-loading" style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:3rem 1rem;color:var(--text-muted);"><div style="width:40px;height:40px;border:3px solid var(--border-color);border-top-color:var(--primary-color);border-radius:50%;animation:spin 0.8s linear infinite;"></div><p style="margin:1rem 0 0 0;font-size:1rem;">Cargando productos…</p></div>';
+
     fetch('/api/delivery/businesses/' + businessId + '/products')
         .then(function (r) { return r.json(); })
         .then(function (data) { displayProducts(data.products || []); })
-        .catch(function (e) { console.error('Error cargando productos:', e); });
+        .catch(function (e) {
+            console.error('Error cargando productos:', e);
+            listEl.innerHTML = '<h4 style="margin-bottom:1rem;color:var(--primary-color);">🍽️ Productos</h4><p style="color:#ff6b6b;text-align:center;padding:2rem;">No se pudieron cargar los productos. Intenta de nuevo.</p>';
+        });
 }
 
 function displayProducts(products) {
@@ -323,23 +333,95 @@ function displayProducts(products) {
         if (product.available === false) return;
         var item = document.createElement('div');
         item.className = 'product-card-modern';
-        var notesId = 'notes-' + product.id + '-' + Math.random().toString(36).slice(2, 8);
         var productImgUrl = (typeof getProductImageUrlByName === 'function' && window.getProductImageUrlByName(product.name)) || product.image || getProductImageUrl(product.id, product.name);
         var fallbackImgUrl = 'https://picsum.photos/seed/alt' + product.id + '/400/300';
-        var nameSafe = (product.name || '').replace(/'/g, "\\'");
+        var nameEsc = (product.name || '').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
         item.innerHTML =
             '<div style="position: relative; margin-bottom: 1rem;">' +
-            '<img src="' + productImgUrl + '" alt="' + product.name + '" style="width: 100%; height: 180px; object-fit: cover; border-radius: 12px; border: 2px solid #2a2a2a;" onerror="this.onerror=null; this.src=\'' + fallbackImgUrl + '\';">' +
-            '</div><h4 style="margin: 0.5rem 0; color: #ffffff; font-size: 1rem; min-height: 2.5rem; line-height: 1.3;">' + product.name + '</h4>' +
+            '<img src="' + productImgUrl + '" alt="' + nameEsc + '" style="width: 100%; height: 180px; object-fit: cover; border-radius: 12px; border: 2px solid #2a2a2a;" onerror="this.onerror=null; this.src=\'' + fallbackImgUrl + '\';">' +
+            '</div><h4 style="margin: 0.5rem 0; color: #ffffff; font-size: 1rem; min-height: 2.5rem; line-height: 1.3;">' + (product.name || '') + '</h4>' +
             '<p style="color: #b8b8b8; margin: 0.3rem 0; font-size: 0.85rem; min-height: 2rem;">' + (product.description || '') + '</p>' +
-            '<input type="text" id="' + notesId + '" placeholder="Notas (ej. sin cebolla)" style="width: 100%; margin-top: 0.5rem; padding: 0.5rem; background: var(--darker-card); border: 1px solid #2a2a2a; border-radius: 8px; color: var(--text-dark); font-size: 0.85rem;">' +
             '<div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;">' +
             '<p class="price" style="color: #D4AF37; font-size: 1.3rem; font-weight: 700; margin: 0;">' + (typeof formatCOP === 'function' ? formatCOP(product.price || 0) : '$ ' + (product.price || 0).toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 })) + '</p>' +
-            '<button onclick="var n=document.getElementById(\'' + notesId + '\'); addProduct(' + product.id + ', \'' + nameSafe + '\', ' + (product.price || 0) + ', n ? n.value : \'\'); if(n) n.value=\'\';" style="background: linear-gradient(135deg, #D4AF37 0%, #FFD700 100%); color: #0a0a0a; border: none; padding: 0.6rem 1.2rem; border-radius: 25px; font-weight: 600; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);">+ Agregar</button>' +
+            '<button type="button" onclick="openAddOptionsModal(' + product.id + ', \'' + (product.name || '').replace(/'/g, "\\'") + '\', ' + (product.price || 0) + ')" style="background: linear-gradient(135deg, #D4AF37 0%, #FFD700 100%); color: #0a0a0a; border: none; padding: 0.6rem 1.2rem; border-radius: 25px; font-weight: 600; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);">+ Agregar</button>' +
             '</div>';
         list.appendChild(item);
     });
     updateOrderTotal();
+}
+
+var addOptionsPending = null;
+
+function openAddOptionsModal(productId, name, price) {
+    addOptionsPending = { productId: productId, name: name, price: price };
+    var nameEl = document.getElementById('add-options-product-name');
+    var sizeEl = document.getElementById('add-options-size');
+    var notesEl = document.getElementById('add-options-notes');
+    if (nameEl) nameEl.textContent = name;
+    if (sizeEl) sizeEl.value = '';
+    if (notesEl) notesEl.value = '';
+    document.getElementById('add-options-overlay').style.display = 'block';
+    document.getElementById('add-options-modal').style.display = 'block';
+    var btn = document.getElementById('add-options-confirm-btn');
+    if (btn) {
+        btn.onclick = function () {
+            confirmAddWithOptions();
+        };
+    }
+}
+
+function closeAddOptionsModal() {
+    addOptionsPending = null;
+    document.getElementById('add-options-overlay').style.display = 'none';
+    document.getElementById('add-options-modal').style.display = 'none';
+}
+
+function animateFlyToCart() {
+    var startBtn = document.getElementById('add-options-confirm-btn');
+    var endBtn = document.querySelector('.cart-icon-btn');
+    if (!startBtn || !endBtn) return;
+    var startR = startBtn.getBoundingClientRect();
+    var endR = endBtn.getBoundingClientRect();
+    var startX = startR.left + startR.width / 2;
+    var startY = startR.top + startR.height / 2;
+    var endX = endR.left + endR.width / 2;
+    var endY = endR.top + endR.height / 2;
+    var fly = document.createElement('div');
+    fly.setAttribute('aria-hidden', 'true');
+    fly.style.cssText = 'position:fixed;left:' + startX + 'px;top:' + startY + 'px;width:32px;height:32px;margin-left:-16px;margin-top:-16px;z-index:9999;border-radius:50%;background:linear-gradient(135deg,#D4AF37,#FF8C00);color:#1a1a1a;font-size:14px;font-weight:800;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 12px rgba(212,175,55,0.5);transition:left 0.45s cubic-bezier(0.25,0.46,0.45,0.94),top 0.45s cubic-bezier(0.25,0.46,0.45,0.94),transform 0.45s;pointer-events:none;';
+    fly.textContent = '+1';
+    document.body.appendChild(fly);
+    requestAnimationFrame(function() {
+        requestAnimationFrame(function() {
+            fly.style.left = endX + 'px';
+            fly.style.top = endY + 'px';
+            fly.style.transform = 'scale(0.3)';
+            fly.style.opacity = '0.6';
+        });
+    });
+    setTimeout(function() {
+        fly.remove();
+        if (endBtn) {
+            endBtn.style.transition = 'transform 0.2s ease';
+            endBtn.style.transform = 'scale(1.2)';
+            setTimeout(function() { endBtn.style.transform = ''; }, 200);
+        }
+    }, 480);
+}
+
+function confirmAddWithOptions() {
+    if (!addOptionsPending) return;
+    var sizeEl = document.getElementById('add-options-size');
+    var notesEl = document.getElementById('add-options-notes');
+    var size = (sizeEl && sizeEl.value) ? sizeEl.value.trim() : '';
+    var notes = (notesEl && notesEl.value) ? notesEl.value.trim() : '';
+    var parts = [];
+    if (size) parts.push('Tamaño: ' + size);
+    if (notes) parts.push(notes);
+    var fullNotes = parts.join('. ');
+    addProduct(addOptionsPending.productId, addOptionsPending.name, addOptionsPending.price, fullNotes);
+    animateFlyToCart();
+    closeAddOptionsModal();
 }
 
 function addProduct(productId, name, price, notes) {

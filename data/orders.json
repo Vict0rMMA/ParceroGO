@@ -629,5 +629,86 @@
     "courier_id": 5,
     "courier_name": "Luis",
     "updated_at": "2026-02-08T18:30:47.236985"
+  },
+  {
+    "id": 17,
+    "customer_name": "tomas",
+    "customer_phone": "+57 3022641008",
+    "customer_address": "Calle 39B #109-46",
+    "customer_lat": 6.2088,
+    "customer_lng": -75.5704,
+    "business_id": 5,
+    "business_name": "Café del Barrio",
+    "business_lat": 6.335289,
+    "business_lng": -75.548913,
+    "products": [
+      {
+        "product_id": 14,
+        "product_name": "Pastel",
+        "quantity": 1,
+        "unit_price": 4000,
+        "subtotal": 4000,
+        "notes": ""
+      }
+    ],
+    "total": 4000,
+    "distance_km": 14.26,
+    "estimated_time": 50,
+    "payment_method": "pse",
+    "tip_amount": 0,
+    "payment_status": "pendiente",
+    "status": "cancelado",
+    "delivery_person": null,
+    "courier_phone": null,
+    "created_at": "2026-02-09T01:45:46.867376",
+    "status_history": [
+      {
+        "status": "pendiente",
+        "timestamp": "2026-02-09T01:45:46.867376"
+      },
+      {
+        "status": "cancelado",
+        "timestamp": "2026-02-09T01:45:52.851502"
+      }
+    ],
+    "updated_at": "2026-02-09T01:45:52.851502"
+  },
+  {
+    "id": 18,
+    "customer_name": "tomas",
+    "customer_phone": "+57 3022641008",
+    "customer_address": "universidad de medellin",
+    "customer_lat": 6.2088,
+    "customer_lng": -75.5704,
+    "business_id": 13,
+    "business_name": "Burger King Express",
+    "business_lat": 6.252078,
+    "business_lng": -75.599373,
+    "products": [
+      {
+        "product_id": 38,
+        "product_name": "Perro Caliente",
+        "quantity": 1,
+        "unit_price": 8000,
+        "subtotal": 8000,
+        "notes": ""
+      }
+    ],
+    "total": 8000,
+    "distance_km": 5.78,
+    "estimated_time": 54,
+    "payment_method": "efectivo",
+    "tip_amount": 0,
+    "payment_status": "pendiente",
+    "status": "pendiente",
+    "delivery_person": null,
+    "courier_phone": null,
+    "created_at": "2026-02-09T01:59:18.561568",
+    "status_history": [
+      {
+        "status": "pendiente",
+        "timestamp": "2026-02-09T01:59:18.561568"
+      }
+    ]
   }
 ]

@@ -4,7 +4,7 @@
     <script src="/static/api-shim.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#0d9488">
+    <meta name="theme-color" content="#FF8C00">
     <title>Confirmar Pedido - Parcero Go</title>
     <link rel="manifest" href="/static/manifest.json">
     <link rel="stylesheet" href="/static/style.css">
@@ -14,7 +14,7 @@
         body { background: #f0f2f5 !important; color: #1f2937; }
         body.page-order-confirm .navbar.order-page-nav { background: #fff !important; border-bottom: 1px solid #e5e7eb !important; color: #111827 !important; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
         body.page-order-confirm .navbar.order-page-nav a { color: #374151 !important; }
-        body.page-order-confirm .navbar.order-page-nav a:hover { color: #0d9488 !important; }
+        body.page-order-confirm .navbar.order-page-nav a:hover { color: #FF8C00 !important; }
         .order-page { max-width: 940px; margin: 0 auto; padding: 1.5rem 1.25rem 3rem; }
         .order-page .hero { text-align: center; margin-bottom: 2rem; background: transparent !important; border: none !important; box-shadow: none !important; padding: 2rem 1rem !important; color: #111827; }
         .order-page .hero::before { display: none; }
@@ -24,50 +24,54 @@
         @media (max-width: 900px) { .order-grid { grid-template-columns: 1fr; } }
         .order-page .card { background: #fff; border: none; border-radius: 16px; padding: 1.5rem 1.75rem; margin-bottom: 1.25rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
         .order-page .card h3 { color: #374151; margin: 0 0 1rem 0; font-size: 1.05rem; font-weight: 600; padding-bottom: 0.65rem; border-bottom: 1px solid #e5e7eb; display: flex; align-items: center; gap: 0.5rem; }
-        .business-summary { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.25rem; background: #f9fafb; border-radius: 12px; margin-bottom: 0; border-left: 4px solid #0d9488; }
+        .business-summary { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.25rem; background: #f9fafb; border-radius: 12px; margin-bottom: 0; border-left: 4px solid #D4AF37; }
         .business-summary .name { font-weight: 700; color: #111827; font-size: 1.05rem; }
         .business-summary .meta { color: #6b7280; font-size: 0.875rem; margin-top: 0.2rem; }
         .product-row { display: flex; justify-content: space-between; align-items: center; padding: 0.65rem 0; border-bottom: 1px solid #f3f4f6; }
         .product-row:last-child { border-bottom: none; }
         .product-row .name { color: #111827; }
         .product-row .qty { color: #6b7280; font-size: 0.85rem; }
-        .product-row .subtotal { color: #0d9488; font-weight: 700; }
-        .total-box { background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 12px; padding: 1.2rem; text-align: center; margin-top: 1rem; }
+        .product-row .subtotal { color: #B8860B; font-weight: 700; }
+        .total-box { background: #fffbeb; border: 1px solid #FCD34D; border-radius: 12px; padding: 1.2rem; text-align: center; margin-top: 1rem; }
         .total-box .label { color: #6b7280; font-size: 0.9rem; }
-        .total-box .amount { font-size: 1.6rem; font-weight: 700; color: #0d9488; margin-top: 0.2rem; }
+        .total-box .amount { font-size: 1.6rem; font-weight: 700; color: #B8860B; margin-top: 0.2rem; }
         .order-page .form-group { margin-bottom: 1.1rem; }
         .order-page .form-group label { display: block; margin-bottom: 0.35rem; color: #374151; font-weight: 600; font-size: 0.875rem; }
         .order-page .form-group input, .order-page .form-group select { width: 100%; padding: 0.75rem 1rem; background: #fff; border: 1px solid #d1d5db; border-radius: 10px; color: #111827; font-size: 1rem; transition: border-color 0.2s, box-shadow 0.2s; }
-        .order-page .form-group input:focus, .order-page .form-group select:focus { outline: none; border-color: #0d9488; box-shadow: 0 0 0 3px rgba(13,148,136,0.15); }
+        .order-page .form-group input:focus, .order-page .form-group select:focus { outline: none; border-color: #D4AF37; box-shadow: 0 0 0 3px rgba(212,175,55,0.2); }
         .order-page .form-group input.input-error { border-color: #dc2626; background: #fef2f2; }
         .order-page .form-group input.input-error:focus { box-shadow: 0 0 0 3px rgba(220,38,38,0.15); }
-        .btn-confirm { width: 100%; padding: 1rem; background: #0d9488; color: #fff; border: none; border-radius: 12px; font-size: 1.05rem; font-weight: 700; cursor: pointer; transition: all 0.2s ease; margin-top: 0.5rem; box-shadow: 0 2px 8px rgba(13,148,136,0.3); }
-        .btn-confirm:hover:not(:disabled) { background: #0f766e; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(13,148,136,0.35); }
+        .btn-confirm { width: 100%; padding: 1rem; background: linear-gradient(135deg, #D4AF37 0%, #FF8C00 100%); color: #1a1a1a; border: none; border-radius: 12px; font-size: 1.05rem; font-weight: 700; cursor: pointer; transition: all 0.2s ease; margin-top: 0.5rem; box-shadow: 0 2px 8px rgba(212,175,55,0.35); }
+        .btn-confirm:hover:not(:disabled) { background: linear-gradient(135deg, #B8860B 0%, #E67A00 100%); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(212,175,55,0.4); }
         .btn-confirm:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-        .back-link { display: inline-flex; align-items: center; gap: 0.5rem; color: #0d9488; text-decoration: none; font-weight: 600; margin-bottom: 1.25rem; }
-        .back-link:hover { color: #0f766e; text-decoration: underline; }
+        .back-link { display: inline-flex; align-items: center; gap: 0.5rem; color: #B8860B; text-decoration: none; font-weight: 600; margin-bottom: 1.25rem; }
+        .back-link:hover { color: #FF8C00; text-decoration: underline; }
         .empty-state { text-align: center; padding: 3rem 2rem; color: #6b7280; }
         .empty-state .icon { font-size: 4rem; margin-bottom: 1rem; }
         .loading-spinner { display: none; text-align: center; padding: 1.25rem; }
         .loading-spinner.show { display: block; }
-        .spinner { border: 3px solid #ccfbf1; border-top-color: #0d9488; border-radius: 50%; width: 36px; height: 36px; animation: spin 0.8s linear infinite; margin: 0 auto 0.5rem; }
+        @media (max-width: 600px) {
+            .loading-spinner.show { padding: 2rem 1rem; min-height: 120px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+            .loading-spinner .spinner { width: 44px; height: 44px; }
+        }
+        .spinner { border: 3px solid #FEF3C7; border-top-color: #D4AF37; border-radius: 50%; width: 36px; height: 36px; animation: spin 0.8s linear infinite; margin: 0 auto 0.5rem; }
         @keyframes spin { to { transform: rotate(360deg); } }
         .success-block { display: none; text-align: center; padding: 2rem; }
         .success-block.show { display: block; }
         .success-block .success-icon { font-size: 4rem; margin-bottom: 1rem; }
-        .success-block h3 { color: #0d9488; margin-bottom: 0.5rem; }
-        .success-block a { display: inline-block; margin-top: 1.5rem; padding: 0.85rem 1.75rem; background: #0d9488; color: #fff; border-radius: 12px; font-weight: 700; text-decoration: none; }
-        .success-payment-badge { display: inline-block; margin-top: 0.75rem; padding: 0.5rem 1rem; background: #f0fdfa; border-radius: 8px; color: #6b7280; font-size: 0.9rem; }
+        .success-block h3 { color: #B8860B; margin-bottom: 0.5rem; }
+        .success-block a { display: inline-block; margin-top: 1.5rem; padding: 0.85rem 1.75rem; background: linear-gradient(135deg, #D4AF37 0%, #FF8C00 100%); color: #1a1a1a; border-radius: 12px; font-weight: 700; text-decoration: none; }
+        .success-payment-badge { display: inline-block; margin-top: 0.75rem; padding: 0.5rem 1rem; background: #fffbeb; border-radius: 8px; color: #6b7280; font-size: 0.9rem; }
         /* Métodos de pago */
         .payment-section-title { margin-bottom: 0.85rem; color: #374151; font-weight: 600; font-size: 0.95rem; }
         .payment-options { display: flex; flex-direction: column; gap: 0.6rem; margin-top: 0.4rem; }
         .payment-option { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.2rem; background: #f9fafb; border: 2px solid #e5e7eb; border-radius: 12px; cursor: pointer; transition: all 0.2s ease; min-height: 52px; }
         .payment-option:hover { border-color: #d1d5db; background: #f3f4f6; }
-        .payment-option.selected { border-color: #0d9488; background: #f0fdfa; }
+        .payment-option.selected { border-color: #D4AF37; background: #fffbeb; }
         .payment-option .radio-wrap { flex-shrink: 0; }
         .payment-option .radio-dot { width: 20px; height: 20px; border: 2px solid #9ca3af; border-radius: 50%; position: relative; transition: all 0.2s; }
-        .payment-option.selected .radio-dot { border-color: #0d9488; }
-        .payment-option.selected .radio-dot::after { content: ''; position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); width: 10px; height: 10px; background: #0d9488; border-radius: 50%; }
+        .payment-option.selected .radio-dot { border-color: #D4AF37; }
+        .payment-option.selected .radio-dot::after { content: ''; position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); width: 10px; height: 10px; background: #D4AF37; border-radius: 50%; }
         .payment-option .pay-icon { font-size: 1.75rem; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; flex-shrink: 0; }
         .payment-option .pay-icon img { width: 100%; height: 100%; object-fit: contain; border-radius: 10px; }
         .payment-option .pay-icon-pse { padding: 6px; }
@@ -92,9 +96,10 @@
         .order-option-row { display: flex; align-items: center; gap: 0.75rem; padding: 0.7rem 0.9rem; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 10px; margin-bottom: 0.5rem; cursor: pointer; transition: background 0.2s, border-color 0.2s; }
         .order-option-row:last-child { margin-bottom: 0; }
         .order-option-row:hover { background: #f3f4f6; border-color: #d1d5db; }
-        .order-option-row input[type="checkbox"] { width: 20px; height: 20px; accent-color: #0d9488; cursor: pointer; flex-shrink: 0; }
+        .order-option-row input[type="checkbox"] { width: 20px; height: 20px; accent-color: #D4AF37; cursor: pointer; flex-shrink: 0; }
         .order-option-row span { font-size: 0.9rem; color: #374151; font-weight: 500; }
         .order-option-row .option-hint { font-size: 0.8rem; color: #6b7280; margin-top: 0.15rem; }
+        .field-error { display: block; font-size: 0.8rem; color: #dc2626; margin-top: 0.35rem; min-height: 1.2em; }
     </style>
 </head>
 <body class="page-order-confirm">
@@ -148,10 +153,12 @@
                         <div class="form-group">
                             <label>Nombre completo *</label>
                             <input type="text" id="customer-name" placeholder="Ej: Juan Pérez" required>
+                            <span class="field-error" id="customer-name-error" role="alert"></span>
                         </div>
                         <div class="form-group">
                             <label>Teléfono *</label>
                             <input type="tel" id="customer-phone" placeholder="Ej: +57 300 1234567" required>
+                            <span class="field-error" id="customer-phone-error" role="alert"></span>
                         </div>
                         <div class="form-group">
                             <label>Propina para el repartidor (opcional)</label>
@@ -163,6 +170,7 @@
                                 <option value="">-- Elegir dirección guardada --</option>
                             </select>
                             <input type="text" id="customer-address" placeholder="Ej: Calle 50 #30-20, Medellín" required>
+                            <span class="field-error" id="customer-address-error" role="alert"></span>
                             <div class="order-options-group">
                                 <label class="order-option-row" for="save-address-cb">
                                     <input type="checkbox" id="save-address-cb">
@@ -321,13 +329,37 @@
             sessionStorage.removeItem(CART_KEY);
         }
 
+        function setFieldError(id, message) {
+            var el = document.getElementById(id);
+            var errEl = document.getElementById(id + '-error');
+            if (el) el.classList.toggle('input-error', !!message);
+            if (errEl) errEl.textContent = message || '';
+        }
+        function validateOrderForm() {
+            var name = document.getElementById('customer-name').value.trim();
+            var phone = document.getElementById('customer-phone').value.trim().replace(/\s/g, '');
+            var address = document.getElementById('customer-address').value.trim();
+            var ok = true;
+            if (!name) {
+                setFieldError('customer-name', 'Escribe tu nombre completo');
+                ok = false;
+            } else setFieldError('customer-name', '');
+            var phoneDigits = phone.replace(/^\+/, '').replace(/\D/g, '');
+            if (!phone || phoneDigits.length < 10) {
+                setFieldError('customer-phone', 'Teléfono válido (mínimo 10 números)');
+                ok = false;
+            } else setFieldError('customer-phone', '');
+            if (!address) {
+                setFieldError('customer-address', 'Escribe la dirección de entrega');
+                ok = false;
+            } else setFieldError('customer-address', '');
+            return ok;
+        }
+
         document.getElementById('order-form').addEventListener('submit', async function(e) {
             e.preventDefault();
             if (!cartData) return;
-            if (!validateOrderFormVisual()) {
-                if (typeof showAlert !== 'undefined') showAlert('Completa todos los campos obligatorios', 'warning', 'Datos requeridos');
-                return;
-            }
+            if (!validateOrderForm()) return;
             const name = document.getElementById('customer-name').value.trim();
             const phone = document.getElementById('customer-phone').value.trim();
             const address = document.getElementById('customer-address').value.trim();
@@ -507,23 +539,19 @@
             else e.target.value = v;
         });
 
-        // Validación visual (inputs vacíos)
-        function setInputError(id, hasError) {
-            var el = document.getElementById(id);
-            if (el) el.classList.toggle('input-error', !!hasError);
-        }
-        function validateOrderFormVisual() {
-            var name = document.getElementById('customer-name').value.trim();
-            var phone = document.getElementById('customer-phone').value.trim();
-            var address = document.getElementById('customer-address').value.trim();
-            setInputError('customer-name', !name);
-            setInputError('customer-phone', !phone);
-            setInputError('customer-address', !address);
-            return name && phone && address;
-        }
         ['customer-name','customer-phone','customer-address'].forEach(function(id) {
-            document.getElementById(id).addEventListener('blur', function() { setInputError(id, !this.value.trim()); });
-            document.getElementById(id).addEventListener('input', function() { setInputError(id, false); });
+            document.getElementById(id).addEventListener('input', function() {
+                setFieldError(id, '');
+            });
+            document.getElementById(id).addEventListener('blur', function() {
+                var name = document.getElementById('customer-name').value.trim();
+                var phone = document.getElementById('customer-phone').value.trim().replace(/\s/g, '');
+                var address = document.getElementById('customer-address').value.trim();
+                var phoneDigits = phone.replace(/^\+/, '').replace(/\D/g, '');
+                if (id === 'customer-name') setFieldError(id, name ? '' : 'Escribe tu nombre completo');
+                else if (id === 'customer-phone') setFieldError(id, (phone && phoneDigits.length >= 10) ? '' : (phone ? 'Mínimo 10 números' : ''));
+                else if (id === 'customer-address') setFieldError(id, address ? '' : 'Escribe la dirección de entrega');
+            });
         });
     </script>
     <script src="/static/theme.js"></script>
