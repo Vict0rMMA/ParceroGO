@@ -27,6 +27,16 @@ var CATEGORY_ICONS = {
 var CATEGORY_ORDER = ['Comidas Rápidas', 'Pizzería', 'Restaurante', 'Cafetería', 'Farmacia', 'Panadería', 'Supermercado', 'Veterinaria', 'Tienda de Mascotas', 'Tienda de Abarrotes'];
 var FAVORITES_KEY = 'delivery_favorites';
 
+function formatPrice(val) {
+    return typeof formatCOP === 'function' ? formatCOP(val) : '$ ' + (Number(val) || 0).toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+}
+function escapeHtml(str) {
+    return (str || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+function escapeAttr(str) {
+    return escapeHtml(str).replace(/"/g, '&quot;');
+}
+
 function getCategoryFilterFromUrl() {
     var params = new URLSearchParams(window.location.search);
     var slug = (params.get('categoria') || '').toLowerCase().trim();
@@ -205,23 +215,22 @@ function displayBusinesses() {
         return;
     }
 
-    function groupByCategory(arr) {
+    function buildByCategory(arr) {
         var byCat = {};
         arr.forEach(function (b) {
             var cat = b.category || 'Otros';
             if (!byCat[cat]) byCat[cat] = [];
             byCat[cat].push(b);
         });
+        return byCat;
+    }
+    function groupByCategory(arr) {
+        var byCat = buildByCategory(arr);
         var rest = Object.keys(byCat).filter(function (c) { return CATEGORY_ORDER.indexOf(c) === -1; });
         return CATEGORY_ORDER.filter(function (c) { return byCat[c]; }).concat(rest).map(function (c) { return { category: c, list: byCat[c] }; });
     }
     function flatOrderByCategory(arr) {
-        var byCat = {};
-        arr.forEach(function (b) {
-            var cat = b.category || 'Otros';
-            if (!byCat[cat]) byCat[cat] = [];
-            byCat[cat].push(b);
-        });
+        var byCat = buildByCategory(arr);
         var rest = Object.keys(byCat).filter(function (c) { return CATEGORY_ORDER.indexOf(c) === -1; });
         return CATEGORY_ORDER.filter(function (c) { return byCat[c]; }).concat(rest).reduce(function (acc, c) { return acc.concat(byCat[c]); }, []);
     }
@@ -233,8 +242,8 @@ function displayBusinesses() {
         var isOpen = business.is_open
             ? '<span style="background: linear-gradient(135deg, #D4AF37 0%, #FFD700 100%); color: #0a0a0a; padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">✓ Abierto</span>'
             : '<span style="background: #ff4444; color: white; padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">✗ Cerrado</span>';
-        var nameEscaped = (business.name || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-        var categoryEscaped = (business.category || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        var nameEscaped = escapeHtml(business.name);
+        var categoryEscaped = escapeHtml(business.category);
         var isFav = favorites.indexOf(business.id) >= 0;
         var imgUrl = getBusinessImageUrl(business.id, business.category);
         var item = document.createElement('div');
@@ -350,14 +359,14 @@ function displayProducts(products) {
         item.className = 'product-card-modern';
         var productImgUrl = (typeof getProductImageUrlByName === 'function' && window.getProductImageUrlByName(product.name)) || product.image || getProductImageUrl(product.id, product.name);
         var fallbackImgUrl = 'https://picsum.photos/seed/alt' + product.id + '/400/300';
-        var nameEsc = (product.name || '').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        var nameEsc = escapeAttr(product.name);
         item.innerHTML =
             '<div style="position: relative; margin-bottom: 1rem;">' +
             '<img src="' + productImgUrl + '" alt="' + nameEsc + '" style="width: 100%; height: 180px; object-fit: cover; border-radius: 12px; border: 2px solid #2a2a2a;" onerror="this.onerror=null; this.src=\'' + fallbackImgUrl + '\';">' +
             '</div><h4 style="margin: 0.5rem 0; color: #ffffff; font-size: 1rem; min-height: 2.5rem; line-height: 1.3;">' + (product.name || '') + '</h4>' +
             '<p style="color: #b8b8b8; margin: 0.3rem 0; font-size: 0.85rem; min-height: 2rem;">' + (product.description || '') + '</p>' +
             '<div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;">' +
-            '<p class="price" style="color: #D4AF37; font-size: 1.3rem; font-weight: 700; margin: 0;">' + (typeof formatCOP === 'function' ? formatCOP(product.price || 0) : '$ ' + (product.price || 0).toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 })) + '</p>' +
+            '<p class="price" style="color: #D4AF37; font-size: 1.3rem; font-weight: 700; margin: 0;">' + formatPrice(product.price) + '</p>' +
             '<button type="button" onclick="openAddOptionsModal(' + product.id + ', \'' + (product.name || '').replace(/'/g, "\\'") + '\', ' + (product.price || 0) + ')" style="background: linear-gradient(135deg, #D4AF37 0%, #FFD700 100%); color: #0a0a0a; border: none; padding: 0.6rem 1.2rem; border-radius: 25px; font-weight: 600; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);">+ Agregar</button>' +
             '</div>';
         list.appendChild(item);
@@ -465,7 +474,7 @@ function updateSelectedProducts() {
             var item = document.createElement('div');
             item.className = 'product-item';
             item.style.cssText = 'display: flex; justify-content: space-between; align-items: center; padding: 1rem; margin-bottom: 0.8rem; background: #151515; border: 1px solid #2a2a2a; border-radius: 12px;';
-            item.innerHTML = '<div><strong style="color: #ffffff; font-size: 1rem;">' + product.name + '</strong><p style="color: #b8b8b8; margin: 0.3rem 0; font-size: 0.9rem;">Cantidad: ' + product.quantity + ' x ' + (typeof formatCOP === 'function' ? formatCOP(product.price) : '$ ' + (product.price || 0).toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 })) + '</p><p class="price" style="color: #D4AF37; font-weight: 700; font-size: 1.1rem; margin: 0.3rem 0;">Subtotal: ' + (typeof formatCOP === 'function' ? formatCOP(product.price * product.quantity) : '$ ' + (product.price * product.quantity).toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 })) + '</p></div><button onclick="removeProduct(' + index + ')" style="background: #ff4444; color: white; border: none; padding: 0.6rem 1rem; border-radius: 8px; font-weight: 600; cursor: pointer;">Eliminar</button>';
+            item.innerHTML = '<div><strong style="color: #ffffff; font-size: 1rem;">' + product.name + '</strong><p style="color: #b8b8b8; margin: 0.3rem 0; font-size: 0.9rem;">Cantidad: ' + product.quantity + ' x ' + formatPrice(product.price) + '</p><p class="price" style="color: #D4AF37; font-weight: 700; font-size: 1.1rem; margin: 0.3rem 0;">Subtotal: ' + formatPrice(product.price * product.quantity) + '</p></div><button onclick="removeProduct(' + index + ')" style="background: #ff4444; color: white; border: none; padding: 0.6rem 1rem; border-radius: 8px; font-weight: 600; cursor: pointer;">Eliminar</button>';
             container.appendChild(item);
         });
     }
@@ -475,11 +484,11 @@ function updateOrderTotal() {
     var total = selectedProducts.reduce(function (sum, p) { return sum + (p.price * p.quantity); }, 0);
     var totalElement = document.getElementById('order-total');
     if (totalElement) {
-        totalElement.textContent = typeof formatCOP === 'function' ? formatCOP(total) : '$ ' + total.toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+        totalElement.textContent = formatPrice(total);
         totalElement.style.color = '#D4AF37';
     }
     var cartTotal = document.getElementById('delivery-cart-total');
-    if (cartTotal) cartTotal.textContent = typeof formatCOP === 'function' ? formatCOP(total) : '$ ' + total.toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+    if (cartTotal) cartTotal.textContent = formatPrice(total);
 }
 
 function addBusinessesToMap() {

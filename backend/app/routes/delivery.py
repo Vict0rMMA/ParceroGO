@@ -1,10 +1,12 @@
 """
 Rutas para el módulo de delivery local.
 Maneja: negocios, productos, pedidos y carrito (API REST).
+Optimización: helpers reutilizables para carga de JSON y búsqueda evitan repetir
+la misma lógica en varios endpoints.
 """
 
 from datetime import datetime
-from typing import List, Dict
+from typing import List, Dict, Optional
 
 from fastapi import APIRouter, HTTPException
 
@@ -19,21 +21,26 @@ from app.utils import (
 router = APIRouter()
 
 # -----------------------------------------------------------------------------
-# Utilidad interna: normalización de teléfono para búsqueda
+# Helpers internos (evitan duplicar carga de JSON y búsquedas)
 # -----------------------------------------------------------------------------
 
 
 def _normalize_phone_for_match(phone: str) -> str:
-    """
-    Deja solo dígitos del teléfono.
-    Si tiene 12 dígitos y empieza con 57, devuelve los últimos 10 (sin código país).
-    """
+    """Deja solo dígitos; si 12 dígitos y empieza con 57, devuelve los últimos 10."""
     if not phone:
         return ""
     s = "".join(c for c in str(phone) if c.isdigit())
-    if len(s) == 12 and s.startswith("57"):
-        return s[2:]
-    return s
+    return s[2:] if len(s) == 12 and s.startswith("57") else s
+
+
+def _get_all_products() -> List[Dict]:
+    """Productos locales + Jumbo en una sola lista (usado en pedidos y carrito)."""
+    return load_json("products.json") + load_json("jumbo_products.json")
+
+
+def _find(seq: list, key: str, value) -> Optional[Dict]:
+    """Devuelve el primer elemento donde elem[key] == value, o None."""
+    return next((x for x in seq if x.get(key) == value), None)
 
 
 # -----------------------------------------------------------------------------
@@ -52,7 +59,7 @@ async def get_businesses():
 async def get_business(business_id: int):
     """Devuelve un negocio por ID. 404 si no existe."""
     businesses = load_json("businesses.json")
-    business = next((b for b in businesses if b["id"] == business_id), None)
+    business = _find(businesses, "id", business_id)
     if not business:
         raise HTTPException(status_code=404, detail="Negocio no encontrado")
     return business
@@ -76,25 +83,11 @@ async def get_business_products(business_id: int):
 
 @router.get("/products")
 async def get_all_products(category: str = None):
-    """
-    Devuelve todos los productos (locales + Jumbo).
-    category: opcional, filtra por categoría.
-    """
-    products = load_json("products.json")
-    jumbo_products = load_json("jumbo_products.json")
-    all_products = products + jumbo_products
-
+    """Devuelve todos los productos (locales + Jumbo). category: opcional."""
+    all_products = _get_all_products()
     if category:
-        all_products = [
-            p for p in all_products
-            if p.get("category", "").lower() == category.lower()
-        ]
-
-    return {
-        "products": all_products,
-        "count": len(all_products),
-        "category": category
-    }
+        all_products = [p for p in all_products if p.get("category", "").lower() == category.lower()]
+    return {"products": all_products, "count": len(all_products), "category": category}
 
 
 @router.get("/products/jumbo")
@@ -130,26 +123,20 @@ async def get_jumbo_products(category: str = None):
 @router.post("/orders")
 async def create_order(order_data: dict):
     """
-    Crea un nuevo pedido.
-    Body: customer_name, customer_phone, customer_address, customer_lat, customer_lng,
-          business_id, products [{product_id, quantity, notes?}], payment_method?, tip_amount?
-    Valida negocio, productos, coordenadas; calcula distancia y tiempo estimado.
-    Dispara notificación SMS al crear (si está configurado).
+    Crea un nuevo pedido. Valida negocio, productos, coordenadas; calcula distancia
+    y tiempo estimado. Dispara notificación SMS al crear (si está configurado).
     """
     orders = load_json("orders.json")
-    products = load_json("products.json")
-    jumbo_products = load_json("jumbo_products.json")
-    all_products = products + jumbo_products
+    all_products = _get_all_products()
     businesses = load_json("businesses.json")
-
-    business = next((b for b in businesses if b["id"] == order_data["business_id"]), None)
+    business = _find(businesses, "id", order_data["business_id"])
     if not business:
         raise HTTPException(status_code=404, detail="Negocio no encontrado")
 
     total = 0
     order_products = []
     for item in order_data["products"]:
-        product = next((p for p in all_products if p["id"] == item["product_id"]), None)
+        product = _find(all_products, "id", item["product_id"])
         if not product:
             raise HTTPException(status_code=404, detail=f"Producto {item['product_id']} no encontrado")
         if not product.get("available", True):
@@ -256,7 +243,7 @@ async def get_orders_by_phone(phone: str):
 async def get_order(order_id: int):
     """Devuelve un pedido por ID. 404 si no existe."""
     orders = load_json("orders.json")
-    order = next((o for o in orders if o["id"] == order_id), None)
+    order = _find(orders, "id", order_id)
     if not order:
         raise HTTPException(status_code=404, detail="Pedido no encontrado")
     return {"order": order}
@@ -271,7 +258,7 @@ async def update_order_status(order_id: int, status_data: dict):
     Registra el cambio en status_history y updated_at.
     """
     orders = load_json("orders.json")
-    order = next((o for o in orders if o["id"] == order_id), None)
+    order = _find(orders, "id", order_id)
     if not order:
         raise HTTPException(status_code=404, detail="Pedido no encontrado")
 
@@ -287,7 +274,7 @@ async def update_order_status(order_id: int, status_data: dict):
     if new_status == "en_camino":
         if courier_id:
             couriers = load_json("couriers.json")
-            courier = next((c for c in couriers if c["id"] == courier_id), None)
+            courier = _find(couriers, "id", courier_id)
             if courier:
                 order["courier_id"] = courier_id
                 order["delivery_person"] = courier.get("name", "")
@@ -342,11 +329,8 @@ async def get_cart():
 @router.post("/cart/add")
 async def add_to_cart(cart_item: dict):
     """Añade un producto al carrito (simulado). Body: product_id, quantity?"""
-    products = load_json("products.json")
-    jumbo_products = load_json("jumbo_products.json")
-    all_products = products + jumbo_products
-
-    product = next((p for p in all_products if p["id"] == cart_item["product_id"]), None)
+    all_products = _get_all_products()
+    product = _find(all_products, "id", cart_item["product_id"])
     if not product:
         raise HTTPException(status_code=404, detail="Producto no encontrado")
     if not product.get("available", True):
@@ -372,11 +356,8 @@ async def add_to_cart(cart_item: dict):
 @router.delete("/cart/remove/{product_id}")
 async def remove_from_cart(product_id: int):
     """Quita un producto del carrito (simulado)."""
-    products = load_json("products.json")
-    jumbo_products = load_json("jumbo_products.json")
-    all_products = products + jumbo_products
-
-    product = next((p for p in all_products if p["id"] == product_id), None)
+    all_products = _get_all_products()
+    product = _find(all_products, "id", product_id)
     if not product:
         raise HTTPException(status_code=404, detail="Producto no encontrado")
 

@@ -73,7 +73,10 @@
             align-items: start;
         }
         .tracking-page .action-btn.cancel { grid-column: 1 / -1; justify-self: center; margin-top: 0.5rem; padding-top: 1.25rem; border-top: 1px solid #e8e8e8; }
-        @media (max-width: 520px) { .tracking-page .actions-row { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 520px) {
+            .tracking-page .actions-row { grid-template-columns: repeat(2, 1fr); }
+            .tracking-page .action-btn.cancel { order: -1; margin-top: 0; padding-top: 0; margin-bottom: 0.75rem; padding-bottom: 1rem; border-top: none; border-bottom: 1px solid #e8e8e8; }
+        }
         .tracking-page .action-btn {
             display: flex;
             flex-direction: column;
