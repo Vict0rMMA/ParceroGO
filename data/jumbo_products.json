@@ -1,0 +1,152 @@
+[
+  {
+    "id": 1,
+    "name": "Nevera Samsung 380L",
+    "price": 1899000,
+    "description": "Producto de Refrigeración - Nevera Samsung 380L",
+    "category": "Refrigeración",
+    "source": "Jumbo Colombia",
+    "available": true,
+    "image": "https://picsum.photos/seed/j1/400"
+  },
+  {
+    "id": 2,
+    "name": "Nevecon 210L",
+    "price": 1299000,
+    "description": "Producto de Refrigeración - Nevecon 210L",
+    "category": "Refrigeración",
+    "source": "Jumbo Colombia",
+    "available": true,
+    "image": "https://picsum.photos/seed/j2/400"
+  },
+  {
+    "id": 3,
+    "name": "Lavadora Samsung 9kg",
+    "price": 2499000,
+    "description": "Producto de Lavadoras - Lavadora Samsung 9kg",
+    "category": "Lavadoras",
+    "source": "Jumbo Colombia",
+    "available": true,
+    "image": "https://picsum.photos/seed/j3/400"
+  },
+  {
+    "id": 4,
+    "name": "Smart TV Samsung 55\" 4K",
+    "price": 2499000,
+    "description": "Producto de Televisores - Smart TV Samsung 55\" 4K",
+    "category": "Televisores",
+    "source": "Jumbo Colombia",
+    "available": true,
+    "image": "https://picsum.photos/seed/j4/400"
+  },
+  {
+    "id": 5,
+    "name": "Samsung Galaxy A54 128GB",
+    "price": 1299000,
+    "description": "Producto de Celulares - Samsung Galaxy A54 128GB",
+    "category": "Celulares",
+    "source": "Jumbo Colombia",
+    "available": true,
+    "image": "https://picsum.photos/seed/j5/400"
+  },
+  {
+    "id": 6,
+    "name": "Arroz Diana 1kg",
+    "price": 3500,
+    "description": "Producto de Despensa - Arroz Diana 1kg",
+    "category": "Despensa",
+    "source": "Jumbo Colombia",
+    "available": true,
+    "image": "https://picsum.photos/seed/j6/400"
+  },
+  {
+    "id": 7,
+    "name": "Aceite Girasoli 1L",
+    "price": 8500,
+    "description": "Producto de Despensa - Aceite Girasoli 1L",
+    "category": "Despensa",
+    "source": "Jumbo Colombia",
+    "available": true,
+    "image": "https://picsum.photos/seed/j7/400"
+  },
+  {
+    "id": 8,
+    "name": "Café Juan Valdez 500g",
+    "price": 18900,
+    "description": "Producto de Despensa - Café Juan Valdez 500g",
+    "category": "Despensa",
+    "source": "Jumbo Colombia",
+    "available": true,
+    "image": "https://picsum.photos/seed/j8/400"
+  },
+  {
+    "id": 9,
+    "name": "Leche Alpina 1L",
+    "price": 4500,
+    "description": "Producto de Lácteos - Leche Alpina 1L",
+    "category": "Lácteos",
+    "source": "Jumbo Colombia",
+    "available": true,
+    "image": "https://picsum.photos/seed/j9/400"
+  },
+  {
+    "id": 10,
+    "name": "Huevos AA x12",
+    "price": 8000,
+    "description": "Producto de Lácteos - Huevos AA x12",
+    "category": "Lácteos",
+    "source": "Jumbo Colombia",
+    "available": true,
+    "image": "https://picsum.photos/seed/j10/400"
+  },
+  {
+    "id": 11,
+    "name": "Banano x1kg",
+    "price": 3500,
+    "description": "Producto de Frutas y Verduras - Banano x1kg",
+    "category": "Frutas y Verduras",
+    "source": "Jumbo Colombia",
+    "available": true,
+    "image": "https://picsum.photos/seed/j11/400"
+  },
+  {
+    "id": 12,
+    "name": "Papa Pastusa x1kg",
+    "price": 3200,
+    "description": "Producto de Frutas y Verduras - Papa Pastusa x1kg",
+    "category": "Frutas y Verduras",
+    "source": "Jumbo Colombia",
+    "available": true,
+    "image": "https://picsum.photos/seed/j12/400"
+  },
+  {
+    "id": 13,
+    "name": "Pechuga de Pollo x1kg",
+    "price": 12900,
+    "description": "Producto de Carnes - Pechuga de Pollo x1kg",
+    "category": "Carnes",
+    "source": "Jumbo Colombia",
+    "available": true,
+    "image": "https://picsum.photos/seed/j13/400"
+  },
+  {
+    "id": 14,
+    "name": "Detergente Ariel 1kg",
+    "price": 12900,
+    "description": "Producto de Aseo - Detergente Ariel 1kg",
+    "category": "Aseo",
+    "source": "Jumbo Colombia",
+    "available": true,
+    "image": "https://picsum.photos/seed/j14/400"
+  },
+  {
+    "id": 15,
+    "name": "Shampoo Pantene 400ml",
+    "price": 12900,
+    "description": "Producto de Cuidado Personal - Shampoo Pantene 400ml",
+    "category": "Cuidado Personal",
+    "source": "Jumbo Colombia",
+    "available": true,
+    "image": "https://picsum.photos/seed/j15/400"
+  }
+]
