@@ -65,14 +65,16 @@
         .tracking-page .timeline-link:hover { text-decoration: underline; }
         .tracking-page .actions-row {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1.25rem 1rem;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1rem;
             align-items: start;
         }
-        .tracking-page .action-btn.cancel { grid-column: 1 / -1; justify-self: center; margin-top: 0.5rem; padding-top: 1.25rem; border-top: 1px solid #e8e8e8; }
-        @media (max-width: 520px) {
+        .tracking-page .action-btn.cancel { }
+        @media (max-width: 620px) {
             .tracking-page .actions-row { grid-template-columns: repeat(2, 1fr); }
-            .tracking-page .action-btn.cancel { order: -1; margin-top: 0; padding-top: 0; margin-bottom: 0.75rem; padding-bottom: 1rem; border-top: none; border-bottom: 1px solid #e8e8e8; }
+        }
+        @media (max-width: 380px) {
+            .tracking-page .actions-row { grid-template-columns: 1fr; }
         }
         .tracking-page .action-btn {
             display: flex;
@@ -230,7 +232,7 @@
 
         function canCancelOrder(order) {
             if (!order) return false;
-            var s = order.status;
+            var s = (order.status || '').toString().toLowerCase().trim();
             if (s === 'entregado' || s === 'cancelado') return false;
             return true;
         }
@@ -304,11 +306,11 @@
                 '</div>' +
                 '<div class="card">' +
                 '<div class="actions-row">' +
+                (canCancelOrder(order) ? '<button type="button" class="action-btn cancel" title="Cancelar pedido"><span class="action-icon">✕</span><span class="action-label">Cancelar pedido</span></button>' : '') +
                 '<button type="button" class="action-btn" title="Entregar a un vecino"><span class="action-icon">🏠</span><span class="action-label">Entregar a un vecino</span></button>' +
                 '<button type="button" class="action-btn" title="Entregar en portería"><span class="action-icon">🔔</span><span class="action-label">Entregar en portería</span></button>' +
                 '<button type="button" class="action-btn" title="Cambiar domicilio"><span class="action-icon">📍</span><span class="action-label">Cambiar domicilio</span></button>' +
                 '<button type="button" class="action-btn" title="Opinar del envío"><span class="action-icon">👍</span><span class="action-label">Opinar del envío</span></button>' +
-                (canCancelOrder(order) ? '<button type="button" class="action-btn cancel" title="Cancelar pedido"><span class="action-icon">✕</span><span class="action-label">Cancelar pedido</span></button>' : '') +
                 '</div></div>' +
                 '<div class="card address-card">' +
                 '<div class="addr-icon">🏠</div>' +
