@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <script src="/static/api-shim.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#FFD23F">
+    <title>Parcero Go - Delivery Medellín</title>
+    <link rel="manifest" href="/static/manifest.json">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+</head>
+<body>
+    <a href="#main" class="skip-link">Saltar al contenido</a>
+
+    <div id="welcome-loading" class="welcome-loading" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 9999; align-items: center; justify-content: center; flex-direction: column; gap: 1rem;">
+        <div style="width: 48px; height: 48px; border: 4px solid rgba(255,255,255,0.2); border-top-color: #FFD23F; border-radius: 50%; animation: spin 0.8s linear infinite;"></div>
+        <span style="color: #fff; font-weight: 600;">Entrando...</span>
+    </div>
+    <style>@keyframes spin { to { transform: rotate(360deg); } }</style>
+
+    <div id="welcome-screen" class="welcome-screen" role="dialog" aria-modal="true" aria-labelledby="welcome-title" style="display: none;">
+        <div class="welcome-backdrop"></div>
+        <div class="welcome-card">
+            <div class="welcome-brand">
+                <img src="/static/logo.png" alt="" class="welcome-logo" onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
+                <div class="welcome-logo-fallback" style="display:none;">
+                    <span class="welcome-name">Parcero Go</span>
+                </div>
+                <h1 id="welcome-title" class="welcome-title">Parcero Go</h1>
+                <p class="welcome-subtitle">Delivery rápido a tu puerta</p>
+            </div>
+            <form id="welcome-form" class="welcome-form" novalidate>
+                <div class="welcome-field">
+                    <label for="welcome-name">Nombre completo</label>
+                    <input type="text" id="welcome-name" name="name" placeholder="Ej: Juan Pérez" required autocomplete="name">
+                </div>
+                <div class="welcome-field">
+                    <label for="welcome-phone">Teléfono</label>
+                    <input type="tel" id="welcome-phone" name="phone" placeholder="Ej: +57 300 1234567" required autocomplete="tel">
+                </div>
+                <div class="welcome-field">
+                    <label for="welcome-address">Dirección de entrega</label>
+                    <input type="text" id="welcome-address" name="address" placeholder="Ej: Calle 50 #30-20, Medellín" required autocomplete="street-address">
+                </div>
+                <button type="submit" class="welcome-btn">Entrar a Parcero Go</button>
+            </form>
+        </div>
+    </div>
+
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="brand-wrap">
+                <img src="/static/logo.png" alt="Parcero Go" class="app-logo" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-block';">
+                <span class="brand-text-fallback" style="display:none;">Parcero Go</span>
+            </a>
+            <div class="navbar-center">
+                <div class="nav-links">
+                    <a href="/" class="active">Inicio</a>
+                    <a href="/delivery">Delivery</a>
+                    <a href="/tracking">Seguimiento</a>
+                    <a href="/" class="nav-link-login">Iniciar sesión</a>
+                    <a href="/perfil" class="nav-link-perfil" style="display:none;" aria-hidden="true">Perfil</a>
+                    <a href="/repartidor">Repartidor</a>
+                </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:0.5rem;">
+                <a href="/tracking" class="cart-icon-btn navbar-cart-btn" aria-label="Mis pedidos" style="position:relative;display:flex;align-items:center;justify-content:center;width:50px;height:50px;border-radius:50%;background:var(--darker-card);border:1px solid var(--border-color);color:var(--text-dark);text-decoration:none;" title="Mis pedidos">📋</a>
+                <a href="/delivery" class="cart-icon-btn navbar-cart-btn" aria-label="Carrito" style="position:relative;display:flex;align-items:center;justify-content:center;width:50px;height:50px;border-radius:50%;background:var(--darker-card);border:1px solid var(--border-color);color:var(--text-dark);text-decoration:none;">
+                    <svg class="cart-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:24px;height:24px;"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                    <span class="cart-badge-dot" id="index-cart-badge" style="display:none;position:absolute;top:4px;right:4px;min-width:20px;height:20px;padding:0 6px;background:var(--danger-color);color:#fff;font-size:0.8rem;font-weight:700;border-radius:10px;">0</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="app-shell">
+        <header class="app-header">
+            <div class="app-header-row">
+                <a href="/" class="app-header-back" aria-label="Inicio">‹</a>
+                <a href="/" class="brand-wrap" style="display:flex;align-items:center;gap:0.3rem;text-decoration:none;">
+                    <img src="/static/logo.png" alt="Parcero Go" style="height:36px;width:auto;object-fit:contain;" onerror="this.style.display='none';this.nextElementSibling.style.display='inline';">
+                    <span class="brand-text-fallback" style="display:none;font-size:1.1rem;font-weight:700;">Parcero Go</span>
+                </a>
+                <div class="app-header-address">
+                    <span class="addr-text">📍 Calle 39B #109-46, Medellín</span>
+                    <span class="chevron">⌄</span>
+                </div>
+            </div>
+            <div class="promo-banner-mini">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.54-2.5 1.35l-.5.67-.5-.68C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM9 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm11 15H4v-2h16v2zm0-5H4V8h5.08L7 10.83 8.62 12 11 8.76l1-1.36 1 1.36L15.38 12 17 10.83 14.92 8H20v6z"/></svg>
+                ¡Envío gratis!
+            </div>
+            <div class="app-search-row">
+                <form action="/delivery" method="GET" class="app-search" role="search">
+                    <svg class="search-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                    <input type="search" id="home-search" name="q" placeholder="Buscar productos o tiendas" aria-label="Buscar productos o tiendas" autocomplete="off">
+                </form>
+                <div class="app-header-actions"></div>
+            </div>
+        </header>
+
+        <nav class="categories-strip" aria-label="Categorías">
+            <div class="categories-strip-inner">
+                <a href="/delivery?categoria=super" class="category-chip">
+                    <div class="icon-wrap">🛒</div>
+                    <span>Súper</span>
+                </a>
+                <a href="/delivery?categoria=expres" class="category-chip">
+                    <div class="icon-wrap">🛍️</div>
+                    <span>Exprés</span>
+                </a>
+                <a href="/delivery?categoria=farmacias" class="category-chip">
+                    <div class="icon-wrap">💊</div>
+                    <span>Farmacias</span>
+                </a>
+                <a href="/delivery?categoria=panaderia" class="category-chip">
+                    <div class="icon-wrap">🥖</div>
+                    <span>Panadería</span>
+                </a>
+                <a href="/delivery?categoria=restaurantes" class="category-chip">
+                    <div class="icon-wrap">🍽️</div>
+                    <span>Restaurantes</span>
+                </a>
+                <a href="/delivery?categoria=cafe" class="category-chip">
+                    <div class="icon-wrap">☕</div>
+                    <span>Café</span>
+                </a>
+            </div>
+        </nav>
+
+        <div class="promo-carousel" aria-label="Ofertas">
+            <div class="promo-carousel-inner" id="promo-carousel-inner">
+                <section class="promo-slide promo-banner-yellow" data-slide="0">
+                    <div class="promo-text">
+                        <div class="promo-offer">Hasta 30% OFF*</div>
+                        <div class="promo-sub">En cerveza, snacks y más. Pide ya.</div>
+                        <a href="/delivery" class="btn-pide-ya">Pide ya</a>
+                    </div>
+                    <div class="promo-icons">🍺🥤</div>
+                </section>
+                <section class="promo-slide promo-banner-yellow" data-slide="1">
+                    <div class="promo-text">
+                        <div class="promo-offer">2x1 en Pizzas*</div>
+                        <div class="promo-sub">Lleva dos al precio de una. Válido en restaurantes.</div>
+                        <a href="/delivery?categoria=restaurantes" class="btn-pide-ya">Pide ya</a>
+                    </div>
+                    <div class="promo-icons">🍕🍕</div>
+                </section>
+                <section class="promo-slide promo-banner-yellow" data-slide="2">
+                    <div class="promo-text">
+                        <div class="promo-offer">Envío gratis</div>
+                        <div class="promo-sub">En pedidos desde tu tienda favorita. Aprovecha.</div>
+                        <a href="/delivery" class="btn-pide-ya">Ver tiendas</a>
+                    </div>
+                    <div class="promo-icons">🛒📦</div>
+                </section>
+                <section class="promo-slide promo-banner-yellow" data-slide="3">
+                    <div class="promo-text">
+                        <div class="promo-offer">20% en Panadería</div>
+                        <div class="promo-sub">Pan fresco y más. Pide ya.</div>
+                        <a href="/delivery?categoria=panaderia" class="btn-pide-ya">Pide ya</a>
+                    </div>
+                    <div class="promo-icons">🥖☕</div>
+                </section>
+            </div>
+            <div class="promo-carousel-dots" id="promo-carousel-dots" aria-hidden="true"></div>
+        </div>
+
+        <div class="section-title">
+            <span>Tiendas cercanas</span>
+            <a href="/delivery">Ver todas</a>
+        </div>
+        <div class="stores-carousel" id="home-stores-carousel">
+            <div class="stores-carousel-inner" id="home-stores-inner">
+            </div>
+        </div>
+
+        <main id="main" style="padding: 1.5rem 0 2rem;">
+            <div class="map-section map-section--home">
+                <div class="map-section-header">
+                    <div>
+                        <h2 class="map-section-title">Mapa de Negocios - Medellín</h2>
+                        <p class="map-section-subtitle">Explora los negocios y repartidores en tu zona</p>
+                    </div>
+                    <a href="/delivery" class="map-btn map-btn--primary">Ver tiendas y pedir</a>
+                </div>
+                <div class="map-wrapper">
+                    <div id="map" class="map-home"></div>
+                    <div class="map-legend" aria-label="Leyenda del mapa">
+                        <div class="map-legend-item"><span class="map-legend-dot map-legend-dot--business"></span> Negocios</div>
+                        <div class="map-legend-item"><span class="map-legend-dot map-legend-dot--courier"></span> Repartidores</div>
+                    </div>
+                    <div class="map-toolbar">
+                        <button type="button" class="map-toolbar-btn" id="map-btn-center" title="Centrar en Medellín">📍 Centrar</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="/static/theme.js"></script>
+    <script src="/static/address.js"></script>
+    <script src="/static/business-images.js"></script>
+    <script>
+        (function () {
+            var welcomeEl = document.getElementById('welcome-screen');
+            var loadingEl = document.getElementById('welcome-loading');
+            var formEl = document.getElementById('welcome-form');
+            function showWelcome() {
+                if (welcomeEl) welcomeEl.style.display = 'flex';
+            }
+            if (typeof isSessionActive === 'function' && !isSessionActive() && welcomeEl) {
+                showWelcome();
+            }
+            if (typeof initNavSession === 'function') initNavSession();
+
+            var loginLink = document.querySelector('.nav-link-login');
+            if (loginLink) {
+                loginLink.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    showWelcome();
+                });
+            }
+
+            if (formEl && typeof setUserProfile === 'function' && typeof setSession === 'function' && typeof setSessionUser === 'function') {
+                formEl.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    var name = (document.getElementById('welcome-name') && document.getElementById('welcome-name').value) || '';
+                    var phone = (document.getElementById('welcome-phone') && document.getElementById('welcome-phone').value) || '';
+                    var address = (document.getElementById('welcome-address') && document.getElementById('welcome-address').value) || '';
+                    if (!name.trim() || !address.trim()) {
+                        if (typeof showAlert === 'function') showAlert('Completa al menos nombre y dirección', 'warning', 'Datos requeridos');
+                        else alert('Completa al menos nombre y dirección.');
+                        return;
+                    }
+                    setSession(true);
+                    setSessionUser(name, phone);
+                    setUserProfile({ name: name, phone: phone, address: address });
+                    if (loadingEl) loadingEl.style.display = 'flex';
+                    if (typeof initNavSession === 'function') initNavSession();
+                    setTimeout(function () {
+                        if (loadingEl) loadingEl.style.display = 'none';
+                        welcomeEl.style.display = 'none';
+                        var addrText = document.querySelector('.app-header-address .addr-text');
+                        if (addrText) addrText.textContent = '\uD83D\uDCCD ' + address.trim();
+                        if (typeof initNavSession === 'function') initNavSession();
+                    }, 1500);
+                });
+            }
+        })();
+
+        var medellinCenter = [6.2476, -75.5658];
+        var medellinZoom = 13;
+        var map = L.map('map', { zoomControl: true, scrollWheelZoom: true }).setView(medellinCenter, medellinZoom);
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; OpenStreetMap &copy; CARTO',
+            subdomains: 'abcd',
+            maxZoom: 20
+        }).addTo(map);
+
+        var businessMarkers = L.markerClusterGroup({
+            chunkedLoading: true,
+            spiderfyOnMaxZoom: true,
+            showCoverageOnHover: false,
+            maxClusterRadius: 50,
+            iconCreateFunction: function(cluster) {
+                var n = cluster.getChildCount();
+                return L.divIcon({
+                    html: '<div class="map-cluster map-cluster--business"><span>' + (n > 99 ? '99+' : n) + '</span></div>',
+                    className: 'map-cluster-wrap',
+                    iconSize: L.point(44, 44),
+                    iconAnchor: [22, 22]
+                });
+            }
+        });
+        var courierMarkers = L.layerGroup();
+
+        var businessIcon = L.divIcon({
+            className: 'custom-business-icon',
+            html: '<div class="map-marker map-marker--business"><span>🏪</span></div>',
+            iconSize: [44, 44],
+            iconAnchor: [22, 22],
+            popupAnchor: [0, -22]
+        });
+        var courierIcon = L.divIcon({
+            className: 'custom-courier-icon',
+            html: '<div class="map-marker map-marker--courier"><span>🚚</span></div>',
+            iconSize: [40, 40],
+            iconAnchor: [20, 20],
+            popupAnchor: [0, -20]
+        });
+
+        L.control.layers(
+            {},
+            { 'Negocios': businessMarkers, 'Repartidores': courierMarkers },
+            { collapsed: false, position: 'topright' }
+        ).addTo(map);
+
+        document.getElementById('map-btn-center').addEventListener('click', function() {
+            map.setView(medellinCenter, medellinZoom);
+        });
+
+        function fitMapToMarkers() {
+            var all = [];
+            businessMarkers.eachLayer(function(l) { all.push(l.getLatLng()); });
+            courierMarkers.eachLayer(function(l) { all.push(l.getLatLng()); });
+            if (all.length > 0) {
+                var bounds = L.latLngBounds(all);
+                map.fitBounds(bounds.pad(0.15), { maxZoom: 14 });
+            }
+        }
+
+        fetch('/api/delivery/businesses')
+            .then(res => res.json())
+            .then(data => {
+                const list = data.businesses || [];
+                var bc = document.getElementById('businesses-count'); if (bc) bc.textContent = list.length;
+                const inner = document.getElementById('home-stores-inner');
+                if (inner) {
+                    inner.innerHTML = list.slice(0, 8).map(b => {
+                        const name = (b.name || '').replace(/</g, '&lt;');
+                        const letter = (b.name || '').charAt(0);
+                        const imgUrl = typeof getBusinessImageUrlByCategory === 'function'
+                            ? getBusinessImageUrlByCategory(b.category || '', b.id)
+                            : 'https://picsum.photos/seed/tienda' + (b.id || 0) + '/80/80';
+                        return `
+                        <a href="/delivery" class="store-circle">
+                            <div class="logo">
+                                <img src="${imgUrl}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                                <span class="logo-fallback" style="display:none;">${letter}</span>
+                            </div>
+                            <span class="time">${Number(b.delivery_time) || 0}-${(Number(b.delivery_time) || 0) + 15} min</span>
+                            <span class="name">${name}</span>
+                        </a>
+                    `}).join('') || '<p style="color: var(--text-muted); padding: 1rem;">Cargando tiendas...</p>';
+                }
+                list.forEach(b => {
+                    if (b.latitude == null || b.longitude == null) return;
+                    const m = L.marker([b.latitude, b.longitude], { icon: businessIcon });
+                    var nameEsc = (b.name || '').replace(/</g, '&lt;');
+                    var catEsc = (b.category || '').replace(/</g, '&lt;');
+                    m.bindPopup('<div class="map-popup"><strong>' + nameEsc + '</strong><p class="map-popup-meta">' + catEsc + ' &middot; ⏱️ ' + (b.delivery_time || 0) + ' min &middot; ⭐ ' + (b.rating || 0) + '</p><a href="/delivery" class="map-popup-link">Ver y pedir →</a></div>');
+                    businessMarkers.addLayer(m);
+                });
+                map.addLayer(businessMarkers);
+                fitMapToMarkers();
+            })
+            .catch(() => { var bc = document.getElementById('businesses-count'); if (bc) bc.textContent = '0'; });
+
+        fetch('/api/couriers/available')
+            .then(res => res.json())
+            .then(data => {
+                const list = data.couriers || [];
+                var cc = document.getElementById('couriers-count'); if (cc) cc.textContent = list.length;
+                list.forEach(c => {
+                    if (c.lat == null || c.lng == null) return;
+                    const m = L.marker([c.lat, c.lng], { icon: courierIcon });
+                    m.bindPopup('<div class="map-popup"><strong>🚚 ' + (c.name || '').replace(/</g, '&lt;') + '</strong><p class="map-popup-meta">Zona: ' + (c.zone || '').replace(/</g, '&lt;') + ' &middot; ' + (c.vehicle || '') + ' &middot; ⭐ ' + (c.rating || 0) + '</p></div>');
+                    courierMarkers.addLayer(m);
+                });
+                map.addLayer(courierMarkers);
+                fitMapToMarkers();
+            })
+            .catch(() => { var cc = document.getElementById('couriers-count'); if (cc) cc.textContent = '0'; });
+
+        function showCouriersInfo() {
+            fetch('/api/couriers/available')
+                .then(res => res.json())
+                .then(data => {
+                    const couriers = data.couriers || [];
+                    const msg = couriers.length ? couriers.map(c => `• ${c.name} - ${c.zone} (${c.vehicle}) ⭐ ${c.rating}`).join('\n') + `\n\nTotal: ${couriers.length} repartidores` : 'No hay repartidores disponibles.';
+                    alert(msg);
+                })
+                .catch(() => alert('Error al cargar repartidores'));
+        }
+
+        (function() {
+            var INTERVAL_MS = 8000;
+            var inner = document.getElementById('promo-carousel-inner');
+            var dotsContainer = document.getElementById('promo-carousel-dots');
+            if (!inner || !dotsContainer) return;
+            var slides = inner.querySelectorAll('.promo-slide');
+            var total = slides.length;
+            if (total === 0) return;
+            var current = 0;
+            function goTo(index) {
+                current = (index + total) % total;
+                inner.style.transform = 'translateX(-' + (current * 100) + '%)';
+                dotsContainer.querySelectorAll('.dot').forEach(function(d, i) {
+                    d.classList.toggle('active', i === current);
+                });
+            }
+            for (var i = 0; i < total; i++) {
+                var dot = document.createElement('span');
+                dot.className = 'dot' + (i === 0 ? ' active' : '');
+                dot.setAttribute('aria-label', 'Ir a oferta ' + (i + 1));
+                dot.onclick = (function(idx) { return function() { goTo(idx); }; })(i);
+                dotsContainer.appendChild(dot);
+            }
+            setInterval(function() { goTo(current + 1); }, INTERVAL_MS);
+        })();
+    </script>
+    <script src="/static/alerts.js"></script>
+</body>
+</html>

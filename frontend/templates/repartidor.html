@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <script src="/static/api-shim.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#D4AF37">
+    <title>Vista Repartidor - Parcero Go</title>
+    <link rel="manifest" href="/static/manifest.json">
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        .repartidor-container { max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
+        .repartidor-container h1 { color: #D4AF37; margin-bottom: 0.5rem; }
+        .repartidor-container .sub { color: #b8b8b8; margin-bottom: 1.5rem; }
+        .card-rep { background: var(--dark-card); border: 2px solid var(--border-color); border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem; }
+        .card-rep h2 { color: #D4AF37; font-size: 1.25rem; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid #2a2a2a; }
+        .order-card { background: var(--darker-card); border-radius: 12px; padding: 1rem; margin-bottom: 1rem; border-left: 4px solid #D4AF37; }
+        .order-card.entregado { border-left-color: #00C896; opacity: 0.9; }
+        .order-card h3 { margin: 0 0 0.5rem 0; color: #fff; font-size: 1.1rem; }
+        .order-card p { margin: 0.3rem 0; color: #b8b8b8; font-size: 0.9rem; }
+        .order-card .total { color: #D4AF37; font-weight: 700; margin-top: 0.5rem; }
+        .btn-take, .btn-delivered { padding: 0.6rem 1.2rem; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; margin-top: 0.5rem; margin-right: 0.5rem; }
+        .btn-take { background: linear-gradient(135deg, #D4AF37 0%, #FFD700 100%); color: #0a0a0a; }
+        .btn-delivered { background: #00C896; color: #fff; }
+        .btn-take:disabled, .btn-delivered:disabled { opacity: 0.5; cursor: not-allowed; }
+        select { padding: 0.6rem 1rem; background: var(--darker-card); border: 2px solid #2a2a2a; border-radius: 8px; color: var(--text-dark); font-size: 1rem; min-width: 200px; }
+        .rep-demo-msg { color: #9ca3af; font-size: 0.9rem; margin-bottom: 1rem; }
+        .rep-demo-card { border-left-color: #6b7280; opacity: 0.85; }
+    </style>
+</head>
+<body>
+    <a href="#main" class="skip-link">Saltar al contenido</a>
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="brand-wrap">
+                <img src="/static/logo.png" alt="Parcero Go" class="app-logo" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-block';">
+                <span class="brand-text-fallback" style="display:none;">Parcero Go</span>
+            </a>
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <div class="nav-links">
+                    <a href="/">Inicio</a>
+                    <a href="/delivery">Delivery</a>
+                    <a href="/tracking">Seguimiento</a>
+                    <a href="/" class="nav-link-login">Iniciar sesión</a>
+                    <a href="/perfil" class="nav-link-perfil" style="display:none;" aria-hidden="true">Perfil</a>
+                    <a href="/repartidor" class="active">Repartidor</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main id="main" class="repartidor-container">
+        <h1>🛵 Vista Repartidor</h1>
+        <p class="sub">Selecciona tu perfil y gestiona tus entregas</p>
+
+        <div class="card-rep">
+            <label for="courier-select" style="color: #D4AF37; font-weight: 600; margin-right: 0.5rem;">Soy:</label>
+            <select id="courier-select">
+                <option value="">-- Elegir repartidor --</option>
+            </select>
+            <button type="button" onclick="loadOrders()" style="margin-left: 0.5rem; padding: 0.6rem 1rem; background: var(--gold-gradient); color: var(--dark-bg); border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">Actualizar</button>
+        </div>
+
+        <div class="card-rep" id="my-orders-section">
+            <h2>📦 Mis pedidos asignados</h2>
+            <p style="color: #b8b8b8; font-size: 0.9rem; margin-bottom: 1rem;">Pedidos que te has asignado. Marca &quot;Entregado&quot; cuando termines.</p>
+            <div id="my-orders-list"></div>
+        </div>
+
+        <div class="card-rep">
+            <h2>📋 Pedidos disponibles para tomar</h2>
+            <p style="color: #b8b8b8; font-size: 0.9rem; margin-bottom: 1rem;">Pedidos en estado &quot;preparando&quot; o &quot;pendiente&quot; que puedes asignarte.</p>
+            <div id="available-orders-list"></div>
+        </div>
+    </main>
+
+    <script src="/static/address.js"></script>
+    <script>if (typeof initNavSession === 'function') initNavSession();</script>
+    <script src="/static/theme.js"></script>
+    <script>
+        let allOrders = [];
+        let couriers = [];
+
+        async function loadCouriers() {
+            try {
+                const r = await fetch('/api/couriers/');
+                const d = await r.json();
+                couriers = d.couriers || [];
+                const sel = document.getElementById('courier-select');
+                sel.innerHTML = '<option value="">-- Elegir repartidor --</option>' +
+                    couriers.map(c => '<option value="' + c.id + '">' + (c.name || 'Repartidor ' + c.id) + ' (' + (c.vehicle || '') + ')</option>').join('');
+                const saved = localStorage.getItem('delivery_courier_id');
+                if (saved) sel.value = saved;
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        async function loadOrders() {
+            const courierId = document.getElementById('courier-select').value;
+            if (courierId) localStorage.setItem('delivery_courier_id', courierId);
+
+            try {
+                const r = await fetch('/api/delivery/orders');
+                const d = await r.json();
+                allOrders = d.orders || [];
+            } catch (e) {
+                allOrders = [];
+            }
+
+            const assignable = allOrders.filter(o => ['pendiente', 'preparando'].includes(o.status));
+            document.getElementById('available-orders-list').innerHTML = assignable.length === 0
+                ? '<p style="color: #b8b8b8;">No hay pedidos disponibles ahora.</p>'
+                : assignable.map(o => renderOrderCard(o, true, courierId)).join('');
+
+            const myListEl = document.getElementById('my-orders-list');
+            if (!courierId) {
+                myListEl.innerHTML = '<p style="color: #b8b8b8;">Selecciona tu perfil arriba para ver tus pedidos.</p>';
+                return;
+            }
+            try {
+                const rMy = await fetch('/api/delivery/orders?courier_id=' + encodeURIComponent(courierId));
+                const dMy = await rMy.json();
+                const myOrders = (dMy.orders || []).filter(o => o.status !== 'entregado' && o.status !== 'cancelado');
+                if (myOrders.length === 0) {
+                    myListEl.innerHTML = '<p style="color: #b8b8b8;">No tienes pedidos asignados. Toma uno desde &quot;Pedidos disponibles para tomar&quot;.</p>';
+                } else {
+                    myListEl.innerHTML = myOrders.map(o => renderOrderCard(o, false, courierId)).join('');
+                }
+            } catch (e) {
+                myListEl.innerHTML = '<p style="color: #b8b8b8;">No se pudieron cargar tus pedidos.</p>';
+            }
+        }
+
+        function renderOrderCard(order, isAssignable, courierId) {
+            const status = order.status || 'pendiente';
+            const isEnCamino = status === 'en_camino';
+            const isEntregado = status === 'entregado';
+            const canTake = isAssignable && courierId;
+            const canMarkDelivered = !isAssignable && isEnCamino && courierId;
+
+            let html = '<div class="order-card ' + (isEntregado ? 'entregado' : '') + '" data-order-id="' + order.id + '">';
+            html += '<h3>Pedido #' + order.id + ' · ' + (order.business_name || '') + '</h3>';
+            html += '<p>📍 ' + (order.customer_address || '') + '</p>';
+            html += '<p>👤 ' + (order.customer_name || '') + ' · ' + (order.customer_phone || '') + '</p>';
+            html += '<p class="total">Total: ' + (typeof formatCOP === 'function' ? formatCOP(order.total || 0) : '$ ' + (order.total || 0).toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 })) + '</p>';
+            html += '<p style="color: #888;">Estado: ' + status + '</p>';
+            if (canTake) {
+                html += '<button type="button" class="btn-take" onclick="takeOrder(' + order.id + ', ' + courierId + ')">Tomar pedido</button>';
+            }
+            if (canMarkDelivered) {
+                html += '<button type="button" class="btn-delivered" onclick="markDelivered(' + order.id + ', ' + courierId + ')">Marcar entregado</button>';
+            }
+            html += '</div>';
+            return html;
+        }
+
+        async function takeOrder(orderId, courierId) {
+            try {
+                const r = await fetch('/api/couriers/' + courierId + '/assign-order/' + orderId, { method: 'POST' });
+                if (!r.ok) {
+                    const err = await r.json().catch(() => ({}));
+                    alert(err.detail || 'No se pudo asignar');
+                    return;
+                }
+                loadOrders();
+            } catch (e) {
+                alert('Error de conexión');
+            }
+        }
+
+        async function markDelivered(orderId, courierId) {
+            try {
+                const r = await fetch('/api/couriers/' + courierId + '/complete-order/' + orderId, { method: 'POST' });
+                if (!r.ok) {
+                    const err = await r.json().catch(() => ({}));
+                    alert(err.detail || 'No se pudo marcar');
+                    return;
+                }
+                loadOrders();
+            } catch (e) {
+                alert('Error de conexión');
+            }
+        }
+
+        document.getElementById('courier-select').addEventListener('change', loadOrders);
+        loadCouriers().then(loadOrders);
+    </script>
+</body>
+</html>

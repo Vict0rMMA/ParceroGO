@@ -1,0 +1,9 @@
+{
+  "name": "parcerogo",
+  "version": "1.0.0",
+  "description": "Delivery para negocios de barrio en Medellín - MVP académico",
+  "private": true,
+  "scripts": {
+    "build": "node scripts/build-vercel.js"
+  }
+}

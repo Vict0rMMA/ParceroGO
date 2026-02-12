@@ -1,0 +1,792 @@
+[
+  {
+    "id": 1,
+    "customer_name": "VICTOR MANUEL MONSALVE AGUILAR",
+    "customer_phone": "+573022641006",
+    "customer_address": "Calle 39B #109-46",
+    "customer_lat": 6.2088,
+    "customer_lng": -75.5704,
+    "business_id": 1,
+    "business_name": "Supermercado El Ahorro",
+    "business_lat": 6.254089,
+    "business_lng": -75.604243,
+    "products": [
+      {
+        "product_id": 1,
+        "product_name": "Pan Tajado",
+        "quantity": 1,
+        "unit_price": 2500,
+        "subtotal": 2500
+      }
+    ],
+    "total": 2500,
+    "distance_km": 6.27,
+    "estimated_time": 29,
+    "payment_method": "tarjeta",
+    "payment_status": "pendiente",
+    "status": "entregado",
+    "delivery_person": null,
+    "created_at": "2026-02-06T00:27:22.774898",
+    "courier_id": 2,
+    "courier_name": "María",
+    "courier_phone": "+57 300 1000001"
+  },
+  {
+    "id": 2,
+    "customer_name": "VICTOR MANUEL MONSALVE AGUILAR",
+    "customer_phone": "+573022641006",
+    "customer_address": "Calle 39B #109-46",
+    "customer_lat": 6.2088,
+    "customer_lng": -75.5704,
+    "business_id": 19,
+    "business_name": "Pizza Hut Express",
+    "business_lat": 6.271505,
+    "business_lng": -75.609378,
+    "products": [
+      {
+        "product_id": 72,
+        "product_name": "Pizza Cuatro Quesos",
+        "quantity": 1,
+        "unit_price": 25000,
+        "subtotal": 25000
+      }
+    ],
+    "total": 25000,
+    "distance_km": 8.2,
+    "estimated_time": 49,
+    "payment_method": "tarjeta",
+    "payment_status": "pendiente",
+    "status": "entregado",
+    "delivery_person": null,
+    "created_at": "2026-02-06T00:29:28.864940",
+    "courier_id": 3,
+    "courier_name": "Pedro",
+    "courier_phone": "+57 300 1000002"
+  },
+  {
+    "id": 3,
+    "customer_name": "VICTOR MANUEL MONSALVE AGUILAR",
+    "customer_phone": "+573022641006",
+    "customer_address": "Calle 39B #109-46",
+    "customer_lat": 6.2088,
+    "customer_lng": -75.5704,
+    "business_id": 1,
+    "business_name": "Supermercado El Ahorro",
+    "business_lat": 6.215757,
+    "business_lng": -75.573702,
+    "products": [
+      {
+        "product_id": 2,
+        "product_name": "Queso 250g",
+        "quantity": 1,
+        "unit_price": 5500,
+        "subtotal": 5500
+      }
+    ],
+    "total": 5500,
+    "distance_km": 0.86,
+    "estimated_time": 36,
+    "payment_method": "tarjeta",
+    "payment_status": "pagado",
+    "status": "entregado",
+    "delivery_person": null,
+    "courier_phone": "+57 300 1000004",
+    "created_at": "2026-02-06T10:55:55.805289",
+    "status_history": [
+      {
+        "status": "pendiente",
+        "timestamp": "2026-02-06T10:55:55.805289"
+      }
+    ],
+    "courier_id": 5,
+    "courier_name": "Luis"
+  },
+  {
+    "id": 4,
+    "customer_name": "VICTOR MANUEL MONSALVE AGUILAR",
+    "customer_phone": "+573022641006",
+    "customer_address": "Calle 39B #109-46",
+    "customer_lat": 6.2088,
+    "customer_lng": -75.5704,
+    "business_id": 1,
+    "business_name": "Supermercado El Ahorro",
+    "business_lat": 6.215757,
+    "business_lng": -75.573702,
+    "products": [
+      {
+        "product_id": 2,
+        "product_name": "Queso 250g",
+        "quantity": 1,
+        "unit_price": 5500,
+        "subtotal": 5500
+      }
+    ],
+    "total": 5500,
+    "distance_km": 0.86,
+    "estimated_time": 36,
+    "payment_method": "tarjeta",
+    "payment_status": "pagado",
+    "status": "en_camino",
+    "delivery_person": null,
+    "courier_phone": "+57 300 1000007",
+    "created_at": "2026-02-06T11:09:48.706592",
+    "status_history": [
+      {
+        "status": "pendiente",
+        "timestamp": "2026-02-06T11:09:48.706592"
+      }
+    ],
+    "courier_id": 8,
+    "courier_name": "Laura"
+  },
+  {
+    "id": 5,
+    "customer_name": "VICTOR MANUEL MONSALVE AGUILAR",
+    "customer_phone": "+573022641006",
+    "customer_address": "Calle 39B #109-46",
+    "customer_lat": 6.2088,
+    "customer_lng": -75.5704,
+    "business_id": 1,
+    "business_name": "Supermercado El Ahorro",
+    "business_lat": 6.215757,
+    "business_lng": -75.573702,
+    "products": [
+      {
+        "product_id": 25,
+        "product_name": "Alimento para Gato 7kg",
+        "quantity": 1,
+        "unit_price": 45000,
+        "subtotal": 45000,
+        "notes": ""
+      }
+    ],
+    "total": 45000,
+    "distance_km": 0.86,
+    "estimated_time": 36,
+    "payment_method": "efectivo",
+    "tip_amount": 0,
+    "payment_status": "pendiente",
+    "status": "entregado",
+    "delivery_person": null,
+    "courier_phone": "+57 300 1000006",
+    "created_at": "2026-02-06T11:26:28.180233",
+    "status_history": [
+      {
+        "status": "pendiente",
+        "timestamp": "2026-02-06T11:26:28.180233"
+      }
+    ],
+    "courier_id": 7,
+    "courier_name": "Juan"
+  },
+  {
+    "id": 6,
+    "customer_name": "Victor Manuel Monsalve Aguilar",
+    "customer_phone": "+57 3022641006",
+    "customer_address": "Calle 39B #109-46",
+    "customer_lat": 6.2088,
+    "customer_lng": -75.5704,
+    "business_id": 18,
+    "business_name": "KFC Express",
+    "business_lat": 6.213194,
+    "business_lng": -75.579196,
+    "products": [
+      {
+        "product_id": 72,
+        "product_name": "Papa Rellena",
+        "quantity": 1,
+        "unit_price": 10000,
+        "subtotal": 10000,
+        "notes": ""
+      }
+    ],
+    "total": 11000,
+    "distance_km": 1.09,
+    "estimated_time": 31,
+    "payment_method": "tarjeta",
+    "tip_amount": 1000,
+    "payment_status": "pendiente",
+    "status": "en_camino",
+    "delivery_person": null,
+    "courier_phone": "+57 300 1000003",
+    "created_at": "2026-02-08T13:33:36.330383",
+    "status_history": [
+      {
+        "status": "pendiente",
+        "timestamp": "2026-02-08T13:33:36.332383"
+      }
+    ],
+    "courier_id": 4,
+    "courier_name": "Ana"
+  },
+  {
+    "id": 7,
+    "customer_name": "Victor Manuel Monsalve Aguilar",
+    "customer_phone": "+57 3022641006",
+    "customer_address": "Calle 39B #109-46",
+    "customer_lat": 6.2088,
+    "customer_lng": -75.5704,
+    "business_id": 5,
+    "business_name": "Café del Barrio",
+    "business_lat": 6.286944,
+    "business_lng": -75.607135,
+    "products": [
+      {
+        "product_id": 19,
+        "product_name": "Cappuccino",
+        "quantity": 1,
+        "unit_price": 4500,
+        "subtotal": 4500,
+        "notes": ""
+      }
+    ],
+    "total": 5500,
+    "distance_km": 9.59,
+    "estimated_time": 57,
+    "payment_method": "efectivo",
+    "tip_amount": 1000,
+    "payment_status": "pendiente",
+    "status": "en_camino",
+    "delivery_person": null,
+    "courier_phone": "+57 300 1000007",
+    "created_at": "2026-02-08T13:56:28.547288",
+    "status_history": [
+      {
+        "status": "pendiente",
+        "timestamp": "2026-02-08T13:56:28.547288"
+      }
+    ],
+    "courier_id": 8,
+    "courier_name": "Laura"
+  },
+  {
+    "id": 8,
+    "customer_name": "Victor Manuel Monsalve Aguilar",
+    "customer_phone": "+57 3022641006",
+    "customer_address": "Calle 39B #109-46, Medellín",
+    "customer_lat": 6.2088,
+    "customer_lng": -75.5704,
+    "business_id": 7,
+    "business_name": "Supermercado El Éxito Local",
+    "business_lat": 6.25229,
+    "business_lng": -75.597656,
+    "products": [
+      {
+        "product_id": 20,
+        "product_name": "Queso 250g",
+        "quantity": 2,
+        "unit_price": 5500,
+        "subtotal": 11000,
+        "notes": ""
+      }
+    ],
+    "total": 12000,
+    "distance_km": 5.7,
+    "estimated_time": 32,
+    "payment_method": "tarjeta",
+    "tip_amount": 1000,
+    "payment_status": "pendiente",
+    "status": "en_camino",
+    "delivery_person": null,
+    "courier_phone": "+57 300 1000001",
+    "created_at": "2026-02-08T14:56:20.089377",
+    "status_history": [
+      {
+        "status": "pendiente",
+        "timestamp": "2026-02-08T14:56:20.089377"
+      }
+    ],
+    "courier_id": 2,
+    "courier_name": "María"
+  },
+  {
+    "id": 9,
+    "customer_name": "Victor Manuel Monsalve Aguilar",
+    "customer_phone": "+57 3022641006",
+    "customer_address": "Calle 39B #109-46, Medellín",
+    "customer_lat": 6.2088,
+    "customer_lng": -75.5704,
+    "business_id": 14,
+    "business_name": "McDonald's Delivery",
+    "business_lat": 6.204535,
+    "business_lng": -75.577591,
+    "products": [
+      {
+        "product_id": 42,
+        "product_name": "Empanadas",
+        "quantity": 1,
+        "unit_price": 3000,
+        "subtotal": 3000,
+        "notes": ""
+      }
+    ],
+    "total": 4000,
+    "distance_km": 0.93,
+    "estimated_time": 19,
+    "payment_method": "tarjeta",
+    "tip_amount": 1000,
+    "payment_status": "pendiente",
+    "status": "entregado",
+    "delivery_person": null,
+    "courier_phone": "+57 300 1000004",
+    "created_at": "2026-02-08T15:15:16.009694",
+    "status_history": [
+      {
+        "status": "pendiente",
+        "timestamp": "2026-02-08T15:15:16.009694"
+      }
+    ],
+    "courier_id": 5,
+    "courier_name": "Luis"
+  },
+  {
+    "id": 10,
+    "customer_name": "Victor Manuel Monsalve Aguilar",
+    "customer_phone": "+57 3022641006",
+    "customer_address": "Calle 39B #109-46, Medellín",
+    "customer_lat": 6.2088,
+    "customer_lng": -75.5704,
+    "business_id": 10,
+    "business_name": "Panadería La Tradición",
+    "business_lat": 6.247522,
+    "business_lng": -75.565626,
+    "products": [
+      {
+        "product_id": 28,
+        "product_name": "Almojábana",
+        "quantity": 1,
+        "unit_price": 600,
+        "subtotal": 600,
+        "notes": ""
+      }
+    ],
+    "total": 600,
+    "distance_km": 4.34,
+    "estimated_time": 50,
+    "payment_method": "tarjeta",
+    "tip_amount": 0,
+    "payment_status": "pendiente",
+    "status": "entregado",
+    "delivery_person": null,
+    "courier_phone": "+57 300 1000004",
+    "created_at": "2026-02-08T15:36:09.049366",
+    "status_history": [
+      {
+        "status": "pendiente",
+        "timestamp": "2026-02-08T15:36:09.049366"
+      }
+    ],
+    "courier_id": 5,
+    "courier_name": "Luis"
+  },
+  {
+    "id": 11,
+    "customer_name": "tomas",
+    "customer_phone": "+57 3022641008",
+    "customer_address": "vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv",
+    "customer_lat": 6.2088,
+    "customer_lng": -75.5704,
+    "business_id": 13,
+    "business_name": "Burger King Express",
+    "business_lat": 6.252078,
+    "business_lng": -75.599373,
+    "products": [
+      {
+        "product_id": 38,
+        "product_name": "Perro Caliente",
+        "quantity": 1,
+        "unit_price": 8000,
+        "subtotal": 8000,
+        "notes": ""
+      }
+    ],
+    "total": 8000,
+    "distance_km": 5.78,
+    "estimated_time": 54,
+    "payment_method": "efectivo",
+    "tip_amount": 0,
+    "payment_status": "pendiente",
+    "status": "entregado",
+    "delivery_person": null,
+    "courier_phone": "+57 300 1000004",
+    "created_at": "2026-02-08T15:40:26.122014",
+    "status_history": [
+      {
+        "status": "pendiente",
+        "timestamp": "2026-02-08T15:40:26.122014"
+      }
+    ],
+    "courier_id": 5,
+    "courier_name": "Luis"
+  },
+  {
+    "id": 12,
+    "customer_name": "tomas",
+    "customer_phone": "+57 3022641008",
+    "customer_address": "Calle 39B #109-46",
+    "customer_lat": 6.2088,
+    "customer_lng": -75.5704,
+    "business_id": 13,
+    "business_name": "Burger King Express",
+    "business_lat": 6.252078,
+    "business_lng": -75.599373,
+    "products": [
+      {
+        "product_id": 38,
+        "product_name": "Perro Caliente",
+        "quantity": 1,
+        "unit_price": 8000,
+        "subtotal": 8000,
+        "notes": ""
+      }
+    ],
+    "total": 8000,
+    "distance_km": 5.78,
+    "estimated_time": 54,
+    "payment_method": "tarjeta",
+    "tip_amount": 0,
+    "payment_status": "pendiente",
+    "status": "entregado",
+    "delivery_person": null,
+    "courier_phone": "+57 300 1000004",
+    "created_at": "2026-02-08T15:56:23.577042",
+    "status_history": [
+      {
+        "status": "pendiente",
+        "timestamp": "2026-02-08T15:56:23.577042"
+      }
+    ],
+    "courier_id": 5,
+    "courier_name": "Luis"
+  },
+  {
+    "id": 13,
+    "customer_name": "tomas",
+    "customer_phone": "+57 3022641008",
+    "customer_address": "Calle 39B #109-4",
+    "customer_lat": 6.2088,
+    "customer_lng": -75.5704,
+    "business_id": 13,
+    "business_name": "Burger King Express",
+    "business_lat": 6.252078,
+    "business_lng": -75.599373,
+    "products": [
+      {
+        "product_id": 38,
+        "product_name": "Perro Caliente",
+        "quantity": 1,
+        "unit_price": 8000,
+        "subtotal": 8000,
+        "notes": ""
+      }
+    ],
+    "total": 8000,
+    "distance_km": 5.78,
+    "estimated_time": 54,
+    "payment_method": "pse",
+    "tip_amount": 0,
+    "payment_status": "pendiente",
+    "status": "entregado",
+    "delivery_person": null,
+    "courier_phone": "+57 300 1000004",
+    "created_at": "2026-02-08T16:13:55.727109",
+    "status_history": [
+      {
+        "status": "pendiente",
+        "timestamp": "2026-02-08T16:13:55.727615"
+      }
+    ],
+    "courier_id": 5,
+    "courier_name": "Luis"
+  },
+  {
+    "id": 14,
+    "customer_name": "tomas",
+    "customer_phone": "+57 3022641008",
+    "customer_address": "Calle 39B #109-46",
+    "customer_lat": 6.2088,
+    "customer_lng": -75.5704,
+    "business_id": 13,
+    "business_name": "Burger King Express",
+    "business_lat": 6.252078,
+    "business_lng": -75.599373,
+    "products": [
+      {
+        "product_id": 38,
+        "product_name": "Perro Caliente",
+        "quantity": 1,
+        "unit_price": 8000,
+        "subtotal": 8000,
+        "notes": ""
+      }
+    ],
+    "total": 10000,
+    "distance_km": 5.78,
+    "estimated_time": 54,
+    "payment_method": "tarjeta",
+    "tip_amount": 2000,
+    "payment_status": "pendiente",
+    "status": "cancelado",
+    "delivery_person": null,
+    "courier_phone": null,
+    "created_at": "2026-02-08T16:18:10.499593",
+    "status_history": [
+      {
+        "status": "pendiente",
+        "timestamp": "2026-02-08T16:18:10.499593"
+      },
+      {
+        "status": "cancelado",
+        "timestamp": "2026-02-08T16:38:49.533152"
+      }
+    ],
+    "updated_at": "2026-02-08T16:38:49.533152"
+  },
+  {
+    "id": 15,
+    "customer_name": "tomas",
+    "customer_phone": "+57 3022641008",
+    "customer_address": "universidad de medellin",
+    "customer_lat": 6.2088,
+    "customer_lng": -75.5704,
+    "business_id": 13,
+    "business_name": "Burger King Express",
+    "business_lat": 6.252078,
+    "business_lng": -75.599373,
+    "products": [
+      {
+        "product_id": 39,
+        "product_name": "Empanadas",
+        "quantity": 1,
+        "unit_price": 3000,
+        "subtotal": 3000,
+        "notes": ""
+      }
+    ],
+    "total": 3000,
+    "distance_km": 5.78,
+    "estimated_time": 54,
+    "payment_method": "efectivo",
+    "tip_amount": 0,
+    "payment_status": "pendiente",
+    "status": "cancelado",
+    "delivery_person": null,
+    "courier_phone": null,
+    "created_at": "2026-02-08T18:13:05.121825",
+    "status_history": [
+      {
+        "status": "pendiente",
+        "timestamp": "2026-02-08T18:13:05.121825"
+      },
+      {
+        "status": "cancelado",
+        "timestamp": "2026-02-08T18:14:36.333950"
+      }
+    ],
+    "updated_at": "2026-02-08T18:14:36.333950"
+  },
+  {
+    "id": 16,
+    "customer_name": "tomas",
+    "customer_phone": "+57 3022641008",
+    "customer_address": "universidad de medellin",
+    "customer_lat": 6.2088,
+    "customer_lng": -75.5704,
+    "business_id": 13,
+    "business_name": "Burger King Express",
+    "business_lat": 6.252078,
+    "business_lng": -75.599373,
+    "products": [
+      {
+        "product_id": 39,
+        "product_name": "Empanadas",
+        "quantity": 1,
+        "unit_price": 3000,
+        "subtotal": 3000,
+        "notes": ""
+      }
+    ],
+    "total": 3000,
+    "distance_km": 5.78,
+    "estimated_time": 54,
+    "payment_method": "efectivo",
+    "tip_amount": 0,
+    "payment_status": "pendiente",
+    "status": "cancelado",
+    "delivery_person": null,
+    "courier_phone": "+57 300 1000004",
+    "created_at": "2026-02-08T18:26:05.215475",
+    "status_history": [
+      {
+        "status": "pendiente",
+        "timestamp": "2026-02-08T18:26:05.215475"
+      },
+      {
+        "status": "cancelado",
+        "timestamp": "2026-02-08T18:30:47.236985"
+      }
+    ],
+    "courier_id": 5,
+    "courier_name": "Luis",
+    "updated_at": "2026-02-08T18:30:47.236985"
+  },
+  {
+    "id": 17,
+    "customer_name": "tomas",
+    "customer_phone": "+57 3022641008",
+    "customer_address": "Calle 39B #109-46",
+    "customer_lat": 6.2088,
+    "customer_lng": -75.5704,
+    "business_id": 5,
+    "business_name": "Café del Barrio",
+    "business_lat": 6.335289,
+    "business_lng": -75.548913,
+    "products": [
+      {
+        "product_id": 14,
+        "product_name": "Pastel",
+        "quantity": 1,
+        "unit_price": 4000,
+        "subtotal": 4000,
+        "notes": ""
+      }
+    ],
+    "total": 4000,
+    "distance_km": 14.26,
+    "estimated_time": 50,
+    "payment_method": "pse",
+    "tip_amount": 0,
+    "payment_status": "pendiente",
+    "status": "cancelado",
+    "delivery_person": null,
+    "courier_phone": null,
+    "created_at": "2026-02-09T01:45:46.867376",
+    "status_history": [
+      {
+        "status": "pendiente",
+        "timestamp": "2026-02-09T01:45:46.867376"
+      },
+      {
+        "status": "cancelado",
+        "timestamp": "2026-02-09T01:45:52.851502"
+      }
+    ],
+    "updated_at": "2026-02-09T01:45:52.851502"
+  },
+  {
+    "id": 18,
+    "customer_name": "tomas",
+    "customer_phone": "+57 3022641008",
+    "customer_address": "universidad de medellin",
+    "customer_lat": 6.2088,
+    "customer_lng": -75.5704,
+    "business_id": 13,
+    "business_name": "Burger King Express",
+    "business_lat": 6.252078,
+    "business_lng": -75.599373,
+    "products": [
+      {
+        "product_id": 38,
+        "product_name": "Perro Caliente",
+        "quantity": 1,
+        "unit_price": 8000,
+        "subtotal": 8000,
+        "notes": ""
+      }
+    ],
+    "total": 8000,
+    "distance_km": 5.78,
+    "estimated_time": 54,
+    "payment_method": "efectivo",
+    "tip_amount": 0,
+    "payment_status": "pendiente",
+    "status": "entregado",
+    "delivery_person": null,
+    "courier_phone": "+57 300 1000002",
+    "created_at": "2026-02-09T01:59:18.561568",
+    "status_history": [
+      {
+        "status": "pendiente",
+        "timestamp": "2026-02-09T01:59:18.561568"
+      }
+    ],
+    "courier_id": 3,
+    "courier_name": "Pedro"
+  },
+  {
+    "id": 19,
+    "customer_name": "VICTOR MANUEL MONSALVE AGUILAR",
+    "customer_phone": "+573022641006",
+    "customer_address": "Calle 39B #109-46",
+    "customer_lat": 6.2088,
+    "customer_lng": -75.5704,
+    "business_id": 13,
+    "business_name": "Burger King Express",
+    "business_lat": 6.252078,
+    "business_lng": -75.599373,
+    "products": [
+      {
+        "product_id": 38,
+        "product_name": "Perro Caliente",
+        "quantity": 1,
+        "unit_price": 8000,
+        "subtotal": 8000,
+        "notes": ""
+      }
+    ],
+    "total": 9000,
+    "distance_km": 5.78,
+    "estimated_time": 54,
+    "payment_method": "tarjeta",
+    "tip_amount": 1000,
+    "payment_status": "pendiente",
+    "status": "pendiente",
+    "delivery_person": null,
+    "courier_phone": null,
+    "created_at": "2026-02-11T22:25:40.169178",
+    "status_history": [
+      {
+        "status": "pendiente",
+        "timestamp": "2026-02-11T22:25:40.169178"
+      }
+    ]
+  },
+  {
+    "id": 20,
+    "customer_name": "VICTOR MANUEL MONSALVE AGUILAR",
+    "customer_phone": "+573022641006",
+    "customer_address": "Calle 39B #109-46",
+    "customer_lat": 6.2088,
+    "customer_lng": -75.5704,
+    "business_id": 10,
+    "business_name": "Panadería La Tradición",
+    "business_lat": 6.247522,
+    "business_lng": -75.565626,
+    "products": [
+      {
+        "product_id": 28,
+        "product_name": "Almojábana",
+        "quantity": 1,
+        "unit_price": 600,
+        "subtotal": 600,
+        "notes": ""
+      }
+    ],
+    "total": 600,
+    "distance_km": 4.34,
+    "estimated_time": 50,
+    "payment_method": "efectivo",
+    "tip_amount": 0,
+    "payment_status": "pendiente",
+    "status": "pendiente",
+    "delivery_person": null,
+    "courier_phone": null,
+    "created_at": "2026-02-11T22:49:47.129382",
+    "status_history": [
+      {
+        "status": "pendiente",
+        "timestamp": "2026-02-11T22:49:47.129382"
+      }
+    ]
+  }
+]
