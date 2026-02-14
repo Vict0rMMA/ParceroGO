@@ -3,6 +3,8 @@
 > Plataforma de delivery para negocios de barrio en Medellín, Colombia.  
 > Proyecto académico con FastAPI, mapa interactivo y pagos simulados.
 
+**Guía completa (cómo ejecutar, arquitectura, estudio):** ver **[GUIA-PARCEROGO.md](GUIA-PARCEROGO.md)**.
+
 ---
 
 ## Características

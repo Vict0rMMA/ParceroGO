@@ -1,5 +1,5 @@
 var CACHE_NAME = 'delivery-v1';
-var STATIC_URLS = ['/static/style.css', '/static/theme.js', '/static/alerts.js', '/static/delivery.js', '/'];
+var STATIC_URLS = ['/static/style.css', '/static/theme.js', '/static/alerts.js', '/static/delivery-services.js', '/static/delivery.js', '/'];
 
 self.addEventListener('install', function (e) {
     e.waitUntil(
