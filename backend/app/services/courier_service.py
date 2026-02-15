@@ -1,4 +1,4 @@
-from typing import List, Dict, Optional
+from typing import Dict, Optional
 
 from app.repositories.order_repository import OrderRepository
 from app.repositories.courier_repository import CourierRepository

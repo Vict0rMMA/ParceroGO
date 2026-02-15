@@ -1,7 +1,7 @@
 (function () {
     var SIZE = '80';
     var BASE_URL = 'https://images.unsplash.com/photo-';
-    var QUERY = '?w=' + SIZE + '&h=' + SIZE + '&fit=crop';
+    var QUERY = '?w=' + (Number(SIZE) * 2) + '&h=' + (Number(SIZE) * 2) + '&fit=crop&auto=format&q=80';
 
     var BY_CATEGORY = {
         'Restaurante': ['1546069901-ba9599a7e63c', '1565299624946-b28f40a0ae38', '1547592166-23ac45744acd', '1414237427423-fa1b3c6d32a2', '1517248135467-4c7edcad34c4'],

@@ -1,12 +1,25 @@
 import json
 import math
 import os
+import sys
 from datetime import datetime
 from pathlib import Path
 from typing import List, Dict
 
 _PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 DATA_DIR = str(_PROJECT_ROOT / "data")
+
+
+def safe_print(*args, **kwargs):
+    try:
+        print(*args, **kwargs)
+    except UnicodeEncodeError:
+        enc = getattr(sys.stdout, "encoding", None) or "utf-8"
+        if enc.lower() in ("cp1252", "cp437", "ascii", "charmap"):
+            parts = [str(a).encode("ascii", errors="replace").decode("ascii") for a in args]
+            print(*parts, **kwargs)
+        else:
+            raise
 
 
 def load_json(file_name: str) -> List[Dict]:

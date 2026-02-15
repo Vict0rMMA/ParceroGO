@@ -1,18 +1,9 @@
-"""
-Prueba rápida de las notificaciones (SMS / log / consola).
-No crea pedidos reales, solo dispara una notificación de prueba.
-
-Ejecutar desde la carpeta del proyecto:
-  python test_notification.py
-"""
-
 import sys
 import os
 
-# Asegurar que el proyecto esté en el path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-# Pedido de prueba (no se guarda en orders.json)
+                                                
 pedido_prueba = {
     "id": 999,
     "business_name": "Negocio de prueba",

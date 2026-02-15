@@ -1,4 +1,12 @@
+import sys
 from pathlib import Path
+
+if sys.platform == "win32":
+    try:
+        sys.stdout.reconfigure(encoding="utf-8")
+        sys.stderr.reconfigure(encoding="utf-8")
+    except Exception:
+        pass
 
 _PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 _ENV = _PROJECT_ROOT / ".env"
@@ -7,7 +15,7 @@ if _ENV.exists():
     load_dotenv(_ENV)
 
 from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 import uvicorn
@@ -31,6 +39,14 @@ app.include_router(payments.router, prefix="/api/payments", tags=["Pagos"])
 app.include_router(couriers.router, prefix="/api/couriers", tags=["Repartidores"])
 app.include_router(notifications.router, prefix="/api/notifications", tags=["Notificaciones"])
 app.include_router(orders.router, prefix="/orders", tags=["Orders"])
+
+
+@app.exception_handler(UnicodeEncodeError)
+def unicode_encode_error_handler(request: Request, exc: UnicodeEncodeError):
+    return JSONResponse(
+        status_code=500,
+        content={"detail": "Error interno del servidor. Intenta de nuevo."},
+    )
 
 
 @app.get("/", response_class=HTMLResponse)

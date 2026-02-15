@@ -6,7 +6,7 @@ from app.repositories.product_repository import ProductRepository
 from app.repositories.business_repository import BusinessRepository
 from app.repositories.courier_repository import CourierRepository
 from app.services.geo_service import GeoService
-from app.utils import get_current_timestamp
+from app.utils import get_current_timestamp, safe_print
 
 
 class OrderService:
@@ -32,10 +32,11 @@ class OrderService:
             raise ValueError("Negocio no encontrado")
 
         all_products = self._products.find_all()
+        product_index = {p.get("id"): p for p in all_products if isinstance(p, dict)}
         total = 0
         order_products = []
         for item in order_data["products"]:
-            product = next((p for p in all_products if p.get("id") == item["product_id"]), None)
+            product = product_index.get(item["product_id"])
             if not product:
                 raise ValueError(f"Producto {item['product_id']} no encontrado")
             if not product.get("available", True):
@@ -70,7 +71,7 @@ class OrderService:
         estimated_time = int(business.get("delivery_time", 30) + (distance * 2))
 
         orders = self._orders.find_all()
-        new_id = len(orders) + 1
+        new_id = (max([o.get("id", 0) for o in orders]) + 1) if orders else 1
         new_order = {
             "id": new_id,
             "customer_name": order_data["customer_name"],
@@ -100,8 +101,8 @@ class OrderService:
         try:
             from app.notify_sms import send_new_order_sms
             send_new_order_sms(new_order)
-        except Exception as e:
-            print("⚠️ Notificación de pedido no enviada:", e)
+        except Exception:
+            pass
 
         return {"order": new_order, "message": "Pedido creado exitosamente"}
 
@@ -157,7 +158,7 @@ class OrderService:
 
         self._orders.update_and_save(order)
 
-        print(f"📱 [NOTIFICACIÓN] Pedido #{order_id} cambió de '{old_status}' a '{new_status}'")
-        print(f"   Cliente: {order['customer_name']} - Teléfono: {order['customer_phone']}")
+        safe_print("[NOTIF] Pedido #{} de '{}' a '{}'".format(order_id, old_status, new_status))
+        safe_print("   Cliente: {} - Telefono: {}".format(order.get("customer_name", ""), order.get("customer_phone", "")))
 
         return {"order": order, "message": f"Estado actualizado de '{old_status}' a '{new_status}'"}

@@ -2,7 +2,7 @@ import json
 import os
 from datetime import datetime
 
-from app.utils import DATA_DIR
+from app.utils import DATA_DIR, safe_print
 
 LOG_FILE = os.path.join(DATA_DIR, "notifications.log")
 CONFIG_FILE = os.path.join(DATA_DIR, "config.json")
@@ -65,17 +65,20 @@ def _build_sms_text(order: dict) -> str:
 
 
 def _log_and_print(message: str, order_id: int):
-    os.makedirs(DATA_DIR, exist_ok=True)
-    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    line = "[{}] Pedido #{} | SMS:\n{}\n---\n".format(timestamp, order_id, message)
     try:
+        os.makedirs(DATA_DIR, exist_ok=True)
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        line = "[{}] Pedido #{} | SMS:\n{}\n---\n".format(timestamp, order_id, message)
         with open(LOG_FILE, "a", encoding="utf-8") as f:
             f.write(line)
-    except Exception as e:
-        print("⚠️ No se pudo escribir en el log:", e)
-    print("\n📱 -------- SMS NOTIFICACIÓN (nuevo pedido) --------")
-    print(message)
-    print("📱 -------------------------------------------------\n")
+    except Exception:
+        pass
+    try:
+        safe_print("\n[SMS] -------- NOTIFICACION (nuevo pedido) --------")
+        safe_print(message)
+        safe_print("[SMS] -------------------------------------------------\n")
+    except Exception:
+        pass
 
 
 def _send_twilio(to_phone: str, body: str) -> bool:
@@ -90,20 +93,20 @@ def _send_twilio(to_phone: str, body: str) -> bool:
         client.messages.create(body=body, from_=from_phone, to=to_phone)
         return True
     except Exception as e:
-        print("⚠️ Error enviando SMS con Twilio:", e)
+        safe_print("[!] Error enviando SMS con Twilio:", e)
         return False
 
 
 def send_new_order_sms(order: dict) -> None:
-    message = _build_sms_text(order)
-    order_id = order.get("id", 0)
-    _log_and_print(message, order_id)
-
-    config = _get_config()
-    owner_phone = _normalize_phone(config.get("owner_phone") or "") or OWNER_PHONE_DEFAULT
-
-    if _send_twilio(owner_phone, message):
-        print("✅ SMS enviado a tu número:", owner_phone)
-    else:
-        print("💡 Las notificaciones se guardan en data/notifications.log y en esta consola.")
-        print("   Para recibir SMS en", owner_phone, "configura Twilio (ver NOTIFICACIONES-SMS.md)")
+    try:
+        message = _build_sms_text(order)
+        order_id = order.get("id", 0)
+        _log_and_print(message, order_id)
+        config = _get_config()
+        owner_phone = _normalize_phone(config.get("owner_phone") or "") or OWNER_PHONE_DEFAULT
+        if _send_twilio(owner_phone, message):
+            safe_print("[OK] SMS enviado a tu numero:", owner_phone)
+        else:
+            safe_print("[i] Notificaciones en data/notifications.log")
+    except Exception:
+        pass

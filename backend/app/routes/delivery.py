@@ -1,6 +1,5 @@
-from typing import Optional
-
 from fastapi import APIRouter, HTTPException
+from typing import Optional
 
 from app.repositories.business_repository import BusinessRepository
 from app.repositories.product_repository import ProductRepository
@@ -11,10 +10,6 @@ router = APIRouter()
 _order_service = OrderService()
 _business_repo = BusinessRepository()
 _product_repo = ProductRepository()
-
-
-def _find(seq: list, key: str, value) -> Optional[dict]:
-    return next((x for x in seq if x.get(key) == value), None)
 
 
 @router.get("/businesses")

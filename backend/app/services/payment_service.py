@@ -1,4 +1,4 @@
-from typing import Dict, Optional
+from typing import Optional
 
 from app.repositories.order_repository import OrderRepository
 from app.repositories.payment_repository import PaymentRepository

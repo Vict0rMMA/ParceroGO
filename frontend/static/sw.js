@@ -28,6 +28,6 @@ self.addEventListener('fetch', function (e) {
 self.addEventListener('push', function (e) {
     var data = e.data ? e.data.json() : {};
     var title = data.title || 'Delivery';
-    var opts = { body: data.body || '', icon: '/static/icon-192.png', badge: '/static/icon-192.png' };
+    var opts = { body: data.body || '', icon: '/static/logo.png', badge: '/static/logo.png' };
     e.waitUntil(self.registration.showNotification(title, opts));
 });

@@ -1,22 +1,16 @@
-"""
-Script rápido para verificar que la aplicación esté lista
-"""
-
 import os
 import sys
 
-# Configurar encoding para Windows
+                                  
 if sys.platform == 'win32':
     import io
     sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
 def _root():
-    """Raíz del proyecto (donde están backend/, frontend/, data/)"""
     return os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 def check_structure():
-    """Verifica que la estructura de archivos esté completa"""
     root = _root()
     os.chdir(root)
     print("Verificando estructura del proyecto...\n")
@@ -59,7 +53,6 @@ def check_structure():
         return True
 
 def check_data_files():
-    """Verifica que los archivos JSON existan"""
     root = _root()
     os.chdir(root)
     print("\nVerificando archivos de datos...\n")
@@ -67,7 +60,6 @@ def check_data_files():
     data_files = [
         "data/businesses.json",
         "data/products.json",
-        "data/jumbo_products.json",
         "data/couriers.json",
         "data/orders.json",
         "data/payments.json"
@@ -93,7 +85,6 @@ def check_data_files():
     return all_exist
 
 def check_imports():
-    """Verifica que los imports funcionen"""
     print("\nVerificando imports...\n")
     root = _root()
     try:

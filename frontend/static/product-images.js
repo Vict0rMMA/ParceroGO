@@ -1,6 +1,6 @@
 (function () {
     var BASE_URL = 'https://images.unsplash.com/photo-';
-    var QUERY = '?w=400&h=300&fit=crop';
+    var QUERY = '?w=800&h=600&fit=crop&auto=format&q=80';
 
     var BY_NAME = {
         'leche': '1563636619-914057cff423', 'huevos': '1582722872445-44dc5f7e3c8f', 'queso': '1486297678162-eb2a19b0a32d',

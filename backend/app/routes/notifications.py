@@ -2,7 +2,7 @@ from datetime import datetime
 
 from fastapi import APIRouter, HTTPException
 
-from app.utils import load_json
+from app.utils import load_json, safe_print
 
 router = APIRouter()
 
@@ -16,7 +16,7 @@ async def send_sms_notification(notification_data: dict):
     if not phone or not message:
         raise HTTPException(status_code=400, detail="Teléfono y mensaje son requeridos")
 
-    print(f"📱 [SMS SIMULADO] Enviado a {phone}: {message}")
+    safe_print("[SMS SIMULADO] Enviado a {}: {}".format(phone, message))
 
     return {
         "success": True,
@@ -43,9 +43,9 @@ async def notify_order_status_change(order_id: int):
     }
     message = status_messages.get(order["status"], f"El estado de tu pedido #{order_id} ha cambiado.")
 
-    print(f"📱 [NOTIFICACIÓN] Pedido #{order_id} - Estado: {order['status']}")
-    print(f"   Mensaje: {message}")
-    print(f"   Teléfono: {order['customer_phone']}")
+    safe_print("[NOTIF] Pedido #{} - Estado: {}".format(order_id, order["status"]))
+    safe_print("   Mensaje: {}".format(message))
+    safe_print("   Telefono: {}".format(order.get("customer_phone", "")))
 
     return {
         "success": True,
